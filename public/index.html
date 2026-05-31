@@ -12,6 +12,8 @@
         *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
         html,body{height:100%;background:var(--black);overflow:hidden;font-family:var(--head);color:var(--white);-webkit-tap-highlight-color:transparent}
         #map{position:absolute;inset:0;z-index:1}
+        .leaflet-marker-icon{transition:transform 1.2s linear!important}
+        .leaflet-marker-shadow{transition:transform 1.2s linear!important}
         .leaflet-control-attribution{display:none!important}
         .hidden{display:none!important}
 
@@ -165,6 +167,11 @@
 
         @keyframes finishPing{0%{transform:scale(1);box-shadow:0 0 0 0 rgba(232,0,26,0.8)}70%{transform:scale(1.15);box-shadow:0 0 0 18px rgba(232,0,26,0)}100%{transform:scale(1);box-shadow:0 0 0 0 rgba(232,0,26,0)}}
         @keyframes rivalPulse{0%,100%{filter:drop-shadow(0 0 4px rgba(0,255,204,0.8))}50%{filter:drop-shadow(0 0 10px rgba(0,255,204,0.3))}}
+        @keyframes checkpointPing{0%{transform:scale(1);opacity:1}50%{transform:scale(1.4);opacity:0.6}100%{transform:scale(1);opacity:1}}
+        .checkpoint-pin{width:18px;height:18px;border-radius:50%;background:#FFAA00;border:2px solid #fff;box-shadow:0 0 10px #FFAA00;animation:checkpointPing 2s ease-in-out infinite;cursor:pointer}
+        .checkpoint-label{font-family:var(--mono);font-size:9px;color:#FFAA00;background:rgba(0,0,0,0.85);padding:2px 6px;border-radius:3px;white-space:nowrap;border:1px solid rgba(255,170,0,0.4)}
+        .badge-toast{position:fixed;top:80px;left:50%;transform:translateX(-50%);z-index:500;background:rgba(255,170,0,0.95);color:#000;font-family:var(--head);font-size:1.1rem;font-weight:900;letter-spacing:1px;padding:12px 24px;border-radius:8px;box-shadow:0 8px 24px rgba(255,170,0,0.5);animation:toastIn 0.4s ease;pointer-events:none}
+        @keyframes toastIn{0%{opacity:0;top:60px}100%{opacity:1;top:80px}}
     </style>
 </head>
 <body>
@@ -302,8 +309,9 @@
                 </div>
             </div>
             <div class="peek-gap closing" id="peek-gap-block">
-                <div class="peek-label">LEADER GAP</div>
+                <div class="peek-label" id="peek-gap-label">LEADER GAP</div>
                 <strong id="peek-gap">LEADING</strong>
+                <div style="font-family:var(--mono);font-size:0.55rem;color:rgba(255,255,255,0.3);margin-top:2px" id="peek-speed"></div>
             </div>
             <div class="peek-expand" id="peek-expand-label">&#8593; BOARD</div>
         </div>
@@ -570,6 +578,7 @@ function updateMyPos(lat,lng){
     }
     if(isRacing){
         document.getElementById('hud-dist-val').textContent=fmtDist(dist);
+        checkCheckpoints(lat,lng);
         var now=Date.now();
         if(now-_lastEmit>4000&&myUID&&selectedSlot){
             db.ref('scrambles/'+selectedSlot+'/players/'+myUID).update({lat:lat,lng:lng,dist:dist,ts:firebase.database.ServerValue.TIMESTAMP});
@@ -634,6 +643,24 @@ function updateLeaderboard(players){
                 +'<div class="lb-dist '+(rk===1?'closest':'')+'">TO FINISH<strong>'+fmtDist(r.dist)+'</strong></div></div>';
         }).join('');
     }
+    // Audio alerts
+    checkAudioAlerts(players, myDist, myRank);
+
+    // Closing speed on peek gap
+    var speedEl = document.getElementById('peek-speed');
+    var gapLabelEl = document.getElementById('peek-gap-label');
+    if(speedEl && all.length > 1){
+        var leader = all[0];
+        if(!leader.isYou && leader.uid){
+            var spd = getClosingSpeed('leader', leader.dist);
+            if(spd !== null){
+                var closing = spd < 0; // leader moving away faster = negative for us
+                speedEl.textContent = Math.abs(spd).toFixed(1) + ' m/s ' + (closing ? '&#9660; closing' : '&#9650; extending');
+                speedEl.style.color = closing ? 'var(--teal)' : 'var(--red)';
+            }
+        }
+    }
+
     // Update rival marker pulse
     Object.entries(players).forEach(function(entry){
         var uid=entry[0],p=entry[1];
@@ -696,6 +723,135 @@ function updateSlotCountdown(){
 }
 setInterval(updateSlotCountdown, 1000);
 updateSlotCountdown();
+
+
+// ── AUDIO ALERTS (Web Speech API) ──
+var _speechEnabled = true;
+var _lastSpeech = 0;
+var _lastMyDist = null;
+var _lastRivalDist = {};
+
+function speak(msg){
+    if(!_speechEnabled) return;
+    var now = Date.now();
+    if(now - _lastSpeech < 12000) return; // max once per 12s
+    _lastSpeech = now;
+    if(!window.speechSynthesis) return;
+    window.speechSynthesis.cancel();
+    var u = new SpeechSynthesisUtterance(msg);
+    u.rate = 1.05; u.pitch = 0.9; u.volume = 0.9;
+    // prefer an Australian/female voice if available
+    var voices = window.speechSynthesis.getVoices();
+    var pref = voices.find(function(v){return v.lang==='en-AU';}) || voices.find(function(v){return v.lang.startsWith('en');});
+    if(pref) u.voice = pref;
+    window.speechSynthesis.speak(u);
+}
+
+// Load voices async
+if(window.speechSynthesis) window.speechSynthesis.onvoiceschanged = function(){window.speechSynthesis.getVoices();};
+
+function checkAudioAlerts(allPlayers, myDist, myRank){
+    if(!isRacing) return;
+    // Approaching finish
+    if(myDist < 1000 && myDist > 900 && _lastMyDist >= 1000){
+        speak('Approaching King George Square. Prepare to claim slot champion.');
+    }
+    // Entering 4km boundary warning
+    if(myDist < 4100 && myDist > 3900 && _lastMyDist >= 4100){
+        speak('Crossing the boundary. Final stretch begins.');
+    }
+    // Rival closing
+    Object.entries(allPlayers).forEach(function(entry){
+        var uid=entry[0], p=entry[1];
+        if(uid===myUID||!p.lat||!p.lng) return;
+        var rivalDist = haversine(p.lat,p.lng,FINISH[0],FINISH[1]);
+        var prev = _lastRivalDist[uid];
+        if(prev && prev-rivalDist > 50 && rivalDist < myDist + 500 && rivalDist > myDist - 200){
+            speak('Rival closing. ' + p.username + ' is gaining from behind.');
+        }
+        _lastRivalDist[uid] = rivalDist;
+    });
+    _lastMyDist = myDist;
+}
+
+// Closing gap speed tracker
+var _prevGapData = {};
+function getClosingSpeed(uid, currentDist){
+    var now = Date.now();
+    var prev = _prevGapData[uid];
+    if(!prev){ _prevGapData[uid]={dist:currentDist,ts:now}; return null; }
+    var dt = (now - prev.ts) / 1000;
+    if(dt < 4) return null;
+    var speed = (prev.dist - currentDist) / dt; // m/s, positive = closing
+    _prevGapData[uid] = {dist:currentDist, ts:now};
+    return speed;
+}
+
+
+// ── CHECKPOINTS ──
+const CHECKPOINTS = [
+    {id:'regatta',   name:'Regatta Ferry',   lat:-27.4988, lng:152.9994, radius:80,  badge:'⛴ Regatta Rider',    hint:'Regatta Ferry Terminal'},
+    {id:'story',     name:'Story Bridge',    lat:-27.4694, lng:153.0348, radius:100, badge:'🌉 Bridge Crosser',   hint:'Story Bridge Walkway'},
+    {id:'roma',      name:'Roma Street',     lat:-27.4648, lng:153.0163, radius:100, badge:'🚉 Roma Rusher',      hint:'Roma Street Station'},
+    {id:'southbank', name:'South Bank',      lat:-27.4820, lng:153.0220, radius:100, badge:'🌴 South Bank Sprinter', hint:'South Bank Parklands'},
+];
+var earnedBadges = {};
+var checkpointMarkers = {};
+
+function initCheckpoints(){
+    CHECKPOINTS.forEach(function(cp){
+        // Pulsing pin
+        var pin = L.marker([cp.lat, cp.lng], {
+            icon: L.divIcon({
+                html: '<div class="checkpoint-pin"></div>',
+                className: '', iconAnchor:[9,9]
+            }),
+            zIndexOffset: 500
+        }).addTo(map);
+        // Label on hover/click
+        var label = L.marker([cp.lat, cp.lng], {
+            icon: L.divIcon({
+                html: '<div class="checkpoint-label">&#9733; '+cp.hint+'</div>',
+                className: '', iconAnchor:[-5, 20]
+            }),
+            zIndexOffset: 499
+        }).addTo(map);
+        checkpointMarkers[cp.id] = {pin:pin, label:label};
+    });
+}
+
+function checkCheckpoints(lat, lng){
+    if(!isRacing) return;
+    CHECKPOINTS.forEach(function(cp){
+        if(earnedBadges[cp.id]) return;
+        var dist = haversine(lat, lng, cp.lat, cp.lng);
+        if(dist <= cp.radius){
+            earnedBadges[cp.id] = true;
+            showBadgeToast(cp.badge);
+            speak('Checkpoint unlocked. ' + cp.name + '. ' + cp.badge.split(' ').slice(1).join(' ') + ' badge earned.');
+            // Flash checkpoint pin gold
+            if(checkpointMarkers[cp.id]){
+                checkpointMarkers[cp.id].pin.setIcon(L.divIcon({
+                    html: '<div style="width:22px;height:22px;border-radius:50%;background:#fff;border:3px solid #FFAA00;box-shadow:0 0 20px #FFAA00"></div>',
+                    className:'', iconAnchor:[11,11]
+                }));
+            }
+        }
+    });
+}
+
+function showBadgeToast(badge){
+    var existing = document.querySelector('.badge-toast');
+    if(existing) existing.remove();
+    var el = document.createElement('div');
+    el.className = 'badge-toast';
+    el.textContent = badge + ' UNLOCKED';
+    document.body.appendChild(el);
+    setTimeout(function(){ el.remove(); }, 4000);
+}
+
+// Init checkpoints on load
+initCheckpoints();
 
 function closeOverlay(){document.getElementById('overlay').classList.remove('show');}
 </script>
