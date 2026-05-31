@@ -12,348 +12,357 @@
         *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
         html,body{height:100%;background:radial-gradient(ellipse at center,#0e0e1f 0%,#070708 100%);overflow:hidden;font-family:var(--head);color:var(--white);-webkit-tap-highlight-color:transparent}
         #map{position:absolute;inset:0;z-index:1}
-        .leaflet-marker-icon{transition:transform 1.2s linear!important}
-        .leaflet-marker-shadow{transition:transform 1.2s linear!important}
         .leaflet-control-attribution{display:none!important}
+        .leaflet-marker-icon{transition:transform 1.2s linear!important}
         .hidden{display:none!important}
 
-        /* SCREENS */
-        .screen{position:fixed;inset:0;z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--black);padding:24px}
+        /* ── SCREEN WRAPPER ── */
+        .screen{position:fixed;inset:0;z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(ellipse at center,#0e0e1f 0%,#070708 100%);padding:28px}
 
-        /* AUTH */
-        #screen-auth .logo{width:160px;height:160px;border-radius:50%;overflow:hidden;border:3px solid var(--red);box-shadow:0 0 40px rgba(232,0,26,0.3);margin-bottom:24px;animation:logoPulse 3s ease-in-out infinite}
-        #screen-auth .logo img{width:100%;height:100%;object-fit:cover}
-        @keyframes logoPulse{0%,100%{box-shadow:0 0 0 3px rgba(232,0,26,0.4),0 0 40px rgba(232,0,26,0.2)}50%{box-shadow:0 0 0 8px rgba(232,0,26,0.2),0 0 60px rgba(232,0,26,0.4)}}
-        .auth-title{font-size:3rem;font-weight:900;letter-spacing:3px;margin-bottom:6px}
-        .auth-title span{color:var(--red)}
-        .auth-sub{font-family:var(--mono);font-size:0.7rem;color:rgba(255,255,255,0.4);letter-spacing:3px;text-transform:uppercase;margin-bottom:36px}
-        .btn-google,.btn-apple{width:100%;max-width:340px;background:#fff;color:#111;border:none;padding:16px 20px;border-radius:8px;font-size:1rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:12px}
-        .btn-google img{width:20px;height:20px}
-        .auth-spectate{font-family:var(--mono);font-size:0.7rem;color:rgba(255,255,255,0.25);letter-spacing:2px;cursor:pointer;text-transform:uppercase;margin-top:12px}
+        /* ── SCREEN 1: SIGN IN ── */
+        #s-auth .logo{width:140px;height:140px;border-radius:50%;overflow:hidden;border:3px solid var(--red);box-shadow:0 0 0 6px rgba(232,0,26,0.15),0 0 40px rgba(232,0,26,0.3);margin-bottom:20px;animation:pulse 3s ease-in-out infinite}
+        #s-auth .logo img{width:100%;height:100%;object-fit:cover}
+        @keyframes pulse{0%,100%{box-shadow:0 0 0 6px rgba(232,0,26,0.15),0 0 40px rgba(232,0,26,0.2)}50%{box-shadow:0 0 0 12px rgba(232,0,26,0.08),0 0 60px rgba(232,0,26,0.4)}}
+        .game-title{font-size:3.2rem;font-weight:900;letter-spacing:3px;margin-bottom:4px}
+        .game-title span{color:var(--red)}
+        .game-sub{font-family:var(--mono);font-size:0.65rem;color:rgba(255,255,255,0.35);letter-spacing:4px;text-transform:uppercase;margin-bottom:40px}
+        .btn-signin{width:100%;max-width:320px;background:#fff;color:#111;border:none;padding:15px 20px;border-radius:8px;font-size:1rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:10px}
+        .btn-signin img{width:20px;height:20px}
+        .btn-signin.apple{background:#111;color:#fff;border:1px solid rgba(255,255,255,0.2)}
 
-        /* USERNAME */
-        #screen-username{gap:16px}
-        .username-heading{font-size:2rem;font-weight:900;letter-spacing:2px;text-align:center}
-        .username-sub{font-family:var(--mono);font-size:0.7rem;color:rgba(255,255,255,0.35);letter-spacing:2px;text-align:center;line-height:1.6}
-        .username-wrap{position:relative;width:100%;max-width:340px}
-        .username-at{position:absolute;left:16px;top:50%;transform:translateY(-50%);color:var(--red);font-family:var(--mono);font-size:1.2rem;font-weight:bold}
-        .username-wrap input{width:100%;background:var(--panel);border:1px solid var(--border);color:var(--white);font-family:var(--mono);font-size:1.2rem;padding:16px 16px 16px 44px;border-radius:8px;outline:none;letter-spacing:1px;transition:border-color 0.2s}
-        .username-wrap input:focus{border-color:var(--red)}
-        .username-wrap input::placeholder{color:rgba(255,255,255,0.2)}
-        #username-error{font-family:var(--mono);font-size:0.7rem;color:var(--red);letter-spacing:1px;min-height:16px}
-        .username-warn{font-family:var(--mono);font-size:0.65rem;color:rgba(255,255,255,0.25);letter-spacing:1px;text-align:center}
-        .username-warn strong{color:#FFAA00}
-        .btn-primary{width:100%;max-width:340px;background:var(--red);color:#fff;border:none;padding:18px;font-family:var(--head);font-size:1.5rem;font-weight:900;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:8px;box-shadow:0 6px 24px rgba(232,0,26,0.4)}
+        /* ── SCREEN 2: USERNAME (first time only) ── */
+        #s-name{gap:14px}
+        .s-title{font-size:2rem;font-weight:900;letter-spacing:2px;text-align:center}
+        .s-sub{font-family:var(--mono);font-size:0.65rem;color:rgba(255,255,255,0.35);letter-spacing:2px;text-align:center;line-height:1.7}
+        .input-wrap{position:relative;width:100%;max-width:320px}
+        .input-at{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--red);font-family:var(--mono);font-size:1.2rem;font-weight:bold}
+        .input-wrap input{width:100%;background:var(--panel);border:1px solid var(--border);color:var(--white);font-family:var(--mono);font-size:1.2rem;padding:15px 15px 15px 42px;border-radius:8px;outline:none;transition:border-color 0.2s}
+        .input-wrap input:focus{border-color:var(--red)}
+        .input-wrap input::placeholder{color:rgba(255,255,255,0.2)}
+        .input-err{font-family:var(--mono);font-size:0.65rem;color:var(--red);min-height:14px}
+        .input-note{font-family:var(--mono);font-size:0.6rem;color:rgba(255,255,255,0.2);text-align:center}
+        .input-note strong{color:#FFAA00}
+        .btn-red{width:100%;max-width:320px;background:var(--red);color:#fff;border:none;padding:17px;font-family:var(--head);font-size:1.5rem;font-weight:900;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:8px;box-shadow:0 6px 24px rgba(232,0,26,0.4)}
 
-        /* REGISTER SCREEN */
-        #screen-register{justify-content:flex-start;padding:0;overflow-y:auto;background:radial-gradient(ellipse at top,#0e0e1a 0%,var(--black) 70%)}
-        .reg-header{width:100%;background:linear-gradient(to right,#0e0e18,#12121f);border-bottom:1px solid rgba(232,0,26,0.2);padding:16px 20px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;position:relative;overflow:hidden}
-        .reg-logo-bg{position:absolute;right:-10px;top:50%;transform:translateY(-50%);width:100px;height:100px;border-radius:50%;overflow:hidden;opacity:0.1}
-        .reg-logo-bg img{width:100%;height:100%;object-fit:cover}
-        .reg-title{font-family:var(--head);font-size:2rem;font-weight:900;letter-spacing:3px}
-        .reg-title span{color:var(--red)}
-        .reg-body{width:100%;max-width:500px;margin:0 auto;padding:20px;display:flex;flex-direction:column;gap:20px;flex:1;background:transparent}
-        .section-label{font-family:var(--mono);font-size:0.7rem;color:rgba(255,255,255,0.35);letter-spacing:3px;text-transform:uppercase;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
-        .section-badge{font-size:0.6rem;color:var(--teal);background:var(--teal-dim);padding:2px 7px;border-radius:3px}
+        /* ── SCREEN 3: REGISTER ── */
+        #s-reg{justify-content:flex-start;padding:0;overflow-y:auto;align-items:stretch}
+        .reg-top{background:linear-gradient(to right,#0e0e18,#12121f);border-bottom:1px solid rgba(232,0,26,0.25);padding:14px 20px;display:flex;align-items:center;gap:12px;flex-shrink:0;position:relative;overflow:hidden}
+        .reg-top-logo{width:38px;height:38px;border-radius:50%;overflow:hidden;border:1.5px solid var(--red);flex-shrink:0}
+        .reg-top-logo img{width:100%;height:100%;object-fit:cover}
+        .reg-top-title{font-family:var(--head);font-size:1.8rem;font-weight:900;letter-spacing:2px}
+        .reg-top-title span{color:var(--red)}
+        .reg-top-user{font-family:var(--mono);font-size:0.65rem;color:var(--teal);letter-spacing:1px;margin-left:auto}
+        .reg-body{padding:16px 20px;display:flex;flex-direction:column;gap:18px;max-width:520px;width:100%;margin:0 auto}
 
-        /* ELIGIBILITY */
-        .eligibility-box{padding:14px;border-radius:8px;font-family:var(--mono);font-size:0.8rem;letter-spacing:1px;text-transform:uppercase;line-height:1.4}
-        .eligibility-box.checking{background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.5);border:1px dashed rgba(255,255,255,0.1)}
-        .eligibility-box.eligible{background:rgba(0,255,204,0.06);border:1px solid var(--teal);color:var(--teal)}
-        .eligibility-box.ineligible{background:rgba(232,0,26,0.08);border:1px solid var(--red);color:var(--red)}
+        /* Countdown */
+        .countdown-block{background:linear-gradient(135deg,rgba(232,0,26,0.12),rgba(232,0,26,0.04));border:1px solid rgba(232,0,26,0.35);border-radius:10px;padding:14px 18px;display:flex;align-items:center;justify-content:space-between}
+        .cd-left{display:flex;flex-direction:column;gap:2px}
+        .cd-label{font-family:var(--mono);font-size:0.55rem;color:rgba(255,255,255,0.35);letter-spacing:2px;text-transform:uppercase}
+        .cd-time{font-family:var(--head);font-size:3rem;font-weight:900;color:var(--red);line-height:1;letter-spacing:2px}
+        .cd-right{text-align:right}
+        .cd-slot{font-family:var(--head);font-size:1.6rem;font-weight:900;color:var(--white)}
 
-        /* SLOTS */
+        /* Eligibility */
+        .elig-box{padding:12px 16px;border-radius:8px;font-family:var(--mono);font-size:0.75rem;letter-spacing:1px;line-height:1.4}
+        .elig-box.checking{background:rgba(255,255,255,0.04);color:rgba(255,255,255,0.45);border:1px dashed rgba(255,255,255,0.1)}
+        .elig-box.ok{background:rgba(0,255,204,0.06);border:1px solid rgba(0,255,204,0.4);color:var(--teal)}
+        .elig-box.no{background:rgba(232,0,26,0.08);border:1px solid rgba(232,0,26,0.4);color:var(--red)}
+
+        /* Section labels */
+        .sec-label{font-family:var(--mono);font-size:0.6rem;color:rgba(255,255,255,0.3);letter-spacing:3px;text-transform:uppercase;margin-bottom:8px}
+
+        /* Slots */
         .slots-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-        .slot-card{background:linear-gradient(135deg,#161620,#0e0e12);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:12px 8px;text-align:center;cursor:pointer;transition:all 0.15s;box-shadow:0 2px 8px rgba(0,0,0,0.4)}
+        .slot-card{background:linear-gradient(135deg,#161620,#0e0e12);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:12px 8px;text-align:center;cursor:pointer;transition:all 0.15s;box-shadow:0 2px 8px rgba(0,0,0,0.4)}
         .slot-card.active{border-color:var(--teal);background:var(--teal-dim)}
         .slot-card.active .slot-time{color:var(--teal)}
         .slot-time{font-family:var(--head);font-size:1.4rem;font-weight:700;display:block}
-        .slot-riders{font-family:var(--mono);font-size:0.6rem;color:rgba(255,255,255,0.35);margin-top:2px;display:block}
+        .slot-count{font-family:var(--mono);font-size:0.55rem;color:rgba(255,255,255,0.3);margin-top:2px;display:block}
+        .slot-card.active .slot-count{color:var(--teal);opacity:0.7}
 
-        /* AVATARS */
-        .avatar-strip{display:flex;gap:10px;overflow-x:scroll;padding-bottom:6px;-webkit-overflow-scrolling:touch;cursor:grab}
-        .avatar-strip::-webkit-scrollbar{display:none}
-        .avatar-card{min-width:80px;height:90px;background:var(--panel);border:1px solid var(--border);border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;position:relative;flex-shrink:0;transition:all 0.15s}
-        .avatar-card.active{border-color:var(--red);background:rgba(232,0,26,0.1)}
-        
-        
-        .avatar-card.taken{opacity:0.4;cursor:not-allowed;border-style:dashed}
-        .avatar-img{width:48px;height:48px;object-fit:contain;border-radius:6px}
-        .avatar-name{font-family:var(--mono);font-size:0.55rem;color:rgba(255,255,255,0.5);text-align:center;padding:0 4px}
-        .avatar-perk{position:absolute;top:3px;right:3px;font-family:var(--mono);font-size:0.45rem;font-weight:bold;background:#FFAA00;color:#000;padding:1px 3px;border-radius:2px}
-        .avatar-taken{position:absolute;inset:0;background:rgba(0,0,0,0.8);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:0.5rem;color:var(--red);text-align:center;padding:4px;border-radius:8px;line-height:1.3}
-        .briscramble-card{border-color:var(--red)!important;background:rgba(232,0,26,0.08)!important}
-        .avatar-logo-mini{width:48px;height:48px;border-radius:50%;overflow:hidden;border:1px solid var(--red)}
-        .avatar-logo-mini img{width:100%;height:100%;object-fit:cover}
+        /* Avatars */
+        .avatar-strip{display:flex;gap:8px;overflow-x:scroll;padding-bottom:6px;cursor:grab;-webkit-overflow-scrolling:touch}
+        .avatar-strip::-webkit-scrollbar{height:3px}
+        .avatar-strip::-webkit-scrollbar-track{background:rgba(255,255,255,0.05)}
+        .avatar-strip::-webkit-scrollbar-thumb{background:var(--red);border-radius:3px}
+        .av-card{min-width:76px;height:86px;background:linear-gradient(135deg,#161620,#0e0e12);border:1px solid rgba(255,255,255,0.08);border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;flex-shrink:0;transition:all 0.15s;position:relative}
+        .av-card.active{border-color:var(--red);background:rgba(232,0,26,0.1)}
+        .av-card img{width:44px;height:44px;object-fit:contain;border-radius:4px}
+        .av-card span{font-family:var(--mono);font-size:0.5rem;color:rgba(255,255,255,0.45);text-align:center;padding:0 3px}
+        .av-default-badge{position:absolute;top:3px;right:3px;font-family:var(--mono);font-size:0.4rem;font-weight:bold;background:#FFAA00;color:#000;padding:1px 3px;border-radius:2px}
+        .av-logo{width:44px;height:44px;border-radius:50%;overflow:hidden;border:1px solid var(--red)}
+        .av-logo img{width:100%;height:100%;object-fit:cover}
 
-        /* REG FOOTER */
-        .reg-footer{width:100%;padding:16px 20px;padding-bottom:max(env(safe-area-inset-bottom,16px),16px);border-top:1px solid var(--border);flex-shrink:0;display:flex;flex-direction:column;gap:10px}
-        .btn-lock{width:100%;background:var(--red);color:#fff;border:none;padding:18px;font-family:var(--head);font-size:1.5rem;font-weight:900;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:8px;box-shadow:0 6px 24px rgba(232,0,26,0.45)}
+        /* Lock button */
+        .reg-footer{padding:14px 20px;padding-bottom:max(env(safe-area-inset-bottom,14px),14px);border-top:1px solid var(--border);flex-shrink:0;max-width:520px;width:100%;margin:0 auto}
+        .btn-lock{width:100%;background:var(--red);color:#fff;border:none;padding:18px;font-family:var(--head);font-size:1.6rem;font-weight:900;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:8px;box-shadow:0 6px 24px rgba(232,0,26,0.45);transition:transform 0.1s}
+        .btn-lock:active{transform:scale(0.98)}
         .btn-lock:disabled{background:#222;color:#555;box-shadow:none;cursor:not-allowed}
-        .btn-share-slot{width:100%;background:transparent;color:var(--teal);border:1px solid var(--teal);padding:12px;font-family:var(--head);font-size:1.1rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:8px}
-        .fine-print{text-align:center;font-family:var(--mono);font-size:0.6rem;color:rgba(255,255,255,0.2);letter-spacing:1px;line-height:1.5}
+        .lock-note{font-family:var(--mono);font-size:0.55rem;color:rgba(255,255,255,0.2);text-align:center;margin-top:8px;letter-spacing:1px}
 
-        /* HUD */
-        #hud{display:none;position:absolute;top:0;left:0;right:0;z-index:30;padding:10px 16px;padding-top:max(env(safe-area-inset-top,10px),10px);background:linear-gradient(to bottom,rgba(7,7,8,0.92) 0%,transparent 100%);align-items:center;justify-content:space-between;gap:12px}
+        /* ── RACE HUD ── */
+        #hud{display:none;position:absolute;top:0;left:0;right:0;z-index:30;padding:10px 14px;padding-top:max(env(safe-area-inset-top,10px),10px);background:linear-gradient(to bottom,rgba(7,7,8,0.95) 0%,transparent 100%);align-items:center;justify-content:space-between;gap:10px}
         #hud.show{display:flex}
-        .hud-logo{width:40px;height:40px;border-radius:50%;overflow:hidden;border:1.5px solid var(--red);flex-shrink:0}
+        .hud-logo{width:38px;height:38px;border-radius:50%;overflow:hidden;border:1.5px solid var(--red);flex-shrink:0}
         .hud-logo img{width:100%;height:100%;object-fit:cover}
-        .hud-slot{font-family:var(--mono);font-size:0.65rem;color:var(--teal);letter-spacing:1px;text-align:center;line-height:1.2}
-        .hud-slot strong{display:block;font-size:1rem;color:#fff}
+        .hud-mid{display:flex;flex-direction:column;align-items:center;gap:1px}
+        .hud-slot-label{font-family:var(--mono);font-size:0.55rem;color:var(--teal);letter-spacing:2px}
+        .hud-slot-val{font-family:var(--head);font-size:1.1rem;font-weight:900;color:#fff;line-height:1}
         .hud-right{display:flex;flex-direction:column;align-items:flex-end;gap:2px}
-        .hud-dist{font-family:var(--mono);font-size:0.65rem;color:rgba(255,255,255,0.5)}
-        .hud-dist strong{color:var(--white);font-size:0.9rem;display:block}
-        .live-pill{display:flex;align-items:center;gap:4px;font-family:var(--mono);font-size:0.6rem;color:var(--red)}
+        .hud-dist-label{font-family:var(--mono);font-size:0.55rem;color:rgba(255,255,255,0.4);letter-spacing:1px}
+        .hud-dist-val{font-family:var(--head);font-size:1.3rem;font-weight:900;color:#fff;line-height:1}
+        .live-pill{display:flex;align-items:center;gap:3px;font-family:var(--mono);font-size:0.55rem;color:var(--red)}
         .live-dot{width:5px;height:5px;border-radius:50%;background:var(--red);animation:blink 1s ease-in-out infinite}
         @keyframes blink{0%,100%{opacity:1}50%{opacity:0.2}}
 
-        /* DRAWER */
-        #race-drawer{display:none;position:absolute;bottom:36px;left:0;right:0;z-index:30}
-        #race-drawer.show{display:block}
-        #race-drawer.collapsed #drawer-body{display:none}
-        .drawer-handle-zone{display:flex;justify-content:center;padding:10px 0 0;cursor:pointer}
-        .drawer-handle{width:36px;height:4px;background:rgba(255,255,255,0.25);border-radius:2px}
-        .drawer-panel{background:rgba(14,14,18,0.97);border-top:1px solid var(--border);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
-        .drawer-peek{padding:10px 16px 12px;display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer}
-        .peek-you{display:flex;align-items:center;gap:10px;flex:1}
-        .peek-position{font-family:var(--head);font-size:2.2rem;font-weight:900;line-height:1;min-width:36px}
-        .peek-position.p1{color:var(--teal)}.peek-position.p2{color:#FFD700}.peek-position.p3{color:#CD7F32}.peek-position.back{color:rgba(255,255,255,0.4)}
-        .peek-label{font-family:var(--mono);font-size:0.6rem;color:rgba(255,255,255,0.35);letter-spacing:2px;text-transform:uppercase}
-        .peek-label strong{display:block;color:var(--white);font-size:0.85rem;font-family:var(--head);font-weight:700;letter-spacing:0}
-        .peek-gap{font-family:var(--mono);font-size:0.65rem;color:rgba(255,255,255,0.4);text-align:center}
-        .peek-gap strong{display:block;font-size:1.1rem;color:var(--white)}
-        .peek-gap.closing strong{color:var(--teal)}.peek-gap.losing strong{color:var(--red)}
-        .peek-expand{font-family:var(--mono);font-size:0.6rem;color:rgba(255,255,255,0.25);text-transform:uppercase;white-space:nowrap}
-        #drawer-body{padding:0 16px 8px}
-        .lb-header{display:flex;justify-content:space-between;align-items:center;padding:10px 0 8px;border-bottom:1px solid var(--border);margin-bottom:8px}
-        .lb-title{font-family:var(--mono);font-size:0.65rem;color:rgba(255,255,255,0.35);letter-spacing:3px;text-transform:uppercase}
-        .lb-slot{font-family:var(--mono);font-size:0.65rem;color:var(--teal)}
-        .lb-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,0.04)}
-        .lb-row.you{background:rgba(232,0,26,0.06);border-radius:6px;padding-left:8px;margin:0 -8px;border-bottom:none}
-        .lb-rank{font-family:var(--head);font-size:1.4rem;font-weight:900;width:28px;text-align:center;flex-shrink:0}
+        /* ── RACE DRAWER ── */
+        #drawer{display:none;position:absolute;bottom:36px;left:0;right:0;z-index:30}
+        #drawer.show{display:block}
+        #drawer.collapsed .drawer-body{display:none}
+        .drawer-panel{background:rgba(10,10,16,0.97);border-top:1px solid var(--border);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+        .drawer-pull{display:flex;justify-content:center;padding:8px 0;cursor:pointer}
+        .drawer-handle{width:32px;height:3px;background:rgba(255,255,255,0.2);border-radius:2px}
+        .drawer-peek{padding:8px 16px 10px;display:flex;align-items:center;justify-content:space-between;gap:10px;cursor:pointer}
+        .peek-pos{font-family:var(--head);font-size:2.4rem;font-weight:900;line-height:1;min-width:32px}
+        .peek-pos.p1{color:var(--teal)}.peek-pos.p2{color:#FFD700}.peek-pos.p3{color:#CD7F32}.peek-pos.back{color:rgba(255,255,255,0.35)}
+        .peek-info{flex:1}
+        .peek-name{font-family:var(--head);font-size:1rem;font-weight:700;color:var(--white)}
+        .peek-sublabel{font-family:var(--mono);font-size:0.55rem;color:rgba(255,255,255,0.3);letter-spacing:1px}
+        .peek-gap-block{text-align:center}
+        .peek-gap-val{font-family:var(--head);font-size:1.1rem;font-weight:900;color:var(--white)}
+        .peek-gap-val.closing{color:var(--teal)}.peek-gap-val.losing{color:var(--red)}
+        .peek-gap-spd{font-family:var(--mono);font-size:0.5rem;color:rgba(255,255,255,0.25);margin-top:1px}
+        .peek-expand{font-family:var(--mono);font-size:0.55rem;color:rgba(255,255,255,0.2);text-transform:uppercase;white-space:nowrap}
+        .drawer-body{padding:0 16px 6px}
+        .lb-head{display:flex;justify-content:space-between;padding:8px 0 6px;border-bottom:1px solid var(--border);margin-bottom:6px;font-family:var(--mono);font-size:0.6rem;color:rgba(255,255,255,0.3);letter-spacing:2px;text-transform:uppercase}
+        .lb-slot{color:var(--teal)}
+        .lb-row{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,0.03)}
+        .lb-row.me{background:rgba(232,0,26,0.07);border-radius:6px;padding-left:8px;margin:0 -8px;border-bottom:none}
+        .lb-rank{font-family:var(--head);font-size:1.3rem;font-weight:900;width:26px;text-align:center;flex-shrink:0}
         .lb-rank.r1{color:var(--teal)}.lb-rank.r2{color:#FFD700}.lb-rank.r3{color:#CD7F32}
+        .lb-av{width:26px;height:26px;object-fit:contain;border-radius:4px;flex-shrink:0}
         .lb-info{flex:1;min-width:0}
-        .lb-name{font-family:var(--head);font-size:1rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-        .lb-name.you-name{color:var(--red)}
-        .lb-dist{font-family:var(--mono);font-size:0.75rem;color:rgba(255,255,255,0.5);text-align:right;flex-shrink:0}
-        .lb-dist strong{display:block;color:var(--white);font-size:0.85rem}
-        .lb-dist.closest strong{color:var(--teal)}
-        .lb-footer-note{padding:10px 0 max(env(safe-area-inset-bottom,10px),10px);text-align:center;font-family:var(--mono);font-size:0.55rem;color:rgba(255,255,255,0.15);letter-spacing:2px}
+        .lb-name{font-family:var(--head);font-size:0.95rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+        .lb-name.me{color:var(--red)}
+        .lb-bar-wrap{width:100%;height:2px;background:rgba(255,255,255,0.05);border-radius:2px;margin-top:3px}
+        .lb-bar{height:100%;border-radius:2px;transition:width 1s ease}
+        .lb-dist{font-family:var(--mono);font-size:0.7rem;color:rgba(255,255,255,0.45);text-align:right;flex-shrink:0}
+        .lb-dist strong{display:block;color:var(--white);font-size:0.8rem}
+        .lb-dist.lead strong{color:var(--teal)}
+        .lb-note{padding:8px 0 max(env(safe-area-inset-bottom,8px),8px);text-align:center;font-family:var(--mono);font-size:0.5rem;color:rgba(255,255,255,0.12);letter-spacing:2px}
 
-        /* AD TICKER */
-        #ad-ticker{display:none;position:absolute;bottom:0;left:0;right:0;z-index:25;background:rgba(7,7,8,0.95);border-top:1px solid var(--border);overflow:hidden;height:36px}
-        #ad-ticker.show{display:block}
-        .ticker-track{display:flex;gap:60px;white-space:nowrap;animation:tickerScroll 35s linear infinite;padding:8px 0}
-        .ticker-track span{font-family:var(--mono);font-size:0.65rem;color:rgba(255,255,255,0.45);letter-spacing:2px;text-transform:uppercase}
-        .ticker-track span strong{color:#FFAA00}
-        @keyframes tickerScroll{0%{transform:translateX(100vw)}100%{transform:translateX(-100%)}}
+        /* ── AD TICKER ── */
+        #ticker{display:none;position:absolute;bottom:0;left:0;right:0;z-index:25;background:rgba(7,7,8,0.92);border-top:1px solid var(--border);overflow:hidden;height:34px}
+        #ticker.show{display:block}
+        .ticker-inner{display:flex;gap:60px;white-space:nowrap;animation:tick 35s linear infinite;padding:7px 0}
+        .ticker-inner span{font-family:var(--mono);font-size:0.6rem;color:rgba(255,255,255,0.4);letter-spacing:2px;text-transform:uppercase}
+        .ticker-inner span strong{color:#FFAA00}
+        @keyframes tick{0%{transform:translateX(100vw)}100%{transform:translateX(-100%)}}
 
-        /* RECENTER */
-        #btn-recenter{display:none;position:absolute;right:14px;bottom:130px;z-index:35;width:42px;height:42px;background:var(--panel);border:1px solid var(--border);border-radius:50%;color:rgba(255,255,255,0.6);font-size:1.1rem;cursor:pointer;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(0,0,0,0.5);transition:bottom 0.3s}
-        #btn-recenter.show{display:flex}
+        /* ── RECENTER ── */
+        #btn-re{display:none;position:absolute;right:12px;bottom:130px;z-index:35;width:40px;height:40px;background:rgba(14,14,18,0.9);border:1px solid var(--border);border-radius:50%;color:rgba(255,255,255,0.6);font-size:1rem;cursor:pointer;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(0,0,0,0.5);transition:bottom 0.3s}
+        #btn-re.show{display:flex}
 
-        /* OVERLAY */
-        #overlay{display:none;position:fixed;inset:0;z-index:200;background:rgba(7,7,8,0.96);justify-content:center;align-items:center}
-        #overlay.show{display:flex}
-        .overlay-card{width:min(90vw,380px);border-radius:12px;padding:36px 28px;text-align:center;font-family:var(--head)}
-        .overlay-card.lockout{background:var(--red);color:#fff}
-        .overlay-card.warning{background:var(--dark);border:2px solid #FFAA00}
-        .overlay-card.winner{background:var(--dark);border:2px solid var(--teal)}
-        .overlay-logo{width:80px;height:80px;border-radius:50%;overflow:hidden;margin:0 auto 16px;border:2px solid rgba(255,255,255,0.3)}
-        .overlay-logo img{width:100%;height:100%;object-fit:cover}
-        .overlay-title{font-size:2rem;font-weight:900;letter-spacing:2px;text-transform:uppercase;margin-bottom:12px}
-        .overlay-msg{font-size:1rem;font-weight:400;line-height:1.5;opacity:0.85;margin-bottom:20px;font-family:sans-serif}
-        .overlay-btn{display:inline-block;padding:12px 28px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);color:#fff;font-family:var(--head);font-size:1rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:6px;text-decoration:none;margin:4px}
+        /* ── SHARE BUTTON (race mode) ── */
+        #btn-share{display:none;position:absolute;right:12px;bottom:180px;z-index:35;width:40px;height:40px;background:rgba(14,14,18,0.9);border:1px solid rgba(0,255,204,0.3);border-radius:50%;color:var(--teal);font-size:1rem;cursor:pointer;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(0,0,0,0.5)}
+        #btn-share.show{display:flex}
 
-        @keyframes finishPing{0%{transform:scale(1);box-shadow:0 0 0 0 rgba(232,0,26,0.8)}70%{transform:scale(1.15);box-shadow:0 0 0 18px rgba(232,0,26,0)}100%{transform:scale(1);box-shadow:0 0 0 0 rgba(232,0,26,0)}}
-        @keyframes rivalPulse{0%,100%{filter:drop-shadow(0 0 4px rgba(0,255,204,0.8))}50%{filter:drop-shadow(0 0 10px rgba(0,255,204,0.3))}}
-        @keyframes checkpointPing{0%{transform:scale(1);opacity:1}50%{transform:scale(1.4);opacity:0.6}100%{transform:scale(1);opacity:1}}
-        .checkpoint-pin{width:18px;height:18px;border-radius:50%;background:#FFAA00;border:2px solid #fff;box-shadow:0 0 10px #FFAA00;animation:checkpointPing 2s ease-in-out infinite;cursor:pointer}
-        .checkpoint-label{font-family:var(--mono);font-size:9px;color:#FFAA00;background:rgba(0,0,0,0.85);padding:2px 6px;border-radius:3px;white-space:nowrap;border:1px solid rgba(255,170,0,0.4)}
-        .badge-toast{position:fixed;top:80px;left:50%;transform:translateX(-50%);z-index:500;background:rgba(255,170,0,0.95);color:#000;font-family:var(--head);font-size:1.1rem;font-weight:900;letter-spacing:1px;padding:12px 24px;border-radius:8px;box-shadow:0 8px 24px rgba(255,170,0,0.5);animation:toastIn 0.4s ease;pointer-events:none}
+        /* ── CHECKPOINTS ── */
+        @keyframes cpPulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.3);opacity:0.7}}
+        .cp-pin{width:16px;height:16px;border-radius:50%;background:#FFAA00;border:2px solid #fff;box-shadow:0 0 8px #FFAA00;animation:cpPulse 2s ease-in-out infinite}
+        .cp-label{font-family:var(--mono);font-size:8px;color:#FFAA00;background:rgba(0,0,0,0.85);padding:2px 5px;border-radius:3px;white-space:nowrap;border:1px solid rgba(255,170,0,0.3)}
+        .badge-toast{position:fixed;top:80px;left:50%;transform:translateX(-50%);z-index:500;background:rgba(255,170,0,0.95);color:#000;font-family:var(--head);font-size:1rem;font-weight:900;letter-spacing:1px;padding:10px 20px;border-radius:8px;white-space:nowrap;pointer-events:none;animation:toastIn 0.3s ease}
         @keyframes toastIn{0%{opacity:0;top:60px}100%{opacity:1;top:80px}}
+
+        /* MAP MARKERS */
+        @keyframes finishPing{0%{transform:scale(1);box-shadow:0 0 0 0 rgba(232,0,26,0.8)}70%{transform:scale(1.1);box-shadow:0 0 0 16px rgba(232,0,26,0)}100%{transform:scale(1);box-shadow:0 0 0 0 rgba(232,0,26,0)}}
+        @keyframes rivalPulse{0%,100%{filter:drop-shadow(0 0 4px rgba(0,255,204,0.8))}50%{filter:drop-shadow(0 0 8px rgba(0,255,204,0.3))}}
     </style>
 </head>
 <body>
 
 <div id="map"></div>
 
-<!-- AUTH -->
-<div id="screen-auth" class="screen">
+<!-- SCREEN 1: SIGN IN -->
+<div id="s-auth" class="screen">
     <div class="logo"><img src="/logo.png" alt="BriScramble"></div>
-    <div class="auth-title">BRIS<span>CRAMBLE</span></div>
-    <div class="auth-sub">Brisbane's morning commute race</div>
-    <button class="btn-google" onclick="signInGoogle()">
-        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="G">
+    <div class="game-title">BRIS<span>CRAMBLE</span></div>
+    <div class="game-sub">Brisbane's Morning Commute Race</div>
+    <button class="btn-signin" onclick="signInGoogle()">
+        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="">
         Continue with Google
     </button>
-    <button class="btn-apple" onclick="signInApple()">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+    <button class="btn-signin apple" onclick="signInApple()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
         Continue with Apple
     </button>
-    <span class="auth-spectate" onclick="spectateMode()">watch live map &rarr;</span>
 </div>
 
-<!-- USERNAME -->
-<div id="screen-username" class="screen hidden">
-    <div class="username-heading">WHAT DO YOU RACE AS?</div>
-    <div class="username-sub">Your permanent race identity.<br>Locked after 24 hours.</div>
-    <div class="username-wrap">
-        <span class="username-at">@</span>
-        <input type="text" id="username-input" placeholder="YourHandle" maxlength="18" autocomplete="off" autocorrect="off" spellcheck="false">
+<!-- SCREEN 2: USERNAME (first time only) -->
+<div id="s-name" class="screen hidden">
+    <div class="s-title">WHAT DO YOU RACE AS?</div>
+    <div class="s-sub">Your race identity — set once,<br>yours forever.</div>
+    <div class="input-wrap">
+        <span class="input-at">@</span>
+        <input type="text" id="name-input" placeholder="YourHandle" maxlength="18" autocomplete="off" autocorrect="off" spellcheck="false">
     </div>
-    <div id="username-error"></div>
-    <div class="username-warn">&#9888; <strong>Cannot be changed after 24 hours</strong></div>
-    <button class="btn-primary" onclick="confirmUsername()">LOCK IT IN</button>
+    <div class="input-err" id="name-err"></div>
+    <div class="input-note">&#9888; <strong>Locked after 24 hours</strong></div>
+    <button class="btn-red" onclick="saveName()">LOCK IT IN</button>
 </div>
 
-<!-- REGISTER -->
-<div id="screen-register" class="screen hidden">
-    <div class="reg-header">
-        <div class="reg-title">BRIS<span>CRAMBLE</span></div>
-        <div class="reg-logo-bg"><img src="/logo.png" alt=""></div>
+<!-- SCREEN 3: REGISTER -->
+<div id="s-reg" class="screen hidden">
+    <div class="reg-top">
+        <div class="reg-top-logo"><img src="/logo.png" alt=""></div>
+        <div class="reg-top-title">BRIS<span>CRAMBLE</span></div>
+        <div class="reg-top-user" id="reg-username"></div>
     </div>
     <div class="reg-body">
-        <div>
-            <div class="section-label">BOUNDARY CHECK</div>
-            <div id="eligibility-box" class="eligibility-box checking">&#128225; Checking GPS location...</div>
-        </div>
-        <div>
-            <div class="section-label">[01] SELECT GRID SLOT</div>
-            <div id="countdown-block" style="background:linear-gradient(135deg,rgba(232,0,26,0.15),rgba(232,0,26,0.05));border:1px solid rgba(232,0,26,0.4);border-radius:8px;padding:14px 16px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between">
-                <div>
-                    <div style="font-family:var(--mono);font-size:0.6rem;color:rgba(255,255,255,0.4);letter-spacing:2px;text-transform:uppercase">NEXT GUN FIRES IN</div>
-                    <div id="slot-countdown" style="font-family:var(--head);font-size:2.8rem;font-weight:900;color:var(--red);line-height:1;letter-spacing:2px">--:--</div>
-                </div>
-                <div style="text-align:right">
-                    <div style="font-family:var(--mono);font-size:0.6rem;color:rgba(255,255,255,0.4);letter-spacing:2px;text-transform:uppercase">SELECTED SLOT</div>
-                    <div id="countdown-slot" style="font-family:var(--head);font-size:1.8rem;font-weight:900;color:var(--white)">7:00</div>
-                </div>
+
+        <!-- COUNTDOWN -->
+        <div class="countdown-block" id="cd-block">
+            <div class="cd-left">
+                <div class="cd-label">NEXT GUN FIRES IN</div>
+                <div class="cd-time" id="cd-time">--:--</div>
             </div>
+            <div class="cd-right">
+                <div class="cd-label">YOUR SLOT</div>
+                <div class="cd-slot" id="cd-slot">7:00</div>
+            </div>
+        </div>
+
+        <!-- BOUNDARY CHECK -->
+        <div>
+            <div class="sec-label">BOUNDARY CHECK</div>
+            <div id="elig-box" class="elig-box checking">&#128225; Getting your GPS location...</div>
+        </div>
+
+        <!-- SLOT SELECTION -->
+        <div>
+            <div class="sec-label">[01] SELECT YOUR SLOT</div>
             <div class="slots-grid">
-                <div class="slot-card active" onclick="selectSlot(this,'7:00')"><span class="slot-time">7:00</span><span class="slot-riders" id="r700">0 / 20</span></div>
-                <div class="slot-card" onclick="selectSlot(this,'7:10')"><span class="slot-time">7:10</span><span class="slot-riders" id="r710">0 / 20</span></div>
-                <div class="slot-card" onclick="selectSlot(this,'7:20')"><span class="slot-time">7:20</span><span class="slot-riders" id="r720">0 / 20</span></div>
-                <div class="slot-card" onclick="selectSlot(this,'7:30')"><span class="slot-time">7:30</span><span class="slot-riders" id="r730">0 / 20</span></div>
-                <div class="slot-card" onclick="selectSlot(this,'7:40')"><span class="slot-time">7:40</span><span class="slot-riders" id="r740">0 / 20</span></div>
-                <div class="slot-card" onclick="selectSlot(this,'7:50')"><span class="slot-time">7:50</span><span class="slot-riders" id="r750">0 / 20</span></div>
+                <div class="slot-card active" onclick="pickSlot(this,'7:00')"><span class="slot-time">7:00</span><span class="slot-count" id="sc700">0 racing</span></div>
+                <div class="slot-card" onclick="pickSlot(this,'7:10')"><span class="slot-time">7:10</span><span class="slot-count" id="sc710">0 racing</span></div>
+                <div class="slot-card" onclick="pickSlot(this,'7:20')"><span class="slot-time">7:20</span><span class="slot-count" id="sc720">0 racing</span></div>
+                <div class="slot-card" onclick="pickSlot(this,'7:30')"><span class="slot-time">7:30</span><span class="slot-count" id="sc730">0 racing</span></div>
+                <div class="slot-card" onclick="pickSlot(this,'7:40')"><span class="slot-time">7:40</span><span class="slot-count" id="sc740">0 racing</span></div>
+                <div class="slot-card" onclick="pickSlot(this,'7:50')"><span class="slot-time">7:50</span><span class="slot-count" id="sc750">0 racing</span></div>
             </div>
         </div>
+
+        <!-- AVATAR -->
         <div>
-            <div class="section-label">[02] CLAIM IDENTITY </div>
-            <div class="avatar-strip" id="avatar-strip">
-                <div class="avatar-card briscramble-card active" onclick="selectAvatar(this,'scrambler','/logo.png')">
-                    <div class="avatar-logo-mini"><img src="/logo.png" alt=""></div>
-                    <span class="avatar-name">SCRAMBLER</span>
-                    <span class="avatar-perk">DEFAULT</span>
+            <div class="sec-label">[02] PICK YOUR AVATAR</div>
+            <div class="avatar-strip" id="av-strip">
+                <div class="av-card active" onclick="pickAvatar(this,'scrambler','/logo.png')">
+                    <div class="av-logo"><img src="/logo.png" alt=""></div>
+                    <span>SCRAMBLER</span>
+                    <div class="av-default-badge">DEFAULT</div>
                 </div>
-                <div class="avatar-card" onclick="selectAvatar(this,'train','/avatars/generic/train.svg')"><img class="avatar-img" src="/avatars/generic/train.svg"><span class="avatar-name">Train</span></div>
-                <div class="avatar-card" onclick="selectAvatar(this,'bus','/avatars/generic/bus.svg')"><img class="avatar-img" src="/avatars/generic/bus.svg"><span class="avatar-name">Bus</span></div>
-                <div class="avatar-card" onclick="selectAvatar(this,'bike','/avatars/generic/bike.svg')"><img class="avatar-img" src="/avatars/generic/bike.svg"><span class="avatar-name">Fixie</span></div>
-                <div class="avatar-card" onclick="selectAvatar(this,'ferry','/avatars/generic/ferry.svg')"><img class="avatar-img" src="/avatars/generic/ferry.svg"><span class="avatar-name">Ferry</span></div>
-                <div class="avatar-card" onclick="selectAvatar(this,'tram','/avatars/generic/tram.svg')"><img class="avatar-img" src="/avatars/generic/tram.svg"><span class="avatar-name">Tram</span></div>
-                <div class="avatar-card" onclick="selectAvatar(this,'taxi','/avatars/generic/taxi.svg')"><img class="avatar-img" src="/avatars/generic/taxi.svg"><span class="avatar-name">Taxi</span></div>
-                <div class="avatar-card" onclick="selectAvatar(this,'scooter','/avatars/generic/scooter.svg')"><img class="avatar-img" src="/avatars/generic/scooter.svg"><span class="avatar-name">Scooter</span></div>
-                <div class="avatar-card" onclick="selectAvatar(this,'motorbike','/avatars/generic/motorbike.svg')"><img class="avatar-img" src="/avatars/generic/motorbike.svg"><span class="avatar-name">Moto</span></div>
-                <div class="avatar-card" onclick="selectAvatar(this,'skateboard','/avatars/generic/skateboard.svg')"><img class="avatar-img" src="/avatars/generic/skateboard.svg"><span class="avatar-name">Skater</span></div>
-                <div class="avatar-card" onclick="selectAvatar(this,'walker','/avatars/generic/walker.svg')"><img class="avatar-img" src="/avatars/generic/walker.svg"><span class="avatar-name">Walker</span></div>
-                <div class="avatar-card" onclick="selectAvatar(this,'koala','/avatars/generic/koala.svg')"><img class="avatar-img" src="/avatars/generic/koala.svg"><span class="avatar-name">Koala</span></div>
-                <div class="avatar-card" onclick="selectAvatar(this,'kangaroo','/avatars/generic/kangaroo.svg')"><img class="avatar-img" src="/avatars/generic/kangaroo.svg"><span class="avatar-name">Kangaroo</span></div>
-                <div class="avatar-card" onclick="selectAvatar(this,'galah','/avatars/generic/galah.svg')"><img class="avatar-img" src="/avatars/generic/galah.svg"><span class="avatar-name">Galah</span></div>
-                <div class="avatar-card" onclick="selectAvatar(this,'ibis','/avatars/generic/ibis.svg')"><img class="avatar-img" src="/avatars/generic/ibis.svg"><span class="avatar-name">Bin Chicken</span></div>
-                <div class="avatar-card" onclick="selectAvatar(this,'croc','/avatars/generic/croc.svg')"><img class="avatar-img" src="/avatars/generic/croc.svg"><span class="avatar-name">Croc</span></div>
-                <div class="avatar-card" onclick="selectAvatar(this,'kookaburra','/avatars/generic/kookaburra.svg')"><img class="avatar-img" src="/avatars/generic/kookaburra.svg"><span class="avatar-name">Kookaburra</span></div>
-                <div class="avatar-card" onclick="selectAvatar(this,'magpie','/avatars/generic/magpie.svg')"><img class="avatar-img" src="/avatars/generic/magpie.svg"><span class="avatar-name">Magpie</span></div>
-                <div class="avatar-card" onclick="selectAvatar(this,'meat_pie','/avatars/generic/meat_pie.svg')"><img class="avatar-img" src="/avatars/generic/meat_pie.svg"><span class="avatar-name">Meat Pie</span></div>
-                <div class="avatar-card" onclick="selectAvatar(this,'snag','/avatars/generic/snag.svg')"><img class="avatar-img" src="/avatars/generic/snag.svg"><span class="avatar-name">Snag</span></div>
-                <div class="avatar-card" onclick="selectAvatar(this,'flat_white','/avatars/generic/flat_white.svg')"><img class="avatar-img" src="/avatars/generic/flat_white.svg"><span class="avatar-name">Flat White</span></div>
-                <div class="avatar-card" onclick="selectAvatar(this,'coldie','/avatars/generic/coldie.svg')"><img class="avatar-img" src="/avatars/generic/coldie.svg"><span class="avatar-name">Coldie</span></div>
-                <div class="avatar-card" onclick="selectAvatar(this,'vegemite','/avatars/generic/vegemite.svg')"><img class="avatar-img" src="/avatars/generic/vegemite.svg"><span class="avatar-name">Vegemite</span></div>
-                <div class="avatar-card" onclick="selectAvatar(this,'pavlova','/avatars/generic/pavlova.svg')"><img class="avatar-img" src="/avatars/generic/pavlova.svg"><span class="avatar-name">Pav</span></div>
-                <div class="avatar-card" onclick="selectAvatar(this,'tim_tam','/avatars/generic/tim_tam.svg')"><img class="avatar-img" src="/avatars/generic/tim_tam.svg"><span class="avatar-name">Tim Tam</span></div>
-                <div class="avatar-card" onclick="selectAvatar(this,'afl_ball','/avatars/generic/afl_ball.svg')"><img class="avatar-img" src="/avatars/generic/afl_ball.svg"><span class="avatar-name">AFL Ball</span></div>
-                <div class="avatar-card" onclick="selectAvatar(this,'cricket','/avatars/generic/cricket.svg')"><img class="avatar-img" src="/avatars/generic/cricket.svg"><span class="avatar-name">Cricket</span></div>
-                <div class="avatar-card" onclick="selectAvatar(this,'rugby_ball','/avatars/generic/rugby_ball.svg')"><img class="avatar-img" src="/avatars/generic/rugby_ball.svg"><span class="avatar-name">Rugby Ball</span></div>
-                <div class="avatar-card" onclick="selectAvatar(this,'cycling','/avatars/generic/cycling.svg')"><img class="avatar-img" src="/avatars/generic/cycling.svg"><span class="avatar-name">Cyclist</span></div>
-                <div class="avatar-card" onclick="selectAvatar(this,'swim','/avatars/generic/swim.svg')"><img class="avatar-img" src="/avatars/generic/swim.svg"><span class="avatar-name">Swimmer</span></div>
-                <div class="avatar-card" onclick="selectAvatar(this,'story_bridge','/avatars/generic/story_bridge.svg')"><img class="avatar-img" src="/avatars/generic/story_bridge.svg"><span class="avatar-name">Story Bridge</span></div>
-                <div class="avatar-card" onclick="selectAvatar(this,'south_bank','/avatars/generic/south_bank.svg')"><img class="avatar-img" src="/avatars/generic/south_bank.svg"><span class="avatar-name">South Bank</span></div>
-                <div class="avatar-card" onclick="selectAvatar(this,'lang_park','/avatars/generic/lang_park.svg')"><img class="avatar-img" src="/avatars/generic/lang_park.svg"><span class="avatar-name">Lang Park</span></div>
-                <div class="avatar-card" onclick="selectAvatar(this,'goma','/avatars/generic/goma.svg')"><img class="avatar-img" src="/avatars/generic/goma.svg"><span class="avatar-name">GOMA</span></div>
-                <div class="avatar-card" onclick="selectAvatar(this,'big_wheel','/avatars/generic/big_wheel.svg')"><img class="avatar-img" src="/avatars/generic/big_wheel.svg"><span class="avatar-name">Big Wheel</span></div>
-                <div class="avatar-card" onclick="selectAvatar(this,'gateway_bridge','/avatars/generic/gateway_bridge.svg')"><img class="avatar-img" src="/avatars/generic/gateway_bridge.svg"><span class="avatar-name">Gateway</span></div>
-                <div class="avatar-card" onclick="selectAvatar(this,'suncorp','/avatars/generic/suncorp.svg')"><img class="avatar-img" src="/avatars/generic/suncorp.svg"><span class="avatar-name">Suncorp</span></div>
-                <div class="avatar-card" onclick="selectAvatar(this,'kangaroo_point','/avatars/generic/kangaroo_point.svg')"><img class="avatar-img" src="/avatars/generic/kangaroo_point.svg"><span class="avatar-name">Roo Point</span></div>
+                <div class="av-card" onclick="pickAvatar(this,'train','/avatars/generic/train.svg')"><img src="/avatars/generic/train.svg"><span>Train</span></div>
+                <div class="av-card" onclick="pickAvatar(this,'bus','/avatars/generic/bus.svg')"><img src="/avatars/generic/bus.svg"><span>Bus</span></div>
+                <div class="av-card" onclick="pickAvatar(this,'bike','/avatars/generic/bike.svg')"><img src="/avatars/generic/bike.svg"><span>Fixie</span></div>
+                <div class="av-card" onclick="pickAvatar(this,'ferry','/avatars/generic/ferry.svg')"><img src="/avatars/generic/ferry.svg"><span>Ferry</span></div>
+                <div class="av-card" onclick="pickAvatar(this,'tram','/avatars/generic/tram.svg')"><img src="/avatars/generic/tram.svg"><span>Tram</span></div>
+                <div class="av-card" onclick="pickAvatar(this,'taxi','/avatars/generic/taxi.svg')"><img src="/avatars/generic/taxi.svg"><span>Taxi</span></div>
+                <div class="av-card" onclick="pickAvatar(this,'scooter','/avatars/generic/scooter.svg')"><img src="/avatars/generic/scooter.svg"><span>Scooter</span></div>
+                <div class="av-card" onclick="pickAvatar(this,'motorbike','/avatars/generic/motorbike.svg')"><img src="/avatars/generic/motorbike.svg"><span>Moto</span></div>
+                <div class="av-card" onclick="pickAvatar(this,'skateboard','/avatars/generic/skateboard.svg')"><img src="/avatars/generic/skateboard.svg"><span>Skater</span></div>
+                <div class="av-card" onclick="pickAvatar(this,'walker','/avatars/generic/walker.svg')"><img src="/avatars/generic/walker.svg"><span>Walker</span></div>
+                <div class="av-card" onclick="pickAvatar(this,'koala','/avatars/generic/koala.svg')"><img src="/avatars/generic/koala.svg"><span>Koala</span></div>
+                <div class="av-card" onclick="pickAvatar(this,'kangaroo','/avatars/generic/kangaroo.svg')"><img src="/avatars/generic/kangaroo.svg"><span>Kangaroo</span></div>
+                <div class="av-card" onclick="pickAvatar(this,'galah','/avatars/generic/galah.svg')"><img src="/avatars/generic/galah.svg"><span>Galah</span></div>
+                <div class="av-card" onclick="pickAvatar(this,'ibis','/avatars/generic/ibis.svg')"><img src="/avatars/generic/ibis.svg"><span>Bin Chicken</span></div>
+                <div class="av-card" onclick="pickAvatar(this,'croc','/avatars/generic/croc.svg')"><img src="/avatars/generic/croc.svg"><span>Croc</span></div>
+                <div class="av-card" onclick="pickAvatar(this,'kookaburra','/avatars/generic/kookaburra.svg')"><img src="/avatars/generic/kookaburra.svg"><span>Kookaburra</span></div>
+                <div class="av-card" onclick="pickAvatar(this,'magpie','/avatars/generic/magpie.svg')"><img src="/avatars/generic/magpie.svg"><span>Magpie</span></div>
+                <div class="av-card" onclick="pickAvatar(this,'meat_pie','/avatars/generic/meat_pie.svg')"><img src="/avatars/generic/meat_pie.svg"><span>Meat Pie</span></div>
+                <div class="av-card" onclick="pickAvatar(this,'snag','/avatars/generic/snag.svg')"><img src="/avatars/generic/snag.svg"><span>Snag</span></div>
+                <div class="av-card" onclick="pickAvatar(this,'flat_white','/avatars/generic/flat_white.svg')"><img src="/avatars/generic/flat_white.svg"><span>Flat White</span></div>
+                <div class="av-card" onclick="pickAvatar(this,'coldie','/avatars/generic/coldie.svg')"><img src="/avatars/generic/coldie.svg"><span>Coldie</span></div>
+                <div class="av-card" onclick="pickAvatar(this,'vegemite','/avatars/generic/vegemite.svg')"><img src="/avatars/generic/vegemite.svg"><span>Vegemite</span></div>
+                <div class="av-card" onclick="pickAvatar(this,'pavlova','/avatars/generic/pavlova.svg')"><img src="/avatars/generic/pavlova.svg"><span>Pav</span></div>
+                <div class="av-card" onclick="pickAvatar(this,'tim_tam','/avatars/generic/tim_tam.svg')"><img src="/avatars/generic/tim_tam.svg"><span>Tim Tam</span></div>
+                <div class="av-card" onclick="pickAvatar(this,'afl_ball','/avatars/generic/afl_ball.svg')"><img src="/avatars/generic/afl_ball.svg"><span>AFL Ball</span></div>
+                <div class="av-card" onclick="pickAvatar(this,'cricket','/avatars/generic/cricket.svg')"><img src="/avatars/generic/cricket.svg"><span>Cricket</span></div>
+                <div class="av-card" onclick="pickAvatar(this,'rugby_ball','/avatars/generic/rugby_ball.svg')"><img src="/avatars/generic/rugby_ball.svg"><span>Rugby</span></div>
+                <div class="av-card" onclick="pickAvatar(this,'cycling','/avatars/generic/cycling.svg')"><img src="/avatars/generic/cycling.svg"><span>Cyclist</span></div>
+                <div class="av-card" onclick="pickAvatar(this,'swim','/avatars/generic/swim.svg')"><img src="/avatars/generic/swim.svg"><span>Swimmer</span></div>
+                <div class="av-card" onclick="pickAvatar(this,'story_bridge','/avatars/generic/story_bridge.svg')"><img src="/avatars/generic/story_bridge.svg"><span>Story Bridge</span></div>
+                <div class="av-card" onclick="pickAvatar(this,'south_bank','/avatars/generic/south_bank.svg')"><img src="/avatars/generic/south_bank.svg"><span>South Bank</span></div>
+                <div class="av-card" onclick="pickAvatar(this,'lang_park','/avatars/generic/lang_park.svg')"><img src="/avatars/generic/lang_park.svg"><span>Lang Park</span></div>
+                <div class="av-card" onclick="pickAvatar(this,'goma','/avatars/generic/goma.svg')"><img src="/avatars/generic/goma.svg"><span>GOMA</span></div>
+                <div class="av-card" onclick="pickAvatar(this,'big_wheel','/avatars/generic/big_wheel.svg')"><img src="/avatars/generic/big_wheel.svg"><span>Big Wheel</span></div>
+                <div class="av-card" onclick="pickAvatar(this,'gateway_bridge','/avatars/generic/gateway_bridge.svg')"><img src="/avatars/generic/gateway_bridge.svg"><span>Gateway</span></div>
+                <div class="av-card" onclick="pickAvatar(this,'suncorp','/avatars/generic/suncorp.svg')"><img src="/avatars/generic/suncorp.svg"><span>Suncorp</span></div>
+                <div class="av-card" onclick="pickAvatar(this,'kangaroo_point','/avatars/generic/kangaroo_point.svg')"><img src="/avatars/generic/kangaroo_point.svg"><span>Roo Point</span></div>
             </div>
         </div>
+
     </div>
     <div class="reg-footer">
-        <button id="btn-lock" class="btn-lock" onclick="lockGrid()" disabled>&#9889; SECURE GRID POSITION</button>
-        <button class="btn-share-slot" onclick="shareSlot()">&#128279; SHARE THIS SLOT</button>
-        <p class="fine-print">GPS required. Must be 4km+ from King George Square.</p>
+        <button class="btn-lock" id="btn-lock" onclick="lockIn()" disabled>&#9889; LOCK IN &amp; RACE</button>
+        <div class="lock-note">Must be outside the 4KM boundary to race</div>
     </div>
 </div>
 
-<!-- HUD -->
+<!-- RACE HUD -->
 <div id="hud">
     <div class="hud-logo"><img src="/logo.png" alt=""></div>
-    <div class="hud-slot">SLOT<strong id="hud-slot-time">7:00</strong></div>
+    <div class="hud-mid">
+        <div class="hud-slot-label">SLOT</div>
+        <div class="hud-slot-val" id="hud-slot">7:00</div>
+    </div>
     <div class="hud-right">
-        <div class="hud-dist">TO FINISH<strong id="hud-dist-val">&#8212;</strong></div>
+        <div class="hud-dist-label">TO FINISH</div>
+        <div class="hud-dist-val" id="hud-dist">&#8212;</div>
         <div class="live-pill"><span class="live-dot"></span>LIVE</div>
     </div>
 </div>
 
-<button id="btn-recenter" onclick="recenterMap()">&#8982;</button>
+<!-- RECENTER -->
+<button id="btn-re" onclick="recentre()">&#8982;</button>
+
+<!-- SHARE (race mode) -->
+<button id="btn-share" onclick="doShare()" title="Share">&#128279;</button>
 
 <!-- RACE DRAWER -->
-<div id="race-drawer">
+<div id="drawer">
     <div class="drawer-panel">
-        <div class="drawer-handle-zone" onclick="toggleDrawer()"><div class="drawer-handle"></div></div>
+        <div class="drawer-pull" onclick="toggleDrawer()"><div class="drawer-handle"></div></div>
         <div class="drawer-peek" onclick="toggleDrawer()">
-            <div class="peek-you">
-                <div class="peek-position p1" id="peek-pos">1</div>
-                <div>
-                    <div class="peek-label">YOUR POSITION</div>
-                    <div class="peek-label"><strong id="peek-name">@You</strong></div>
-                </div>
+            <div class="peek-pos back" id="pk-pos">1</div>
+            <div class="peek-info">
+                <div class="peek-name" id="pk-name">@You</div>
+                <div class="peek-sublabel">YOUR POSITION</div>
             </div>
-            <div class="peek-gap closing" id="peek-gap-block">
-                <div class="peek-label" id="peek-gap-label">LEADER GAP</div>
-                <strong id="peek-gap">LEADING</strong>
-                <div style="font-family:var(--mono);font-size:0.55rem;color:rgba(255,255,255,0.3);margin-top:2px" id="peek-speed"></div>
+            <div class="peek-gap-block">
+                <div class="peek-gap-val" id="pk-gap">LEADING</div>
+                <div class="peek-gap-spd" id="pk-spd"></div>
+                <div class="peek-sublabel">LEADER GAP</div>
             </div>
-            <div class="peek-expand" id="peek-expand-label">&#8593; BOARD</div>
+            <div class="peek-expand" id="pk-expand">&#8593; BOARD</div>
         </div>
-        <div id="drawer-body">
-            <div class="lb-header">
-                <span class="lb-title">LIVE LEADERBOARD</span>
-                <span class="lb-slot" id="lb-slot-label">7:00 SCRAMBLE</span>
+        <div class="drawer-body" id="drawer-body">
+            <div class="lb-head">
+                <span>LIVE LEADERBOARD</span>
+                <span class="lb-slot" id="lb-slot-lbl">7:00 SCRAMBLE</span>
             </div>
             <div id="lb-rows"></div>
-            <div class="lb-footer-note">YOUR SLOT ONLY &mdash; FIREBASE REALTIME</div>
+            <div class="lb-note">YOUR SLOT ONLY &mdash; FIREBASE REALTIME</div>
         </div>
     </div>
 </div>
 
 <!-- AD TICKER -->
-<div id="ad-ticker">
-    <div class="ticker-track">
+<div id="ticker">
+    <div class="ticker-inner">
         <span>&#9749; <strong>SPONSORED</strong> &mdash; XXXX GOLD &mdash; CRACK ONE OPEN AT THE FINISH LINE</span>
         <span>&#127828; <strong>HUNGRY JACK'S</strong> &mdash; WINNER EATS FREE &mdash; SHOW YOUR WIN SCREEN</span>
-        <span>&#9749; <strong>BOOST JUICE</strong> &mdash; FUEL YOUR SCRAMBLE &mdash; BRISBANE CBD STORES</span>
+        <span>&#9749; <strong>BOOST JUICE</strong> &mdash; FUEL YOUR SCRAMBLE &mdash; BRISBANE CBD</span>
         <span>&#127942; <strong>TODAY'S PRIZE</strong> &mdash; $3 COFFEE VOUCHER &mdash; FIRST TO KING GEORGE SQUARE WINS</span>
         <span>&#9749; <strong>SPONSORED</strong> &mdash; XXXX GOLD &mdash; CRACK ONE OPEN AT THE FINISH LINE</span>
-    </div>
-</div>
-
-<!-- OVERLAY -->
-<div id="overlay">
-    <div class="overlay-card" id="overlay-card">
-        <div class="overlay-logo"><img src="/logo.png" alt=""></div>
-        <div class="overlay-title" id="overlay-title"></div>
-        <div class="overlay-msg" id="overlay-msg"></div>
-        <div id="overlay-actions"></div>
     </div>
 </div>
 
@@ -374,519 +383,411 @@ firebase.initializeApp({
     appId:"1:1055901704932:web:ccb078dc722a7b580782f1"
 });
 const auth = firebase.auth();
-const db = firebase.database();
+const db   = firebase.database();
 const claimPhone = window.claimPhone || '+61400000000';
 
+// ── CONSTANTS ──
+const FINISH   = [-27.4691, 153.0235];
+const BOUNDARY = 4000;
+
 // ── STATE ──
-const FINISH = [-27.4691, 153.0235];
-const EXCLUSION_M = 4000;
-let myUID=null, myUsername=null, myEmoji='/logo.png', myAvatarSlug='scrambler';
+let myUID=null, myUsername=null, myAvatar='/logo.png', mySlug='scrambler';
 let selectedSlot='7:00', isRacing=false, drawerOpen=false;
 let mapFollowing=true, myLat=null, myLng=null, isEligible=false;
-const leafletMarkers={};
-let myMarker=null, slotRef=null, slotListener=null;
-var _lastEmit=0;
+const markers={};
+let myMarker=null, slotRef=null;
+let _lastEmit=0, _lastMyDist=null, _lastRivalDist={}, _prevGapData={};
 
 // ── MAP ──
-const map=L.map('map',{zoomControl:false,attributionControl:false}).setView([-27.464,153.024],12);
-L.tileLayer('https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}',{
-    maxZoom:20, attribution:''
-}).addTo(map);
+const map = L.map('map',{zoomControl:false,attributionControl:false}).setView(FINISH,13);
+L.tileLayer('https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}',{maxZoom:20}).addTo(map);
+
+// Boundary ring
+L.circle(FINISH,{radius:BOUNDARY,color:'#E8001A',weight:2,fill:true,fillColor:'#E8001A',fillOpacity:0.04,dashArray:'8,6',opacity:0.7}).addTo(map);
+L.marker([-27.433,153.0235],{icon:L.divIcon({html:"<div style='font-family:monospace;font-size:10px;font-weight:bold;color:rgba(232,0,26,0.8);background:rgba(0,0,0,0.7);padding:2px 6px;border-radius:3px;white-space:nowrap;border:1px solid rgba(232,0,26,0.3)'>&#8212; 4KM BOUNDARY &#8212;</div>",className:'',iconAnchor:[70,0]})}).addTo(map);
+
+// Finish marker
 L.marker(FINISH,{icon:L.divIcon({
-    html:"<div style='text-align:center;'>"
-        +"<div style='width:28px;height:28px;border-radius:50%;background:#E8001A;border:3px solid #fff;box-shadow:0 0 20px #E8001A;animation:finishPing 2s infinite;margin:0 auto'></div>"
-        +"<div style='font-family:monospace;font-size:10px;font-weight:bold;color:#fff;background:#E8001A;padding:2px 6px;border-radius:3px;margin-top:3px;letter-spacing:2px;white-space:nowrap;animation:finishPing 2s infinite'>FINISH</div>"
+    html:"<div style='text-align:center'>"
+        +"<div style='width:26px;height:26px;border-radius:50%;background:#E8001A;border:3px solid #fff;box-shadow:0 0 20px #E8001A;animation:finishPing 2s infinite;margin:0 auto'></div>"
+        +"<div style='font-family:monospace;font-size:9px;font-weight:bold;color:#fff;background:#E8001A;padding:2px 6px;border-radius:3px;margin-top:3px;letter-spacing:2px;animation:finishPing 2s infinite'>FINISH</div>"
         +"</div>",
-    className:'', iconAnchor:[14,0]
+    className:'',iconAnchor:[13,0]
 })}).addTo(map);
-L.circle(FINISH,{radius:EXCLUSION_M,color:'#E8001A',weight:1.5,fill:true,fillColor:'#E8001A',fillOpacity:0.04,dashArray:'8,6',opacity:0.5}).addTo(map);
-L.marker([-27.424,153.0235],{icon:L.divIcon({html:"<div style='font-family:monospace;font-size:10px;color:rgba(232,0,26,0.7);letter-spacing:2px;white-space:nowrap;text-shadow:0 1px 3px black'>&#8212; 4KM BOUNDARY &#8212;</div>",className:'',iconAnchor:[60,0]})}).addTo(map);
-map.on('dragstart',function(){mapFollowing=false;document.getElementById('btn-recenter').classList.add('show');});
+
+map.on('dragstart',function(){mapFollowing=false;document.getElementById('btn-re').classList.add('show');});
+
+// ── CHECKPOINTS ──
+const CPS=[
+    {id:'regatta',  name:'Regatta Ferry',  lat:-27.4988,lng:152.9994,r:80, badge:'&#9972; Regatta Rider'},
+    {id:'story',    name:'Story Bridge',   lat:-27.4694,lng:153.0348,r:100,badge:'&#127311; Bridge Crosser'},
+    {id:'roma',     name:'Roma Street',    lat:-27.4648,lng:153.0163,r:100,badge:'&#128649; Roma Rusher'},
+    {id:'southbank',name:'South Bank',     lat:-27.4820,lng:153.0220,r:100,badge:'&#127796; South Bank Sprinter'},
+];
+var earned={};
+CPS.forEach(function(cp){
+    L.marker([cp.lat,cp.lng],{icon:L.divIcon({html:"<div class='cp-pin'></div>",className:'',iconAnchor:[8,8]})}).addTo(map);
+    L.marker([cp.lat,cp.lng],{icon:L.divIcon({html:"<div class='cp-label'>&#9733; "+cp.name+"</div>",className:'',iconAnchor:[-4,18]})}).addTo(map);
+});
+
+function checkCPs(lat,lng){
+    CPS.forEach(function(cp){
+        if(earned[cp.id]) return;
+        if(haversine(lat,lng,cp.lat,cp.lng)<=cp.r){
+            earned[cp.id]=true;
+            var el=document.createElement('div');
+            el.className='badge-toast';
+            el.innerHTML=cp.badge+' UNLOCKED';
+            document.body.appendChild(el);
+            setTimeout(function(){el.remove();},3500);
+            speak('Checkpoint unlocked. '+cp.name+'.');
+        }
+    });
+}
 
 // ── UTILS ──
-function haversine(lat1,lng1,lat2,lng2){var R=6371000,dLat=(lat2-lat1)*Math.PI/180,dLng=(lng2-lng1)*Math.PI/180;var a=Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLng/2)*Math.sin(dLng/2);return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));}
-function fmtDist(m){return m>=1000?(m/1000).toFixed(1)+'km':Math.round(m)+'m';}
+function haversine(a,b,c,d){var R=6371000,dL=(c-a)*Math.PI/180,dl=(d-b)*Math.PI/180;var x=Math.sin(dL/2)*Math.sin(dL/2)+Math.cos(a*Math.PI/180)*Math.cos(c*Math.PI/180)*Math.sin(dl/2)*Math.sin(dl/2);return R*2*Math.atan2(Math.sqrt(x),Math.sqrt(1-x));}
+function fmt(m){return m>=1000?(m/1000).toFixed(1)+'km':Math.round(m)+'m';}
+
+// ── SPEECH ──
+var _lastSpeak=0;
+function speak(msg){
+    if(!window.speechSynthesis) return;
+    var now=Date.now();
+    if(now-_lastSpeak<10000) return;
+    _lastSpeak=now;
+    window.speechSynthesis.cancel();
+    var u=new SpeechSynthesisUtterance(msg);
+    u.rate=1.05;u.pitch=0.9;u.volume=0.9;
+    var v=window.speechSynthesis.getVoices();
+    var pref=v.find(function(x){return x.lang==='en-AU';})||v.find(function(x){return x.lang.startsWith('en');});
+    if(pref) u.voice=pref;
+    window.speechSynthesis.speak(u);
+}
+if(window.speechSynthesis) window.speechSynthesis.onvoiceschanged=function(){window.speechSynthesis.getVoices();};
 
 // ── MARKER ICONS ──
-function makeIcon(src,label,isYou,distLabel,pulse){
-    var c=isYou?'#E8001A':pulse?'#00FFCC':'rgba(255,255,255,0.7)';
-    var b=isYou?'border:1.5px solid #E8001A':pulse?'border:1.5px solid #00FFCC':'border:1px solid rgba(232,0,26,0.5)';
-    var anim=pulse?'animation:rivalPulse 1.2s ease-in-out infinite;':'';
-    var dist=distLabel?'<div style="font-family:monospace;font-size:8px;color:'+(isYou?'#fff':pulse?'#00FFCC':'rgba(255,255,255,0.5)')+';background:rgba(0,0,0,0.85);padding:1px 5px;border-radius:3px;margin-top:2px;white-space:nowrap">'+distLabel+'</div>':'';
+function mkIcon(src,label,isMe,dist,pulse){
+    var c=isMe?'#E8001A':pulse?'#00FFCC':'rgba(255,255,255,0.8)';
+    var b=isMe?'border:1.5px solid #E8001A':pulse?'border:1.5px solid #00FFCC':'border:1px solid rgba(255,255,255,0.3)';
+    var a=pulse?'animation:rivalPulse 1.2s ease-in-out infinite;':'';
     return L.divIcon({
-        html:'<div style="text-align:center;filter:drop-shadow(0 2px 6px rgba(0,0,0,0.9));'+anim+'"><img src="'+src+'" style="width:26px;height:26px;object-fit:contain;border-radius:4px" onerror="this.style.display=\'none\'"><br><span style="font-size:8px;background:rgba(7,7,8,0.9);color:'+c+';'+b+';padding:1px 5px;font-family:monospace;border-radius:3px;white-space:nowrap;display:inline-block">'+label+'</span>'+dist+'</div>',
+        html:'<div style="text-align:center;'+a+'filter:drop-shadow(0 2px 6px rgba(0,0,0,0.8))">'
+            +'<img src="'+src+'" style="width:26px;height:26px;object-fit:contain;border-radius:4px" onerror="this.style.display=\'none\'">'
+            +'<br><span style="font-size:8px;background:rgba(7,7,8,0.92);color:'+c+';'+b+';padding:1px 5px;font-family:monospace;border-radius:3px;white-space:nowrap;display:inline-block">'+label+'</span>'
+            +(dist?'<div style="font-size:7px;color:'+(isMe?'#fff':pulse?'#00FFCC':'rgba(255,255,255,0.5)')+';background:rgba(0,0,0,0.8);padding:1px 4px;border-radius:2px;margin-top:1px;white-space:nowrap">'+dist+'</div>':'')
+            +'</div>',
         className:'',iconAnchor:[20,30]
     });
 }
 
 // ── AUTH ──
-auth.getRedirectResult().then(function(r){if(r&&r.user)handleAuth(r);}).catch(function(){});
-auth.onAuthStateChanged(function(user){if(user){myUID=user.uid;checkExistingUsername();}});
+auth.getRedirectResult().then(function(r){if(r&&r.user)afterAuth(r.user);}).catch(function(){});
+auth.onAuthStateChanged(function(u){if(u) afterAuth(u);});
 
-function signInGoogle(){auth.signInWithRedirect(new firebase.auth.GoogleAuthProvider()).catch(function(e){alert(e.message);});}
-function signInApple(){auth.signInWithRedirect(new firebase.auth.OAuthProvider('apple.com')).catch(function(e){alert(e.message);});}
-function handleAuth(r){myUID=r.user.uid;checkExistingUsername();}
+function signInGoogle(){auth.signInWithRedirect(new firebase.auth.GoogleAuthProvider());}
+function signInApple(){auth.signInWithRedirect(new firebase.auth.OAuthProvider('apple.com'));}
 
-function checkExistingUsername(){
+function afterAuth(user){
+    myUID=user.uid;
     fetch('/api/register-username',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({uid:myUID,username:'__check__'})})
-    .then(function(r){return r.json();}).then(function(d){
-        if(d.username&&d.username!=='__check__'){myUsername=d.username;goToRegister();}
-        else{showScreen('screen-username');}
-    }).catch(function(){showScreen('screen-username');});
+    .then(function(r){return r.json();})
+    .then(function(d){
+        if(d.username&&d.username!=='__check__'){myUsername=d.username;goRegister();}
+        else{show('s-name');}
+    }).catch(function(){show('s-name');});
 }
 
-function confirmUsername(){
-    var v=document.getElementById('username-input').value.trim().replace(/[^a-zA-Z0-9_]/g,'');
-    var e=document.getElementById('username-error');
-    if(v.length<2){e.textContent='Too short — minimum 2 characters';return;}
+// ── USERNAME ──
+function saveName(){
+    var v=document.getElementById('name-input').value.trim().replace(/[^a-zA-Z0-9_]/g,'');
+    var e=document.getElementById('name-err');
+    if(v.length<2){e.textContent='Minimum 2 characters';return;}
     e.textContent='';
     fetch('/api/register-username',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({uid:myUID||'u_'+Date.now(),username:v})})
-    .then(function(r){return r.json();}).then(function(d){
-        if(d.error){e.textContent=d.error;return;}
-        myUsername=d.username;
-        goToRegister();
-    }).catch(function(){myUsername=v;goToRegister();});
+    .then(function(r){return r.json();})
+    .then(function(d){if(d.error){e.textContent=d.error;return;}myUsername=d.username;goRegister();})
+    .catch(function(){myUsername=v;goRegister();});
 }
 
-function showScreen(id){
-    ['screen-auth','screen-username','screen-register'].forEach(function(s){
-        document.getElementById(s).classList.toggle('hidden',s!==id);
-    });
-}
-
-// ── REGISTER ──
-function goToRegister(){
-    showScreen('screen-register');
-    document.getElementById('peek-name').textContent='@'+(myUsername||'You');
-    startGPS();
+// ── REGISTER SCREEN ──
+function goRegister(){
+    show('s-reg');
+    document.getElementById('reg-username').textContent='@'+myUsername;
+    document.getElementById('pk-name').textContent='@'+myUsername;
     listenSlotCounts();
-    // Auto-select slot from URL
-    var params=new URLSearchParams(window.location.search);
-    var slot=params.get('slot');
-    if(slot){
-        selectedSlot=slot;
-        document.querySelectorAll('.slot-card').forEach(function(c){
-            var t=c.querySelector('.slot-time');
-            c.classList.toggle('active',t&&t.textContent===slot);
-        });
-    }
+    startCountdown();
+    startGPS();
+    // auto-select slot from URL
+    var p=new URLSearchParams(window.location.search).get('slot');
+    if(p) pickSlot(document.querySelector('.slot-card'),p);
 }
 
-function spectateMode(){myUsername='Spectator';showScreen(null);startRaceMode();}
+function show(id){
+    ['s-auth','s-name','s-reg'].forEach(function(s){document.getElementById(s).classList.toggle('hidden',s!==id);});
+}
 
-function selectSlot(el,time){
+function pickSlot(el,time){
     document.querySelectorAll('.slot-card').forEach(function(c){c.classList.remove('active');});
-    el.classList.add('active');
+    // find matching card if called with time only
+    if(typeof el === 'string'){ time=el; el=null; document.querySelectorAll('.slot-card').forEach(function(c){if(c.querySelector('.slot-time')&&c.querySelector('.slot-time').textContent===time)el=c;}); }
+    if(el) el.classList.add('active');
     selectedSlot=time;
+    startCountdown();
 }
 
-function selectAvatar(el,slug,src){
-    document.querySelectorAll('.avatar-card:not(.taken)').forEach(function(c){c.classList.remove('active');});
+function pickAvatar(el,slug,src){
+    document.querySelectorAll('.av-card').forEach(function(c){c.classList.remove('active');});
     el.classList.add('active');
-    myAvatarSlug=slug;
-    myEmoji=src;
+    mySlug=slug; myAvatar=src;
 }
 
-// Live slot player counts from Firebase
+// Drag scroll on desktop
+(function(){
+    var s=document.getElementById('av-strip');
+    if(!s) return;
+    var down=false,sx=0,sl=0;
+    s.addEventListener('mousedown',function(e){down=true;sx=e.pageX-s.offsetLeft;sl=s.scrollLeft;s.style.cursor='grabbing';});
+    s.addEventListener('mouseleave',function(){down=false;s.style.cursor='grab';});
+    s.addEventListener('mouseup',function(){down=false;s.style.cursor='grab';});
+    s.addEventListener('mousemove',function(e){if(!down)return;e.preventDefault();s.scrollLeft=sl-(e.pageX-s.offsetLeft-sx)*1.5;});
+})();
+
+// Slot counts from Firebase
 function listenSlotCounts(){
     ['7:00','7:10','7:20','7:30','7:40','7:50'].forEach(function(slot){
         db.ref('scrambles/'+slot+'/players').on('value',function(snap){
-            var count=snap.exists()?Object.keys(snap.val()).length:0;
-            var id='r'+slot.replace(':','');
-            var el=document.getElementById(id);
-            if(el) el.textContent=count+' / 20';
+            var n=snap.exists()?Object.keys(snap.val()).length:0;
+            var el=document.getElementById('sc'+slot.replace(':',''));
+            if(el) el.textContent=n+' racing';
         });
     });
 }
 
-function lockGrid(){
-    if(!isEligible) return;
-    showScreen(null);
-    startRaceMode();
-    // Write to Firebase
-    var playerRef=db.ref('scrambles/'+selectedSlot+'/players/'+myUID);
-    playerRef.set({username:myUsername,avatar:myEmoji,lat:myLat,lng:myLng,dist:haversine(myLat,myLng,FINISH[0],FINISH[1]),ts:firebase.database.ServerValue.TIMESTAMP});
-    playerRef.onDisconnect().remove();
-    // Listen to this slot
-    listenToSlot(selectedSlot);
-    showOverlay('winner','GRID LOCKED',
-        '<strong>@'+myUsername+'</strong> registered for the <strong>'+selectedSlot+'</strong> scramble.<br><br>Stay outside 4KM. GPS is tracking.',
-        '<button class="overlay-btn" onclick="closeOverlay()">RACE READY &#9889;</button>'
-        +'<button class="overlay-btn" style="border-color:var(--teal);color:var(--teal)" onclick="closeOverlay();shareSlot()">&#128279; SHARE</button>');
-}
-
-function shareSlot(){
-    var text='I just entered the '+selectedSlot+' BriScramble — Brisbane\'s morning commute race. Join me: https://briscramble.onrender.com?slot='+encodeURIComponent(selectedSlot);
-    if(navigator.share){navigator.share({title:'BriScramble',text:text,url:'https://briscramble.onrender.com?slot='+encodeURIComponent(selectedSlot)});}
-    else{navigator.clipboard.writeText(text).then(function(){alert('Copied!');});}
-}
-
-// ── FIREBASE REALTIME PLAYER SYNC ──
-function listenToSlot(slot){
-    if(slotListener) db.ref('scrambles/'+slot+'/players').off('value',slotListener);
-    slotListener=db.ref('scrambles/'+slot+'/players').on('value',function(snap){
-        var players=snap.val()||{};
-        // Remove stale markers
-        Object.keys(leafletMarkers).forEach(function(k){
-            if(k.startsWith('fb_')&&!players[k.replace('fb_','')]){
-                map.removeLayer(leafletMarkers[k]);delete leafletMarkers[k];
-            }
-        });
-        // Update/add markers and leaderboard
-        updateLeaderboard(players);
-        Object.entries(players).forEach(function(entry){
-            var uid=entry[0],p=entry[1];
-            if(uid===myUID||!p.lat||!p.lng) return;
-            var k='fb_'+uid;
-            var dist=haversine(p.lat,p.lng,FINISH[0],FINISH[1]);
-            var icon=makeIcon(p.avatar||'/logo.png','@'+p.username,false,fmtDist(dist)+' to finish',false);
-            if(!leafletMarkers[k]){leafletMarkers[k]=L.marker([p.lat,p.lng],{icon:icon}).addTo(map);}
-            else{leafletMarkers[k].setLatLng([p.lat,p.lng]);leafletMarkers[k].setIcon(icon);}
-        });
-    });
-    // Listen for winner
-    db.ref('scrambles/'+slot+'/winner').on('value',function(snap){
-        if(!snap.exists()) return;
-        var w=snap.val();
-        if(w.username===myUsername){
-            showOverlay('winner','&#127942; SLOT CHAMPION','You crossed King George Square FIRST in the <strong>'+slot+'</strong> scramble!',
-                '<a href="sms:'+claimPhone+'?body=BRISCRAMBLE%20WIN%20@'+myUsername+'%20'+slot+'" class="overlay-btn">&#128241; TEXT TO CLAIM</a>');
-        }
-    });
+// Countdown
+var _cdInterval=null;
+function startCountdown(){
+    clearInterval(_cdInterval);
+    function tick(){
+        var el=document.getElementById('cd-time');
+        var sl=document.getElementById('cd-slot');
+        var blk=document.getElementById('cd-block');
+        if(!el) return;
+        if(sl) sl.textContent=selectedSlot;
+        var now=new Date();
+        var bne=new Date(now.toLocaleString('en-AU',{timeZone:'Australia/Brisbane'}));
+        var pts=selectedSlot.split(':');
+        var tgt=new Date(bne);
+        tgt.setHours(parseInt(pts[0]),parseInt(pts[1]),0,0);
+        if(tgt<=bne){el.textContent='RACE OPEN';el.style.color='var(--teal)';el.style.fontSize='2rem';if(blk)blk.style.borderColor='rgba(0,255,204,0.5)';return;}
+        var diff=Math.floor((tgt-bne)/1000);
+        var h=Math.floor(diff/3600),m=Math.floor((diff%3600)/60),s=diff%60;
+        el.textContent=(h>0?String(h).padStart(2,'0')+':':'')+ String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+        el.style.fontSize='3rem';
+        if(diff<300){el.style.color='#FFAA00';if(blk)blk.style.borderColor='rgba(255,170,0,0.6)';}
+        else{el.style.color='var(--red)';if(blk)blk.style.borderColor='rgba(232,0,26,0.35)';}
+    }
+    tick();
+    _cdInterval=setInterval(tick,1000);
 }
 
 // ── GPS ──
 function startGPS(){
-    if(!navigator.geolocation){showEligibility('ineligible','&#10060; GPS not available');return;}
+    if(!navigator.geolocation){setElig('no','&#10060; GPS not available on this device');return;}
     navigator.geolocation.watchPosition(
-        function(pos){updateMyPos(pos.coords.latitude,pos.coords.longitude);},
-        function(){showEligibility('ineligible','&#10060; Enable location services and reload');},
+        function(p){onPos(p.coords.latitude,p.coords.longitude);},
+        function(){setElig('no','&#10060; Enable location services and reload');},
         {enableHighAccuracy:true,maximumAge:8000,timeout:20000}
     );
 }
 
-function showEligibility(type,msg){
-    var el=document.getElementById('eligibility-box');
+function setElig(type,msg){
+    var el=document.getElementById('elig-box');
     if(!el) return;
-    el.className='eligibility-box '+type;
+    el.className='elig-box '+type;
     el.innerHTML=msg;
-    isEligible=(type==='eligible');
+    isEligible=(type==='ok');
     var btn=document.getElementById('btn-lock');
     if(btn) btn.disabled=!isEligible;
 }
 
-function updateMyPos(lat,lng){
-    myLat=lat;myLng=lng;
+function onPos(lat,lng){
+    myLat=lat; myLng=lng;
     var dist=haversine(lat,lng,FINISH[0],FINISH[1]);
-    var firstFix=!myMarker;
+    var first=!myMarker;
+
     if(!myMarker){
-        myMarker=L.marker([lat,lng],{icon:makeIcon(myEmoji,'@'+(myUsername||'You'),true,fmtDist(dist)+' to finish',false),zIndexOffset:1000}).addTo(map);
+        myMarker=L.marker([lat,lng],{icon:mkIcon(myAvatar,'@'+myUsername,true,fmt(dist)+' to finish',false),zIndexOffset:1000}).addTo(map);
     } else {
         myMarker.setLatLng([lat,lng]);
-        myMarker.setIcon(makeIcon(myEmoji,'@'+(myUsername||'You'),true,fmtDist(dist)+' to finish',false));
+        myMarker.setIcon(mkIcon(myAvatar,'@'+(myUsername||'You'),true,fmt(dist)+' to finish',false));
     }
+
     if(!isRacing){
-        if(dist<EXCLUSION_M){showEligibility('ineligible','&#10060; INSIDE 4KM — '+fmtDist(dist)+' from finish. Move further out.');}
-        else{showEligibility('eligible','&#10003; ELIGIBLE — '+fmtDist(dist)+' from finish. Outside 4KM boundary.');}
+        if(dist<BOUNDARY) setElig('no','&#10060; INSIDE 4KM — '+fmt(dist)+' from finish. Move further out to race.');
+        else setElig('ok','&#10003; ELIGIBLE — '+fmt(dist)+' from finish. Outside boundary.');
     }
-    if(firstFix){map.fitBounds(L.latLngBounds([[lat,lng],FINISH]).pad(0.3),{animate:true,duration:1.5});}
+
+    if(first) map.fitBounds(L.latLngBounds([[lat,lng],FINISH]).pad(0.35),{animate:true,duration:1.5});
     else if(mapFollowing&&isRacing){
-        var z=dist>5000?13:dist>2000?14:dist>800?15:dist>300?16:dist>100?17:18;
+        var z=dist>4000?13:dist>2000?14:dist>800?15:dist>300?16:dist>100?17:18;
         map.setView([lat,lng],z,{animate:true,duration:1});
     }
+
     if(isRacing){
-        document.getElementById('hud-dist-val').textContent=fmtDist(dist);
-        checkCheckpoints(lat,lng);
+        document.getElementById('hud-dist').textContent=fmt(dist);
+        checkCPs(lat,lng);
         var now=Date.now();
-        if(now-_lastEmit>4000&&myUID&&selectedSlot){
+        if(now-_lastEmit>4000&&myUID){
             db.ref('scrambles/'+selectedSlot+'/players/'+myUID).update({lat:lat,lng:lng,dist:dist,ts:firebase.database.ServerValue.TIMESTAMP});
             _lastEmit=now;
-            // Check win condition
             if(dist<=20){
-                db.ref('scrambles/'+selectedSlot+'/winner').once('value').then(function(snap){
-                    if(!snap.exists()){
-                        db.ref('scrambles/'+selectedSlot+'/winner').set({username:myUsername,uid:myUID,ts:firebase.database.ServerValue.TIMESTAMP});
-                    }
+                db.ref('scrambles/'+selectedSlot+'/winner').once('value').then(function(s){
+                    if(!s.exists()) db.ref('scrambles/'+selectedSlot+'/winner').set({username:myUsername,uid:myUID,ts:firebase.database.ServerValue.TIMESTAMP});
                 });
             }
+            // Audio proximity alerts
+            if(_lastMyDist!==null){
+                if(dist<1000&&_lastMyDist>=1000) speak('Approaching King George Square. Prepare to finish.');
+                if(dist<4100&&_lastMyDist>=4100) speak('You have crossed the boundary. Final stretch.');
+            }
+            _lastMyDist=dist;
         }
     }
 }
 
-function recenterMap(){mapFollowing=true;document.getElementById('btn-recenter').classList.remove('show');if(myLat)map.setView([myLat,myLng],14,{animate:true});}
-
-// ── RACE MODE ──
-function startRaceMode(){
-    isRacing=true;
+// ── LOCK IN ──
+function lockIn(){
+    if(!isEligible) return;
+    var ref=db.ref('scrambles/'+selectedSlot+'/players/'+myUID);
+    ref.set({username:myUsername,avatar:myAvatar,lat:myLat,lng:myLng,dist:haversine(myLat,myLng,FINISH[0],FINISH[1]),ts:firebase.database.ServerValue.TIMESTAMP});
+    ref.onDisconnect().remove();
+    listenToSlot(selectedSlot);
+    show(null);
     document.getElementById('hud').classList.add('show');
-    document.getElementById('hud-slot-time').textContent=selectedSlot;
-    document.getElementById('race-drawer').classList.add('show','collapsed');
-    document.getElementById('ad-ticker').classList.add('show');
-    document.getElementById('lb-slot-label').textContent=selectedSlot+' SCRAMBLE';
+    document.getElementById('hud-slot').textContent=selectedSlot;
+    document.getElementById('drawer').classList.add('show','collapsed');
+    document.getElementById('ticker').classList.add('show');
+    document.getElementById('btn-re').classList.add('show');
+    document.getElementById('btn-share').classList.add('show');
+    document.getElementById('lb-slot-lbl').textContent=selectedSlot+' SCRAMBLE';
+    isRacing=true;
+}
+
+// ── FIREBASE PLAYER SYNC ──
+function listenToSlot(slot){
+    db.ref('scrambles/'+slot+'/players').on('value',function(snap){
+        var players=snap.val()||{};
+        // Remove stale
+        Object.keys(markers).forEach(function(k){
+            if(!players[k]){map.removeLayer(markers[k]);delete markers[k];}
+        });
+        // Update leaderboard
+        updateLB(players);
+        // Update/add rival markers
+        Object.entries(players).forEach(function(e){
+            var uid=e[0],p=e[1];
+            if(uid===myUID||!p.lat||!p.lng) return;
+            var d=haversine(p.lat,p.lng,FINISH[0],FINISH[1]);
+            var icon=mkIcon(p.avatar||'/logo.png','@'+p.username,false,fmt(d)+' to finish',false);
+            if(!markers[uid]){markers[uid]=L.marker([p.lat,p.lng],{icon:icon}).addTo(map);}
+            else{markers[uid].setLatLng([p.lat,p.lng]);markers[uid].setIcon(icon);}
+        });
+    });
+    db.ref('scrambles/'+slot+'/winner').on('value',function(snap){
+        if(!snap.exists()) return;
+        var w=snap.val();
+        if(w.username===myUsername){
+            alert('🏆 SLOT CHAMPION!\n\nYou crossed King George Square first in the '+slot+' scramble!\n\nText '+claimPhone+' with: BRISCRAMBLE WIN @'+myUsername+' '+slot);
+        }
+    });
 }
 
 // ── LEADERBOARD ──
-function updateLeaderboard(players){
+function updateLB(players){
     var myDist=myLat?haversine(myLat,myLng,FINISH[0],FINISH[1]):99999;
-    var me={uid:'me',username:myUsername||'You',avatar:myEmoji,dist:myDist,isYou:true};
-    var all=[me];
-    Object.entries(players).forEach(function(entry){
-        var uid=entry[0],p=entry[1];
+    var all=[{uid:'me',username:myUsername||'You',avatar:myAvatar,dist:myDist,isMe:true}];
+    Object.entries(players).forEach(function(e){
+        var uid=e[0],p=e[1];
         if(uid===myUID||!p.lat||!p.lng) return;
-        all.push({uid:uid,username:p.username,avatar:p.avatar||'/logo.png',dist:haversine(p.lat,p.lng,FINISH[0],FINISH[1]),isYou:false});
+        all.push({uid:uid,username:p.username,avatar:p.avatar||'/logo.png',dist:haversine(p.lat,p.lng,FINISH[0],FINISH[1]),isMe:false});
     });
     all.sort(function(a,b){return a.dist-b.dist;});
-    var myRank=all.findIndex(function(r){return r.isYou;})+1;
+
+    var myRank=all.findIndex(function(r){return r.isMe;})+1;
     var leader=all[0];
     var gap=myDist-leader.dist;
 
-    var posEl=document.getElementById('peek-pos');
-    if(posEl){posEl.textContent=myRank;posEl.className='peek-position '+(myRank===1?'p1':myRank===2?'p2':myRank===3?'p3':'back');}
-    var gapEl=document.getElementById('peek-gap');
-    var gb=document.getElementById('peek-gap-block');
-    if(gapEl&&gb){
-        if(myRank===1){gapEl.textContent='LEADING';gb.className='peek-gap closing';}
-        else{gapEl.textContent='+'+fmtDist(gap);gb.className='peek-gap '+(gap<500?'closing':'losing');}
+    // Peek strip
+    var posEl=document.getElementById('pk-pos');
+    if(posEl){posEl.textContent=myRank;posEl.className='peek-pos '+(myRank===1?'p1':myRank===2?'p2':myRank===3?'p3':'back');}
+    var gapEl=document.getElementById('pk-gap');
+    if(gapEl){
+        if(myRank===1){gapEl.textContent='LEADING';gapEl.className='peek-gap-val closing';}
+        else{gapEl.textContent='+'+fmt(gap);gapEl.className='peek-gap-val '+(gap<500?'closing':'losing');}
     }
-    var maxDist=Math.max.apply(null,all.map(function(r){return r.dist;}));
+    // Closing speed
+    var spdEl=document.getElementById('pk-spd');
+    if(spdEl&&!leader.isMe&&leader.uid){
+        var now=Date.now();
+        var prev=_prevGapData[leader.uid];
+        if(prev&&(now-prev.ts)>3000){
+            var spd=((prev.dist-leader.dist)/(now-prev.ts))*1000;
+            spdEl.textContent=Math.abs(spd).toFixed(1)+'m/s '+(spd>0?'&#9660;closing':'&#9650;extending');
+            spdEl.style.color=spd>0?'var(--teal)':'var(--red)';
+        }
+        _prevGapData[leader.uid]={dist:leader.dist,ts:now};
+    }
+
+    // Rows
+    var maxD=Math.max.apply(null,all.map(function(r){return r.dist;}));
     var lbEl=document.getElementById('lb-rows');
-    if(lbEl){
-        lbEl.innerHTML=all.map(function(r,i){
-            var rk=i+1,rc=rk===1?'r1':rk===2?'r2':rk===3?'r3':'';
-            var pct=maxDist>0?Math.max(4,Math.round((1-r.dist/maxDist)*100)):50;
-            return '<div class="lb-row '+(r.isYou?'you':'')+'"><div class="lb-rank '+rc+'">'+rk+'</div>'
-                +'<img src="'+r.avatar+'" style="width:24px;height:24px;object-fit:contain;border-radius:4px;flex-shrink:0" onerror="this.style.display=\'none\'">'
-                +'<div class="lb-info"><div class="lb-name '+(r.isYou?'you-name':'')+'">@'+r.username+'</div>'
-                +'<div style="width:100%;height:2px;background:rgba(255,255,255,0.06);border-radius:2px;margin-top:4px"><div style="width:'+pct+'%;height:100%;border-radius:2px;background:'+(rk===1?'var(--teal)':'var(--red)')+'"></div></div></div>'
-                +'<div class="lb-dist '+(rk===1?'closest':'')+'">TO FINISH<strong>'+fmtDist(r.dist)+'</strong></div></div>';
-        }).join('');
-    }
-    // Audio alerts
-    checkAudioAlerts(players, myDist, myRank);
+    if(!lbEl) return;
+    lbEl.innerHTML=all.map(function(r,i){
+        var rk=i+1,rc=rk===1?'r1':rk===2?'r2':rk===3?'r3':'';
+        var pct=maxD>0?Math.max(4,Math.round((1-r.dist/maxD)*100)):50;
+        var barColor=rk===1?'var(--teal)':'var(--red)';
+        return '<div class="lb-row '+(r.isMe?'me':'')+'"><div class="lb-rank '+rc+'">'+rk+'</div>'
+            +'<img class="lb-av" src="'+r.avatar+'" onerror="this.style.display=\'none\'">'
+            +'<div class="lb-info"><div class="lb-name '+(r.isMe?'me':'')+'">@'+r.username+'</div>'
+            +'<div class="lb-bar-wrap"><div class="lb-bar" style="width:'+pct+'%;background:'+barColor+'"></div></div></div>'
+            +'<div class="lb-dist '+(rk===1?'lead':'')+'">TO FINISH<strong>'+fmt(r.dist)+'</strong></div></div>';
+    }).join('');
 
-    // Closing speed on peek gap
-    var speedEl = document.getElementById('peek-speed');
-    var gapLabelEl = document.getElementById('peek-gap-label');
-    if(speedEl && all.length > 1){
-        var leader = all[0];
-        if(!leader.isYou && leader.uid){
-            var spd = getClosingSpeed('leader', leader.dist);
-            if(spd !== null){
-                var closing = spd < 0; // leader moving away faster = negative for us
-                speedEl.textContent = Math.abs(spd).toFixed(1) + ' m/s ' + (closing ? '&#9660; closing' : '&#9650; extending');
-                speedEl.style.color = closing ? 'var(--teal)' : 'var(--red)';
-            }
-        }
-    }
-
-    // Update rival marker pulse
-    Object.entries(players).forEach(function(entry){
-        var uid=entry[0],p=entry[1];
-        if(!p.lat||!p.lng||uid===myUID) return;
-        var k='fb_'+uid;
-        if(!leafletMarkers[k]) return;
-        var rank=all.findIndex(function(r){return r.uid===uid;})+1;
-        var pulse=rank===1||rank===myRank+1;
-        leafletMarkers[k].setIcon(makeIcon(p.avatar||'/logo.png','@'+p.username,false,fmtDist(haversine(p.lat,p.lng,FINISH[0],FINISH[1]))+' to finish',pulse));
-    });
-}
-
-// ── DRAWER ──
-function toggleDrawer(){
-    drawerOpen=!drawerOpen;
-    document.getElementById('race-drawer').classList.toggle('collapsed',!drawerOpen);
-    document.getElementById('peek-expand-label').textContent=drawerOpen?'&#8595; CLOSE':'&#8593; BOARD';
-    var btn=document.getElementById('btn-recenter');
-    if(btn) btn.style.bottom=drawerOpen?'320px':'130px';
-}
-(function(){
-    var zone=document.getElementById('race-drawer');
-    if(!zone) return;
-    var sy=0;
-    zone.addEventListener('touchstart',function(e){sy=e.touches[0].clientY;},{passive:true});
-    zone.addEventListener('touchend',function(e){var dy=sy-e.changedTouches[0].clientY;if(dy>40&&!drawerOpen)toggleDrawer();if(dy<-40&&drawerOpen)toggleDrawer();},{passive:true});
-})();
-
-// ── OVERLAYS ──
-function showOverlay(type,title,msg,a){document.getElementById('overlay-card').className='overlay-card '+type;document.getElementById('overlay-title').innerHTML=title;document.getElementById('overlay-msg').innerHTML=msg;document.getElementById('overlay-actions').innerHTML=a;document.getElementById('overlay').classList.add('show');}
-
-// Drag to scroll avatar strip on desktop
-(function(){
-    var strip = document.getElementById('avatar-strip');
-    if(!strip) return;
-    var isDown=false, startX=0, scrollLeft=0;
-    strip.addEventListener('mousedown',function(e){isDown=true;strip.style.cursor='grabbing';startX=e.pageX-strip.offsetLeft;scrollLeft=strip.scrollLeft;});
-    strip.addEventListener('mouseleave',function(){isDown=false;strip.style.cursor='grab';});
-    strip.addEventListener('mouseup',function(){isDown=false;strip.style.cursor='grab';});
-    strip.addEventListener('mousemove',function(e){if(!isDown)return;e.preventDefault();var x=e.pageX-strip.offsetLeft;strip.scrollLeft=scrollLeft-(x-startX)*1.5;});
-})();
-
-
-// Countdown to selected slot
-function updateSlotCountdown(){
-    var el = document.getElementById('slot-countdown');
-    var slotEl = document.getElementById('countdown-slot');
-    var block = document.getElementById('countdown-block');
-    if(!el) return;
-    if(slotEl) slotEl.textContent = selectedSlot;
-    var now = new Date();
-    var bne = new Date(now.toLocaleString('en-AU', {timeZone:'Australia/Brisbane'}));
-    var parts = selectedSlot.split(':');
-    var target = new Date(bne);
-    target.setHours(parseInt(parts[0]), parseInt(parts[1]), 0, 0);
-    if(target <= bne){
-        el.textContent = 'RACE OPEN';
-        el.style.color = 'var(--teal)';
-        el.style.fontSize = '2rem';
-        if(block) block.style.borderColor = 'rgba(0,255,204,0.5)';
-        return;
-    }
-    var diff = Math.floor((target - bne) / 1000);
-    var hr = Math.floor(diff/3600);
-    var mn = Math.floor((diff%3600)/60);
-    var sc = diff%60;
-    el.textContent = (hr>0?String(hr).padStart(2,'0')+':':'') + String(mn).padStart(2,'0') + ':' + String(sc).padStart(2,'0');
-    if(diff < 300){
-        el.style.color = '#FFAA00';
-        if(block) block.style.borderColor = 'rgba(255,170,0,0.6)';
-    } else {
-        el.style.color = 'var(--red)';
-        if(block) block.style.borderColor = 'rgba(232,0,26,0.4)';
-    }
-}
-setInterval(updateSlotCountdown, 1000);
-updateSlotCountdown();
-
-
-// ── AUDIO ALERTS (Web Speech API) ──
-var _speechEnabled = true;
-var _lastSpeech = 0;
-var _lastMyDist = null;
-var _lastRivalDist = {};
-
-function speak(msg){
-    if(!_speechEnabled) return;
-    var now = Date.now();
-    if(now - _lastSpeech < 12000) return; // max once per 12s
-    _lastSpeech = now;
-    if(!window.speechSynthesis) return;
-    window.speechSynthesis.cancel();
-    var u = new SpeechSynthesisUtterance(msg);
-    u.rate = 1.05; u.pitch = 0.9; u.volume = 0.9;
-    // prefer an Australian/female voice if available
-    var voices = window.speechSynthesis.getVoices();
-    var pref = voices.find(function(v){return v.lang==='en-AU';}) || voices.find(function(v){return v.lang.startsWith('en');});
-    if(pref) u.voice = pref;
-    window.speechSynthesis.speak(u);
-}
-
-// Load voices async
-if(window.speechSynthesis) window.speechSynthesis.onvoiceschanged = function(){window.speechSynthesis.getVoices();};
-
-function checkAudioAlerts(allPlayers, myDist, myRank){
-    if(!isRacing) return;
-    // Approaching finish
-    if(myDist < 1000 && myDist > 900 && _lastMyDist >= 1000){
-        speak('Approaching King George Square. Prepare to claim slot champion.');
-    }
-    // Entering 4km boundary warning
-    if(myDist < 4100 && myDist > 3900 && _lastMyDist >= 4100){
-        speak('Crossing the boundary. Final stretch begins.');
-    }
-    // Rival closing
-    Object.entries(allPlayers).forEach(function(entry){
-        var uid=entry[0], p=entry[1];
+    // Audio: rival closing
+    Object.entries(players).forEach(function(e){
+        var uid=e[0],p=e[1];
         if(uid===myUID||!p.lat||!p.lng) return;
-        var rivalDist = haversine(p.lat,p.lng,FINISH[0],FINISH[1]);
-        var prev = _lastRivalDist[uid];
-        if(prev && prev-rivalDist > 50 && rivalDist < myDist + 500 && rivalDist > myDist - 200){
-            speak('Rival closing. ' + p.username + ' is gaining from behind.');
-        }
-        _lastRivalDist[uid] = rivalDist;
-    });
-    _lastMyDist = myDist;
-}
-
-// Closing gap speed tracker
-var _prevGapData = {};
-function getClosingSpeed(uid, currentDist){
-    var now = Date.now();
-    var prev = _prevGapData[uid];
-    if(!prev){ _prevGapData[uid]={dist:currentDist,ts:now}; return null; }
-    var dt = (now - prev.ts) / 1000;
-    if(dt < 4) return null;
-    var speed = (prev.dist - currentDist) / dt; // m/s, positive = closing
-    _prevGapData[uid] = {dist:currentDist, ts:now};
-    return speed;
-}
-
-
-// ── CHECKPOINTS ──
-const CHECKPOINTS = [
-    {id:'regatta',   name:'Regatta Ferry',   lat:-27.4988, lng:152.9994, radius:80,  badge:'⛴ Regatta Rider',    hint:'Regatta Ferry Terminal'},
-    {id:'story',     name:'Story Bridge',    lat:-27.4694, lng:153.0348, radius:100, badge:'🌉 Bridge Crosser',   hint:'Story Bridge Walkway'},
-    {id:'roma',      name:'Roma Street',     lat:-27.4648, lng:153.0163, radius:100, badge:'🚉 Roma Rusher',      hint:'Roma Street Station'},
-    {id:'southbank', name:'South Bank',      lat:-27.4820, lng:153.0220, radius:100, badge:'🌴 South Bank Sprinter', hint:'South Bank Parklands'},
-];
-var earnedBadges = {};
-var checkpointMarkers = {};
-
-function initCheckpoints(){
-    CHECKPOINTS.forEach(function(cp){
-        // Pulsing pin
-        var pin = L.marker([cp.lat, cp.lng], {
-            icon: L.divIcon({
-                html: '<div class="checkpoint-pin"></div>',
-                className: '', iconAnchor:[9,9]
-            }),
-            zIndexOffset: 500
-        }).addTo(map);
-        // Label on hover/click
-        var label = L.marker([cp.lat, cp.lng], {
-            icon: L.divIcon({
-                html: '<div class="checkpoint-label">&#9733; '+cp.hint+'</div>',
-                className: '', iconAnchor:[-5, 20]
-            }),
-            zIndexOffset: 499
-        }).addTo(map);
-        checkpointMarkers[cp.id] = {pin:pin, label:label};
+        var rd=haversine(p.lat,p.lng,FINISH[0],FINISH[1]);
+        var prev=_lastRivalDist[uid];
+        if(prev&&prev-rd>80&&rd<myDist+600&&rd>myDist-300) speak('Rival closing. '+p.username+' is gaining.');
+        _lastRivalDist[uid]=rd;
     });
 }
 
-function checkCheckpoints(lat, lng){
-    if(!isRacing) return;
-    CHECKPOINTS.forEach(function(cp){
-        if(earnedBadges[cp.id]) return;
-        var dist = haversine(lat, lng, cp.lat, cp.lng);
-        if(dist <= cp.radius){
-            earnedBadges[cp.id] = true;
-            showBadgeToast(cp.badge);
-            speak('Checkpoint unlocked. ' + cp.name + '. ' + cp.badge.split(' ').slice(1).join(' ') + ' badge earned.');
-            // Flash checkpoint pin gold
-            if(checkpointMarkers[cp.id]){
-                checkpointMarkers[cp.id].pin.setIcon(L.divIcon({
-                    html: '<div style="width:22px;height:22px;border-radius:50%;background:#fff;border:3px solid #FFAA00;box-shadow:0 0 20px #FFAA00"></div>',
-                    className:'', iconAnchor:[11,11]
-                }));
-            }
-        }
-    });
+// ── CONTROLS ──
+function recentre(){mapFollowing=true;document.getElementById('btn-re').classList.remove('show');if(myLat)map.setView([myLat,myLng],14,{animate:true});}
+
+var _drawerOpen=false;
+function toggleDrawer(){
+    _drawerOpen=!_drawerOpen;
+    document.getElementById('drawer').classList.toggle('collapsed',!_drawerOpen);
+    document.getElementById('pk-expand').textContent=_drawerOpen?'&#8595; CLOSE':'&#8593; BOARD';
+    document.getElementById('btn-re').style.bottom=_drawerOpen?'320px':'130px';
 }
+(function(){
+    var z=document.getElementById('drawer');
+    if(!z) return;
+    var sy=0;
+    z.addEventListener('touchstart',function(e){sy=e.touches[0].clientY;},{passive:true});
+    z.addEventListener('touchend',function(e){var dy=sy-e.changedTouches[0].clientY;if(dy>40&&!_drawerOpen)toggleDrawer();if(dy<-40&&_drawerOpen)toggleDrawer();},{passive:true});
+})();
 
-function showBadgeToast(badge){
-    var existing = document.querySelector('.badge-toast');
-    if(existing) existing.remove();
-    var el = document.createElement('div');
-    el.className = 'badge-toast';
-    el.textContent = badge + ' UNLOCKED';
-    document.body.appendChild(el);
-    setTimeout(function(){ el.remove(); }, 4000);
+function doShare(){
+    var txt='I\'m racing to King George Square in the '+selectedSlot+' BriScramble. Join me: https://briscramble.onrender.com?slot='+encodeURIComponent(selectedSlot);
+    if(navigator.share) navigator.share({title:'BriScramble',text:txt,url:'https://briscramble.onrender.com?slot='+encodeURIComponent(selectedSlot)});
+    else navigator.clipboard.writeText(txt).then(function(){alert('Link copied!');});
 }
-
-// Init checkpoints on load
-initCheckpoints();
-
-function closeOverlay(){document.getElementById('overlay').classList.remove('show');}
 </script>
 </body>
 </html>
