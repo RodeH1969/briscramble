@@ -530,6 +530,7 @@ const TAKEN = {"xxxx":"@CRISPY"};
 
 function buildAvatarStrip(){
   var strip = document.getElementById("avatar-strip");
+  console.log('buildAvatarStrip called, strip:', strip, 'generics:', GENERIC_AVATARS.length);
   if(!strip) return;
   var html = "";
 
