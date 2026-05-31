@@ -183,6 +183,15 @@
 
 <div id="map"></div>
 
+<!-- LOADING SCREEN -->
+<div id="s-loading" style="position:fixed;inset:0;z-index:200;background:#070708;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px">
+    <div style="width:80px;height:80px;border-radius:50%;overflow:hidden;border:3px solid var(--red);box-shadow:0 0 30px rgba(232,0,26,0.4)">
+        <img src="/logo.png" style="width:100%;height:100%;object-fit:cover">
+    </div>
+    <div style="font-family:var(--head);font-size:2rem;font-weight:900;letter-spacing:3px">BRIS<span style="color:var(--red)">CRAMBLE</span></div>
+    <div style="font-family:var(--mono);font-size:0.65rem;color:rgba(255,255,255,0.3);letter-spacing:3px">LOADING...</div>
+</div>
+
 <!-- SCREEN 1: SIGN IN -->
 <div id="s-auth" class="screen">
     <div class="logo"><img src="/logo.png" alt="BriScramble"></div>
@@ -535,12 +544,7 @@ auth.getRedirectResult().then(function(r){
 // onAuthStateChanged handles both redirect return AND existing sessions
 auth.onAuthStateChanged(function(u){
     if(u){ afterAuth(u); }
-    // If no user and we're not on auth screen, show auth screen
     else {
-        var reg = document.getElementById('s-reg');
-        var name = document.getElementById('s-name');
-        if(reg && !reg.classList.contains('hidden')) return;
-        if(name && !name.classList.contains('hidden')) return;
         show('s-auth');
     }
 });
@@ -599,6 +603,9 @@ function goRegister(){
 }
 
 function show(id){
+    // Hide loading screen
+    var loading = document.getElementById('s-loading');
+    if(loading) loading.style.display='none';
     ['s-auth','s-name','s-location','s-reg'].forEach(function(s){document.getElementById(s).classList.toggle('hidden',s!==id);});
 }
 
