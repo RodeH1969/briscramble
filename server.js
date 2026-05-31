@@ -10,6 +10,18 @@ const io = new Server(server);
 
 app.use(express.json());
 
+// COOP header for Firebase Auth redirect
+app.use(function(req, res, next){
+    res.setHeader('Cross-Origin-Opener-Policy', 'same-origin-allow-popups');
+    next();
+});
+
+// Favicon
+app.get('/favicon.ico', function(req, res){
+    res.setHeader('Content-Type', 'image/svg+xml');
+    res.send('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" fill="%23E8001A"/><circle cx="50" cy="50" r="30" fill="none" stroke="white" stroke-width="4" stroke-dasharray="8,6"/><circle cx="50" cy="50" r="8" fill="white"/></svg>');
+});
+
 // Inject config to frontend without exposing in source
 app.get('/api/config.js', (req, res) => {
     res.setHeader('Content-Type', 'application/javascript');
