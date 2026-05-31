@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>BRISCRAMBLE</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%23E8001A'/><circle cx='50' cy='50' r='30' fill='none' stroke='white' stroke-width='4' stroke-dasharray='8,6'/><circle cx='50' cy='50' r='8' fill='white'/></svg>">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;700;900&family=Share+Tech+Mono&display=swap');
         :root{--red:#E8001A;--white:#F5F5F0;--black:#070708;--dark:#0e0e12;--panel:#121217;--border:rgba(255,255,255,0.08);--teal:#00FFCC;--teal-dim:rgba(0,255,204,0.15);--mono:'Share Tech Mono',monospace;--head:'Barlow Condensed',sans-serif}
@@ -13,24 +13,21 @@
         html,body{height:100%;background:var(--black);overflow:hidden;font-family:var(--head);color:var(--white);-webkit-tap-highlight-color:transparent}
         #map{position:absolute;inset:0;z-index:1}
         .leaflet-control-attribution{display:none!important}
+        .hidden{display:none!important}
 
-        /* SCREENS */
-        .screen{position:fixed;inset:0;z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--black);padding:32px 24px;transition:opacity 0.3s}
-        .screen.hidden{opacity:0;pointer-events:none}
-
-        /* AUTH */
+        /* AUTH SCREEN */
+        .screen{position:fixed;inset:0;z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--black);padding:24px}
         #screen-auth .logo{width:160px;height:160px;border-radius:50%;overflow:hidden;border:3px solid var(--red);box-shadow:0 0 40px rgba(232,0,26,0.3);margin-bottom:24px;animation:logoPulse 3s ease-in-out infinite}
         #screen-auth .logo img{width:100%;height:100%;object-fit:cover}
         @keyframes logoPulse{0%,100%{box-shadow:0 0 0 3px rgba(232,0,26,0.4),0 0 40px rgba(232,0,26,0.2)}50%{box-shadow:0 0 0 8px rgba(232,0,26,0.2),0 0 60px rgba(232,0,26,0.4)}}
         .auth-title{font-size:3rem;font-weight:900;letter-spacing:3px;margin-bottom:6px}
         .auth-title span{color:var(--red)}
         .auth-sub{font-family:var(--mono);font-size:0.7rem;color:rgba(255,255,255,0.4);letter-spacing:3px;text-transform:uppercase;margin-bottom:36px}
-        .btn-google,.btn-apple{width:100%;max-width:340px;background:#fff;color:#111;border:none;padding:16px 20px;border-radius:8px;font-size:1rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:12px;transition:opacity 0.15s}
-        .btn-google:active,.btn-apple:active{opacity:0.85}
+        .btn-google,.btn-apple{width:100%;max-width:340px;background:#fff;color:#111;border:none;padding:16px 20px;border-radius:8px;font-size:1rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:12px}
         .btn-google img{width:20px;height:20px}
         .auth-spectate{font-family:var(--mono);font-size:0.7rem;color:rgba(255,255,255,0.25);letter-spacing:2px;cursor:pointer;text-transform:uppercase;margin-top:12px}
 
-        /* USERNAME */
+        /* USERNAME SCREEN */
         #screen-username{gap:16px}
         .username-heading{font-size:2rem;font-weight:900;letter-spacing:2px;text-align:center}
         .username-sub{font-family:var(--mono);font-size:0.7rem;color:rgba(255,255,255,0.35);letter-spacing:2px;text-align:center;line-height:1.6}
@@ -39,64 +36,58 @@
         .username-wrap input{width:100%;background:var(--panel);border:1px solid var(--border);color:var(--white);font-family:var(--mono);font-size:1.2rem;padding:16px 16px 16px 44px;border-radius:8px;outline:none;letter-spacing:1px;transition:border-color 0.2s}
         .username-wrap input:focus{border-color:var(--red)}
         .username-wrap input::placeholder{color:rgba(255,255,255,0.2)}
+        #username-error{font-family:var(--mono);font-size:0.7rem;color:var(--red);letter-spacing:1px;min-height:16px}
         .username-warn{font-family:var(--mono);font-size:0.65rem;color:rgba(255,255,255,0.25);letter-spacing:1px;text-align:center}
         .username-warn strong{color:#FFAA00}
-        #username-error{font-family:var(--mono);font-size:0.7rem;color:var(--red);letter-spacing:1px;min-height:16px}
-        .btn-primary{width:100%;max-width:340px;background:var(--red);color:#fff;border:none;padding:18px;font-family:var(--head);font-size:1.5rem;font-weight:900;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:8px;box-shadow:0 6px 24px rgba(232,0,26,0.4);transition:transform 0.1s}
-        .btn-primary:active{transform:scale(0.98)}
+        .btn-primary{width:100%;max-width:340px;background:var(--red);color:#fff;border:none;padding:18px;font-family:var(--head);font-size:1.5rem;font-weight:900;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:8px;box-shadow:0 6px 24px rgba(232,0,26,0.4)}
 
-        /* LOBBY */
-        #lobby{position:fixed;bottom:-100vh;left:0;width:100%;height:100svh;background:var(--dark);z-index:100;display:flex;flex-direction:column;transition:bottom 0.55s cubic-bezier(0.16,1,0.3,1);overflow:hidden}
-        #lobby.open{bottom:0}
-        .lobby-header{position:relative;padding:18px 20px 14px;display:flex;align-items:center;justify-content:center;border-bottom:1px solid var(--border);flex-shrink:0;overflow:hidden}
-        .lobby-logo-bg{position:absolute;right:-20px;top:50%;transform:translateY(-50%);width:110px;height:110px;border-radius:50%;overflow:hidden;opacity:0.1}
-        .lobby-logo-bg img{width:100%;height:100%;object-fit:cover}
-        .lobby-esc{position:absolute;left:16px;background:none;border:1px solid var(--border);color:rgba(255,255,255,0.4);font-family:var(--mono);font-size:0.7rem;padding:5px 10px;cursor:pointer;border-radius:4px}
-        .lobby-title{font-family:var(--head);font-size:2.2rem;font-weight:900;letter-spacing:3px}
-        .lobby-title span{color:var(--red)}
-        .lobby-countdown{position:absolute;right:16px;font-family:var(--mono);font-size:0.65rem;color:var(--red);letter-spacing:1px;text-align:right}
-        .lobby-countdown strong{display:block;font-size:1.1rem}
-        .lobby-body{flex:1;overflow-y:auto;padding:20px 20px 0;display:flex;flex-direction:column;gap:22px;scrollbar-width:none}
-        .lobby-body::-webkit-scrollbar{display:none}
+        /* REGISTRATION SCREEN */
+        #screen-register{gap:0;justify-content:flex-start;padding-top:0;overflow-y:auto}
+        .reg-header{width:100%;background:var(--dark);border-bottom:1px solid var(--border);padding:16px 20px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;position:relative;overflow:hidden}
+        .reg-logo-bg{position:absolute;right:-10px;top:50%;transform:translateY(-50%);width:100px;height:100px;border-radius:50%;overflow:hidden;opacity:0.1}
+        .reg-logo-bg img{width:100%;height:100%;object-fit:cover}
+        .reg-title{font-family:var(--head);font-size:2rem;font-weight:900;letter-spacing:3px}
+        .reg-title span{color:var(--red)}
+        .reg-body{width:100%;max-width:500px;margin:0 auto;padding:20px;display:flex;flex-direction:column;gap:20px;flex:1}
         .section-label{font-family:var(--mono);font-size:0.7rem;color:rgba(255,255,255,0.35);letter-spacing:3px;text-transform:uppercase;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
         .section-badge{font-size:0.6rem;color:var(--teal);background:var(--teal-dim);padding:2px 7px;border-radius:3px}
+
+        /* ELIGIBILITY BOX */
+        .eligibility-box{padding:14px;border-radius:8px;font-family:var(--mono);font-size:0.8rem;letter-spacing:1px;text-transform:uppercase}
+        .eligibility-box.checking{background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.5)}
+        .eligibility-box.eligible{background:rgba(0,255,204,0.1);border:1px solid var(--teal);color:var(--teal)}
+        .eligibility-box.ineligible{background:rgba(232,0,26,0.1);border:1px solid var(--red);color:var(--red)}
+
+        /* SLOT GRID */
         .slots-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
         .slot-card{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:12px 8px;text-align:center;cursor:pointer;transition:all 0.15s}
         .slot-card.active{border-color:var(--teal);background:var(--teal-dim)}
         .slot-card.active .slot-time{color:var(--teal)}
         .slot-time{font-family:var(--head);font-size:1.4rem;font-weight:700;display:block}
         .slot-riders{font-family:var(--mono);font-size:0.6rem;color:rgba(255,255,255,0.35);margin-top:2px;display:block}
-        .slot-card.active .slot-riders{color:var(--teal);opacity:0.7}
-        .avatar-strip{display:flex;gap:10px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
+
+        /* AVATAR STRIP */
+        .avatar-strip{display:flex;gap:10px;overflow-x:auto;padding-bottom:6px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
         .avatar-strip::-webkit-scrollbar{display:none}
-        .avatar-card{min-width:88px;height:100px;background:var(--panel);border:1px solid var(--border);border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;position:relative;flex-shrink:0;transition:all 0.15s}
+        .avatar-card{min-width:80px;height:90px;background:var(--panel);border:1px solid var(--border);border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;position:relative;flex-shrink:0;transition:all 0.15s}
         .avatar-card.active{border-color:var(--red);background:rgba(232,0,26,0.1)}
-        .avatar-card.premium{border-color:#FFAA00}
+        .avatar-card.sponsor-card{border-color:#FFAA00}
+        .avatar-card.sponsor-card.active{border-color:#FFAA00;background:rgba(255,170,0,0.12)}
         .avatar-card.taken{opacity:0.4;cursor:not-allowed;border-style:dashed}
-        .avatar-emoji{font-size:2.2rem}
-        .avatar-name{font-family:var(--mono);font-size:0.6rem;color:rgba(255,255,255,0.5)}
-        .avatar-perk{position:absolute;top:4px;right:4px;font-family:var(--mono);font-size:0.5rem;font-weight:bold;background:#FFAA00;color:#000;padding:1px 4px;border-radius:3px}
-        .avatar-taken{position:absolute;inset:0;background:rgba(0,0,0,0.75);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:0.55rem;color:var(--red);text-align:center;padding:6px;border-radius:8px;line-height:1.3}
+        .avatar-img{width:48px;height:48px;object-fit:contain;border-radius:6px}
+        .avatar-name{font-family:var(--mono);font-size:0.55rem;color:rgba(255,255,255,0.5);text-align:center;padding:0 4px}
+        .avatar-perk{position:absolute;top:3px;right:3px;font-family:var(--mono);font-size:0.45rem;font-weight:bold;background:#FFAA00;color:#000;padding:1px 3px;border-radius:2px}
+        .avatar-taken{position:absolute;inset:0;background:rgba(0,0,0,0.8);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:0.5rem;color:var(--red);text-align:center;padding:4px;border-radius:8px;line-height:1.3}
         .avatar-card.briscramble-card{border-color:var(--red);background:rgba(232,0,26,0.08)}
-        .avatar-card .avatar-img{width:52px;height:52px;object-fit:cover;border-radius:6px;}
-        .avatar-card.sponsor-card{border-color:#FFAA00;}
-        .avatar-card.sponsor-card.active{border-color:#FFAA00;background:rgba(255,170,0,0.12);}
-        .avatar-section-head{min-width:100%;font-family:var(--mono);font-size:0.6rem;color:rgba(255,255,255,0.25);letter-spacing:2px;padding:4px 0 6px;text-transform:uppercase;flex-shrink:0;}
+        .avatar-logo-mini{width:48px;height:48px;border-radius:50%;overflow:hidden;border:1px solid var(--red)}
+        .avatar-logo-mini img{width:100%;height:100%;object-fit:cover}
 
-        .avatar-card.briscramble-card .avatar-logo-mini{width:52px;height:52px;border-radius:50%;overflow:hidden;border:1px solid var(--red)}
-        .avatar-card.briscramble-card .avatar-logo-mini img{width:100%;height:100%;object-fit:cover}
-        .lobby-footer{padding:16px 20px;padding-bottom:max(env(safe-area-inset-bottom,16px),16px);flex-shrink:0;border-top:1px solid var(--border)}
-        .btn-lock{width:100%;background:var(--red);color:#fff;border:none;padding:18px 0;font-family:var(--head);font-size:1.5rem;font-weight:900;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:6px;box-shadow:0 6px 24px rgba(232,0,26,0.45);transition:transform 0.1s}
-        .btn-lock:active{transform:scale(0.98)}
-        .fine-print{text-align:center;font-family:var(--mono);font-size:0.6rem;color:rgba(255,255,255,0.2);letter-spacing:1px;margin-top:10px;line-height:1.5}
-
-        /* AD TICKER */
-        #ad-ticker{display:none;position:absolute;bottom:0;left:0;right:0;z-index:25;background:rgba(7,7,8,0.95);border-top:1px solid var(--border);padding:8px 0;overflow:hidden;height:36px}
-        #ad-ticker.show{display:block}
-        .ticker-track{display:flex;gap:60px;white-space:nowrap;animation:tickerScroll 35s linear infinite}
-        .ticker-track span{font-family:var(--mono);font-size:0.65rem;color:rgba(255,255,255,0.45);letter-spacing:2px;text-transform:uppercase}
-        .ticker-track span strong{color:#FFAA00}
-        @keyframes tickerScroll{0%{transform:translateX(100vw)}100%{transform:translateX(-100%)}}
+        /* REG FOOTER */
+        .reg-footer{width:100%;padding:16px 20px;padding-bottom:max(env(safe-area-inset-bottom,16px),16px);border-top:1px solid var(--border);flex-shrink:0;display:flex;flex-direction:column;gap:10px}
+        .btn-lock{width:100%;background:var(--red);color:#fff;border:none;padding:18px;font-family:var(--head);font-size:1.5rem;font-weight:900;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:8px;box-shadow:0 6px 24px rgba(232,0,26,0.45)}
+        .btn-lock:disabled{background:#333;color:#666;box-shadow:none;cursor:not-allowed}
+        .btn-share-slot{width:100%;background:transparent;color:var(--teal);border:1px solid var(--teal);padding:12px;font-family:var(--head);font-size:1.1rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:8px}
+        .fine-print{text-align:center;font-family:var(--mono);font-size:0.6rem;color:rgba(255,255,255,0.2);letter-spacing:1px;line-height:1.5}
 
         /* HUD */
         #hud{display:none;position:absolute;top:0;left:0;right:0;z-index:30;padding:10px 16px;padding-top:max(env(safe-area-inset-top,10px),10px);background:linear-gradient(to bottom,rgba(7,7,8,0.92) 0%,transparent 100%);align-items:center;justify-content:space-between;gap:12px}
@@ -137,18 +128,21 @@
         .lb-row.you{background:rgba(232,0,26,0.06);border-radius:6px;padding-left:8px;margin:0 -8px;border-bottom:none}
         .lb-rank{font-family:var(--head);font-size:1.4rem;font-weight:900;width:28px;text-align:center;flex-shrink:0}
         .lb-rank.r1{color:var(--teal)}.lb-rank.r2{color:#FFD700}.lb-rank.r3{color:#CD7F32}
-        .lb-emoji{font-size:1.3rem;flex-shrink:0}
         .lb-info{flex:1;min-width:0}
         .lb-name{font-family:var(--head);font-size:1rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
         .lb-name.you-name{color:var(--red)}
-        .lb-transport{font-family:var(--mono);font-size:0.6rem;color:rgba(255,255,255,0.3)}
-        .lb-bar-wrap{width:100%;height:2px;background:rgba(255,255,255,0.06);border-radius:2px;margin-top:3px}
-        .lb-bar{height:100%;border-radius:2px;background:var(--red);transition:width 1s ease}
-        .lb-bar.lead{background:var(--teal)}
         .lb-dist{font-family:var(--mono);font-size:0.75rem;color:rgba(255,255,255,0.5);text-align:right;flex-shrink:0}
         .lb-dist strong{display:block;color:var(--white);font-size:0.85rem}
         .lb-dist.closest strong{color:var(--teal)}
         .lb-footer-note{padding:10px 0 max(env(safe-area-inset-bottom,10px),10px);text-align:center;font-family:var(--mono);font-size:0.55rem;color:rgba(255,255,255,0.15);letter-spacing:2px}
+
+        /* AD TICKER */
+        #ad-ticker{display:none;position:absolute;bottom:0;left:0;right:0;z-index:25;background:rgba(7,7,8,0.95);border-top:1px solid var(--border);overflow:hidden;height:36px}
+        #ad-ticker.show{display:block}
+        .ticker-track{display:flex;gap:60px;white-space:nowrap;animation:tickerScroll 35s linear infinite;padding:8px 0}
+        .ticker-track span{font-family:var(--mono);font-size:0.65rem;color:rgba(255,255,255,0.45);letter-spacing:2px;text-transform:uppercase}
+        .ticker-track span strong{color:#FFAA00}
+        @keyframes tickerScroll{0%{transform:translateX(100vw)}100%{transform:translateX(-100%)}}
 
         /* RECENTER */
         #btn-recenter{display:none;position:absolute;right:14px;bottom:130px;z-index:35;width:42px;height:42px;background:var(--panel);border:1px solid var(--border);border-radius:50%;color:rgba(255,255,255,0.6);font-size:1.1rem;cursor:pointer;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(0,0,0,0.5);transition:bottom 0.3s}
@@ -165,13 +159,11 @@
         .overlay-logo img{width:100%;height:100%;object-fit:cover}
         .overlay-title{font-size:2rem;font-weight:900;letter-spacing:2px;text-transform:uppercase;margin-bottom:12px}
         .overlay-msg{font-size:1rem;font-weight:400;line-height:1.5;opacity:0.85;margin-bottom:20px;font-family:sans-serif}
-        .overlay-btn{display:inline-block;padding:12px 28px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);color:#fff;font-family:var(--head);font-size:1rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:6px;text-decoration:none}
+        .overlay-btn{display:inline-block;padding:12px 28px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);color:#fff;font-family:var(--head);font-size:1rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:6px;text-decoration:none;margin:4px}
 
         @keyframes finishPing{0%{transform:scale(1);box-shadow:0 0 0 0 rgba(232,0,26,0.8)}70%{transform:scale(1.15);box-shadow:0 0 0 18px rgba(232,0,26,0)}100%{transform:scale(1);box-shadow:0 0 0 0 rgba(232,0,26,0)}}
         .finish-pin{width:22px;height:22px;border-radius:50%;background:var(--red);border:3px solid #fff;box-shadow:0 0 12px var(--red);animation:finishPing 2s infinite}
-        @keyframes youPulse{0%,100%{box-shadow:0 0 0 4px rgba(232,0,26,0.25)}50%{box-shadow:0 0 0 8px rgba(232,0,26,0.1)}}
         @keyframes rivalPulse{0%,100%{opacity:1;filter:drop-shadow(0 0 4px rgba(0,255,204,0.8))}50%{opacity:0.75;filter:drop-shadow(0 0 10px rgba(0,255,204,0.4))}}
-        .you-dot{width:16px;height:16px;border-radius:50%;background:#fff;border:2px solid var(--red);animation:youPulse 1.5s ease-in-out infinite}
     </style>
 </head>
 <body>
@@ -197,7 +189,7 @@
 <!-- USERNAME SCREEN -->
 <div id="screen-username" class="screen hidden">
     <div class="username-heading">WHAT DO YOU RACE AS?</div>
-    <div class="username-sub">Your permanent race identity.<br>Once set after 24hrs, it's yours forever.</div>
+    <div class="username-sub">Your permanent race identity.<br>Locked after 24 hours.</div>
     <div class="username-wrap">
         <span class="username-at">@</span>
         <input type="text" id="username-input" placeholder="YourHandle" maxlength="18" autocomplete="off" autocorrect="off" spellcheck="false">
@@ -205,6 +197,53 @@
     <div id="username-error"></div>
     <div class="username-warn">&#9888; <strong>Cannot be changed after 24 hours</strong></div>
     <button class="btn-primary" onclick="confirmUsername()">LOCK IT IN</button>
+</div>
+
+<!-- REGISTRATION SCREEN -->
+<div id="screen-register" class="screen hidden">
+    <div class="reg-header">
+        <div class="reg-title">BRIS<span>CRAMBLE</span></div>
+        <div class="reg-logo-bg"><img src="/logo.png" alt=""></div>
+    </div>
+    <div class="reg-body">
+
+        <!-- ELIGIBILITY -->
+        <div>
+            <div class="section-label">BOUNDARY CHECK</div>
+            <div id="eligibility-box" class="eligibility-box checking">&#128225; Checking GPS location...</div>
+        </div>
+
+        <!-- SLOT -->
+        <div>
+            <div class="section-label">[01] SELECT GRID SLOT</div>
+            <div class="slots-grid">
+                <div class="slot-card active" onclick="selectSlot(this,'7:00')"><span class="slot-time">7:00</span><span class="slot-riders" id="riders-700">— / 20</span></div>
+                <div class="slot-card" onclick="selectSlot(this,'7:10')"><span class="slot-time">7:10</span><span class="slot-riders" id="riders-710">— / 20</span></div>
+                <div class="slot-card" onclick="selectSlot(this,'7:20')"><span class="slot-time">7:20</span><span class="slot-riders" id="riders-720">— / 20</span></div>
+                <div class="slot-card" onclick="selectSlot(this,'7:30')"><span class="slot-time">7:30</span><span class="slot-riders" id="riders-730">— / 20</span></div>
+                <div class="slot-card" onclick="selectSlot(this,'7:40')"><span class="slot-time">7:40</span><span class="slot-riders" id="riders-740">— / 20</span></div>
+                <div class="slot-card" onclick="selectSlot(this,'7:50')"><span class="slot-time">7:50</span><span class="slot-riders" id="riders-750">— / 20</span></div>
+            </div>
+        </div>
+
+        <!-- AVATAR -->
+        <div>
+            <div class="section-label">[02] CLAIM IDENTITY <span class="section-badge">LOCKED FOREVER</span></div>
+            <div class="avatar-strip" id="avatar-strip">
+                <div class="avatar-card briscramble-card active" onclick="selectAvatar(this,'scrambler','/logo.png')">
+                    <div class="avatar-logo-mini"><img src="/logo.png" alt=""></div>
+                    <span class="avatar-name">SCRAMBLER</span>
+                    <span class="avatar-perk">DEFAULT</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="reg-footer">
+        <button id="btn-lock" class="btn-lock" onclick="lockGrid()" disabled>&#9889; SECURE GRID POSITION</button>
+        <button class="btn-share-slot" onclick="shareSlot()">&#128279; SHARE THIS SLOT</button>
+        <p class="fine-print">GPS required. Must be 5km+ from King George Square to race.</p>
+    </div>
 </div>
 
 <!-- HUD -->
@@ -243,41 +282,8 @@
                 <span class="lb-slot" id="lb-slot-label">7:00 SCRAMBLE</span>
             </div>
             <div id="lb-rows"></div>
-            <div class="lb-footer-note">UPDATES EVERY 5s &mdash; BACKGROUND GPS ACTIVE</div>
+            <div class="lb-footer-note">SLOT-MATCHED ONLY &mdash; BACKGROUND GPS ACTIVE</div>
         </div>
-    </div>
-</div>
-
-<!-- LOBBY -->
-<div id="lobby">
-    <div class="lobby-header">
-        <button class="lobby-esc" onclick="closeLobby()">&larr; ESC</button>
-        <div class="lobby-title">BRIS<span>CRAMBLE</span></div>
-        <div class="lobby-countdown">NEXT GRID<strong id="countdown">09:59</strong></div>
-        <div class="lobby-logo-bg"><img src="/logo.png" alt=""></div>
-    </div>
-    <div class="lobby-body">
-        <div>
-            <div class="section-label">[01] SELECT GRID SLOT</div>
-            <div class="slots-grid">
-                <div class="slot-card active" onclick="selectSlot(this,'7:00')"><span class="slot-time">7:00</span><span class="slot-riders">12 / 20</span></div>
-                <div class="slot-card" onclick="selectSlot(this,'7:10')"><span class="slot-time">7:10</span><span class="slot-riders">18 / 20</span></div>
-                <div class="slot-card" onclick="selectSlot(this,'7:20')"><span class="slot-time">7:20</span><span class="slot-riders">7 / 20</span></div>
-                <div class="slot-card" onclick="selectSlot(this,'7:30')"><span class="slot-time">7:30</span><span class="slot-riders">15 / 20</span></div>
-                <div class="slot-card" onclick="selectSlot(this,'7:40')"><span class="slot-time">7:40</span><span class="slot-riders">4 / 20</span></div>
-                <div class="slot-card" onclick="selectSlot(this,'7:50')"><span class="slot-time">7:50</span><span class="slot-riders">1 / 20</span></div>
-            </div>
-        </div>
-        <div>
-            <div class="section-label">[02] CLAIM IDENTITY <span class="section-badge">LOCKED FOREVER</span></div>
-            <div class="avatar-strip" id="avatar-strip">
-                <!-- Populated by JS -->
-            </div>
-        </div>
-    </div>
-    <div class="lobby-footer">
-        <button class="btn-lock" onclick="lockGrid()">&#9889; SECURE GRID POSITION</button>
-        <p class="fine-print">GPS permissions required. Must start 5km+ from King George Square.</p>
     </div>
 </div>
 
@@ -289,7 +295,6 @@
         <span>&#9749; <strong>BOOST JUICE</strong> &mdash; FUEL YOUR SCRAMBLE &mdash; BRISBANE CBD STORES</span>
         <span>&#127942; <strong>TODAY'S PRIZE</strong> &mdash; $3 COFFEE VOUCHER &mdash; FIRST TO KING GEORGE SQUARE WINS</span>
         <span>&#9749; <strong>SPONSORED</strong> &mdash; XXXX GOLD &mdash; CRACK ONE OPEN AT THE FINISH LINE</span>
-        <span>&#127828; <strong>HUNGRY JACK'S</strong> &mdash; WINNER EATS FREE &mdash; SHOW YOUR WIN SCREEN</span>
     </div>
 </div>
 
@@ -303,304 +308,461 @@
     </div>
 </div>
 
-<script src="/api/config.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="/socket.io/socket.io.js"></script>
+<script src="/api/config.js"></script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-const firebaseConfig={apiKey:"AIzaSyBAsWw3Z56cLrXLIsjNQdN15_OeN1ad134",authDomain:"briscramble.firebaseapp.com",projectId:"briscramble",storageBucket:"briscramble.firebasestorage.app",messagingSenderId:"1055901704932",appId:"1:1055901704932:web:ccb078dc722a7b580782f1"};
-firebase.initializeApp(firebaseConfig);
-const auth=firebase.auth();
+// ── CONFIG ──
+const FINISH = [-27.4691, 153.0235];
+const EXCLUSION_M = 5000;
+const claimPhone = window.claimPhone || '+61400000000';
 
-const claimPhone=window.claimPhone||'+61400000000';
-let myUID=null,myUsername=null,myEmoji="🏁",selectedSlot="7:00",isRacing=false,drawerOpen=false,mapFollowing=true,myLat=null,myLng=null;
+firebase.initializeApp({
+    apiKey:"AIzaSyBAsWw3Z56cLrXLIsjNQdN15_OeN1ad134",
+    authDomain:"briscramble.firebaseapp.com",
+    projectId:"briscramble",
+    storageBucket:"briscramble.firebasestorage.app",
+    messagingSenderId:"1055901704932",
+    appId:"1:1055901704932:web:ccb078dc722a7b580782f1"
+});
+const auth = firebase.auth();
+
+// ── STATE ──
+let myUID=null, myUsername=null, myEmoji='/logo.png', myAvatarSlug='scrambler';
+let selectedSlot='7:00', isRacing=false, drawerOpen=false;
+let mapFollowing=true, myLat=null, myLng=null;
+let isEligible=false;
+var lastPlayers={};
 const leafletMarkers={};
 let myMarker=null;
 
-const socket=io();
-var lastPlayers={};
-socket.on("mapUpdate",function(p){lastPlayers=p;renderOtherPlayers(p);});
-socket.on("slotFinished",data=>{if(data.winner===myUsername)showOverlay("winner","🏆 SLOT CHAMPION","You crossed King George Square FIRST in the <strong>"+data.slot+"</strong> scramble!","<a href='sms:"+claimPhone+"?body=BRISCRAMBLE%20WIN%20@"+myUsername+"%20"+data.slot+"' class='overlay-btn'>📱 TEXT TO CLAIM</a>");});
-socket.on("gridLockout",data=>showOverlay("lockout","🚨 GRID PENALTY",data.message,"<button class='overlay-btn' onclick='closeOverlay()'>WATCH MAP</button>"));
-socket.on("proximityDangerWarning",data=>{if(navigator.vibrate)navigator.vibrate([300,100,300]);showOverlay("warning","⚠ DANGER ZONE","Only <strong>"+data.distance+"km</strong> from finish. Switch slots or be disqualified at <strong>"+data.slot+"</strong>!","<button class='overlay-btn' onclick='closeOverlay()'>UNDERSTOOD</button>");});
+// ── SOCKET ──
+let socket;
+try{ socket=io(); }catch(e){ socket={emit:function(){},on:function(){}}; }
 
-const FINISH=[-27.4691,153.0235];
-const map=L.map("map",{zoomControl:false,attributionControl:false}).setView([-27.464,153.024],13);
-L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png").addTo(map);
-L.marker(FINISH,{icon:L.divIcon({html:"<div style='width:22px;height:22px;border-radius:50%;background:#E8001A;border:3px solid #fff;box-shadow:0 0 12px #E8001A;animation:finishPing 2s infinite'></div>",className:"",iconAnchor:[11,11]})}).addTo(map);
-// 5KM exclusion ring
-L.circle(FINISH, {
-    radius: 5000,
-    color: '#E8001A',
-    fillColor: '#E8001A',
-    fillOpacity: 0.04,
-    weight: 1.5,
-    dashArray: '8,6',
-    opacity: 0.5
-}).addTo(map);
-// Label
-L.marker([-27.4240, 153.0235], {icon: L.divIcon({
-    html: "<div style='font-family:monospace;font-size:10px;color:rgba(232,0,26,0.7);letter-spacing:2px;white-space:nowrap;text-shadow:0 1px 3px black'>— 5KM BOUNDARY —</div>",
-    className:'', iconAnchor:[60,0]
-})}).addTo(map);
-map.on("dragstart",()=>{mapFollowing=false;document.getElementById("btn-recenter").classList.add("show");});
+socket.on('mapUpdate', function(players){
+    lastPlayers=players;
+    renderOtherPlayers(players);
+});
+socket.on('slotFinished', function(data){
+    if(data.winner===myUsername){
+        showOverlay('winner','&#127942; SLOT CHAMPION',
+            'You crossed King George Square FIRST in the <strong>'+data.slot+'</strong> scramble!',
+            '<a href="sms:'+claimPhone+'?body=BRISCRAMBLE%20WIN%20@'+myUsername+'%20'+data.slot+'" class="overlay-btn">&#128241; TEXT TO CLAIM</a>');
+    }
+});
+socket.on('gridLockout', function(data){
+    showOverlay('lockout','&#128680; GRID PENALTY',data.message,'<button class="overlay-btn" onclick="closeOverlay()">WATCH MAP</button>');
+});
+socket.on('proximityDangerWarning', function(data){
+    if(navigator.vibrate) navigator.vibrate([300,100,300]);
+    showOverlay('warning','&#9888; DANGER ZONE',
+        'Only <strong>'+data.distance+'km</strong> from finish. Switch slots or be disqualified at <strong>'+data.slot+'</strong>!',
+        '<button class="overlay-btn" onclick="closeOverlay()">UNDERSTOOD</button>');
+});
+socket.on('slotCounts', function(counts){
+    Object.keys(counts).forEach(function(slot){
+        var id='riders-'+slot.replace(':','');
+        var el=document.getElementById(id);
+        if(el) el.textContent=counts[slot]+' / 20';
+    });
+});
 
-const demoRacers=[];
+// ── MAP ──
+const map=L.map('map',{zoomControl:false,attributionControl:false}).setView([-27.464,153.024],12);
+L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png').addTo(map);
+L.marker(FINISH,{icon:L.divIcon({html:"<div style='width:22px;height:22px;border-radius:50%;background:#E8001A;border:3px solid #fff;box-shadow:0 0 12px #E8001A;animation:finishPing 2s infinite'></div>",className:'',iconAnchor:[11,11]})}).addTo(map);
+L.circle(FINISH,{radius:EXCLUSION_M,color:'#E8001A',weight:1.5,fill:true,fillColor:'#E8001A',fillOpacity:0.04,dashArray:'8,6',opacity:0.5}).addTo(map);
+L.marker([-27.4240,153.0235],{icon:L.divIcon({html:"<div style='font-family:monospace;font-size:10px;color:rgba(232,0,26,0.7);letter-spacing:2px;white-space:nowrap;text-shadow:0 1px 3px black'>&#8212; 5KM BOUNDARY &#8212;</div>",className:'',iconAnchor:[60,0]})}).addTo(map);
+map.on('dragstart',function(){mapFollowing=false;document.getElementById('btn-recenter').classList.add('show');});
 
-setInterval(()=>{if(isRacing)updateRaceUI();},1000);
+// ── HAVERSINE ──
+function haversine(lat1,lng1,lat2,lng2){
+    var R=6371000,dLat=(lat2-lat1)*Math.PI/180,dLng=(lng2-lng1)*Math.PI/180;
+    var a=Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLng/2)*Math.sin(dLng/2);
+    return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+}
+function fmtDist(m){return m>=1000?(m/1000).toFixed(1)+'km':Math.round(m)+'m';}
+
+// ── MARKERS ──
+function makeIcon(src,label,isYou,distLabel,pulse){
+    var c=isYou?'#E8001A':pulse?'#00FFCC':'rgba(255,255,255,0.7)';
+    var b=isYou?'border:1.5px solid #E8001A':pulse?'border:1.5px solid #00FFCC':'border:1px solid rgba(232,0,26,0.5)';
+    var anim=pulse?'animation:rivalPulse 1.2s ease-in-out infinite;':'';
+    var distHtml=distLabel?'<div style="font-family:monospace;font-size:8px;color:'+(isYou?'#fff':pulse?'#00FFCC':'rgba(255,255,255,0.5)')+';background:rgba(0,0,0,0.85);padding:1px 5px;border-radius:3px;margin-top:2px;white-space:nowrap">'+distLabel+'</div>':'';
+    var imgOrEmoji='<img src="'+src+'" style="width:24px;height:24px;object-fit:contain;border-radius:4px;" onerror="this.style.display=\'none\'">';
+    return L.divIcon({
+        html:'<div style="text-align:center;filter:drop-shadow(0 2px 6px rgba(0,0,0,0.9));'+anim+'">'+imgOrEmoji+'<span style="font-size:8px;background:rgba(7,7,8,0.9);color:'+c+';'+b+';padding:1px 5px;font-family:monospace;border-radius:3px;white-space:nowrap;display:inline-block;margin-top:1px">'+label+'</span>'+distHtml+'</div>',
+        className:'',iconAnchor:[20,28]
+    });
+}
 
 function renderOtherPlayers(players){
-  // Remove stale markers for players who have dropped
-  Object.keys(leafletMarkers).forEach(function(k){
-    if(!k.startsWith("live_")) return;
-    var id = k.replace("live_","");
-    if(!players[id]){
-      map.removeLayer(leafletMarkers[k]);
-      delete leafletMarkers[k];
-    }
-  });
-  // Add/update active players
-  Object.entries(players).forEach(function([id,p]){
-    if(p.username===myUsername) return;
-    var k="live_"+id;
-    if(!p.lat||!p.lng) return;
-    var icon = makeIcon(p.avatar||"🏁","@"+p.username,false,fmtDist(haversine(p.lat,p.lng,FINISH[0],FINISH[1]))+" to finish",false);
-    if(!leafletMarkers[k]){
-      leafletMarkers[k]=L.marker([p.lat,p.lng],{icon:icon}).addTo(map);
-    } else {
-      leafletMarkers[k].setLatLng([p.lat,p.lng]);
-      leafletMarkers[k].setIcon(icon);
-    }
-  });
+    Object.keys(leafletMarkers).forEach(function(k){
+        if(!k.startsWith('live_')) return;
+        var id=k.replace('live_','');
+        if(!players[id]){map.removeLayer(leafletMarkers[k]);delete leafletMarkers[k];}
+    });
+    Object.entries(players).forEach(function(entry){
+        var id=entry[0],p=entry[1];
+        if(p.username===myUsername||!p.lat||!p.lng) return;
+        if(p.slot!==selectedSlot) return; // only show same slot
+        var k='live_'+id;
+        var dist=haversine(p.lat,p.lng,FINISH[0],FINISH[1]);
+        var icon=makeIcon(p.avatar||'/logo.png','@'+p.username,false,fmtDist(dist)+' to finish',false);
+        if(!leafletMarkers[k]){leafletMarkers[k]=L.marker([p.lat,p.lng],{icon:icon}).addTo(map);}
+        else{leafletMarkers[k].setLatLng([p.lat,p.lng]);leafletMarkers[k].setIcon(icon);}
+    });
 }
 
-function makeIcon(emoji, label, isYou, distLabel, pulse){
-  var c = isYou ? "#E8001A" : pulse ? "#00FFCC" : "rgba(255,255,255,0.7)";
-  var b = isYou ? "border:1.5px solid #E8001A" : pulse ? "border:1.5px solid #00FFCC" : "border:1px solid rgba(232,0,26,0.6)";
-  var anim = pulse ? "animation:rivalPulse 1.2s ease-in-out infinite;" : "";
-  var distHtml = distLabel ? "<div style='font-family:monospace;font-size:8px;color:"+(isYou?"#fff":pulse?"#00FFCC":"rgba(255,255,255,0.5)")+";background:rgba(0,0,0,0.85);padding:1px 5px;border-radius:3px;margin-top:2px;white-space:nowrap'>"+distLabel+"</div>" : "";
-  return L.divIcon({
-    html: "<div style='text-align:center;filter:drop-shadow(0 2px 6px rgba(0,0,0,0.9));"+anim+"'>"
-        + "<div style='font-size:20px'>"+emoji+"</div>"
-        + "<span style='font-size:8px;background:rgba(7,7,8,0.9);color:"+c+";"+b+";padding:1px 5px;font-family:monospace;border-radius:3px;white-space:nowrap;display:inline-block;margin-top:1px'>"+label+"</span>"
-        + distHtml
-        + "</div>",
-    className:"", iconAnchor:[22,28]
-  });
-}
-
-function haversine(lat1,lng1,lat2,lng2){const R=6371000,dLat=(lat2-lat1)*Math.PI/180,dLng=(lng2-lng1)*Math.PI/180;const a=Math.sin(dLat/2)**2+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLng/2)**2;return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));}
-function fmtDist(m){return m>=1000?(m/1000).toFixed(1)+"km":Math.round(m)+"m";}
-
-function signInGoogle(){if(typeof firebase==='undefined'){alert('Still loading, try again');return;}const p=new firebase.auth.GoogleAuthProvider();auth.signInWithRedirect(p).catch(e=>alert(e.message));}
-function signInApple(){const p=new firebase.auth.OAuthProvider("apple.com");auth.signInWithPopup(p).then(handleAuth).catch(e=>alert(e.message));}
-function handleAuth(result){myUID=result.user.uid;checkExistingUsername();}
-// Handle redirect result after Google/Apple sign-in
+// ── AUTH ──
 auth.getRedirectResult().then(function(result){
-  if(result && result.user) handleAuth(result);
-}).catch(function(e){ if(e.code !== 'auth/no-current-user') console.error(e); });
+    if(result&&result.user) handleAuth(result);
+}).catch(function(e){if(e.code!=='auth/no-current-user') console.error(e);});
 
-auth.onAuthStateChanged(user=>{if(user){myUID=user.uid;checkExistingUsername();}});
-function checkExistingUsername(){fetch("/api/register-username",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({uid:myUID,username:"__check__"})}).then(r=>r.json()).then(d=>{if(d.username&&d.username!=="__check__"){myUsername=d.username;goToLobby();}else{showScreen("screen-username");}}).catch(()=>showScreen("screen-username"));}
+auth.onAuthStateChanged(function(user){
+    if(user){myUID=user.uid;checkExistingUsername();}
+});
 
-function confirmUsername(){const v=document.getElementById("username-input").value.trim().replace(/[^a-zA-Z0-9_]/g,"");const e=document.getElementById("username-error");if(v.length<2){e.textContent="Too short — minimum 2 characters";return;}e.textContent="";fetch("/api/register-username",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({uid:myUID||"demo_"+Date.now(),username:v})}).then(r=>r.json()).then(d=>{if(d.error){e.textContent=d.error;return;}myUsername=d.username;goToLobby();}).catch(()=>{myUsername=v;goToLobby();});}
+function signInGoogle(){
+    if(typeof firebase==='undefined'){alert('Still loading, try again');return;}
+    auth.signInWithRedirect(new firebase.auth.GoogleAuthProvider()).catch(function(e){alert(e.message);});
+}
+function signInApple(){
+    if(typeof firebase==='undefined'){alert('Still loading, try again');return;}
+    auth.signInWithRedirect(new firebase.auth.OAuthProvider('apple.com')).catch(function(e){alert(e.message);});
+}
+function handleAuth(result){myUID=result.user.uid;checkExistingUsername();}
 
-function goToLobby(){showScreen(null);document.getElementById("lobby").classList.add("open");startCountdown();buildAvatarStrip();}
-function spectateMode(){myUsername="Spectator";showScreen(null);startRaceMode();}
-function showScreen(id){["screen-auth","screen-username"].forEach(s=>document.getElementById(s).classList.toggle("hidden",s!==id));}
-function closeLobby(){document.getElementById("lobby").classList.remove("open");showScreen("screen-auth");}
-function selectSlot(el,t){document.querySelectorAll(".slot-card").forEach(c=>c.classList.remove("active"));el.classList.add("active");selectedSlot=t;}
-function selectAvatar(el,slug,src){document.querySelectorAll(".avatar-card:not(.taken)").forEach(c=>c.classList.remove("active"));el.classList.add("active");myEmoji=src||slug;myAvatarSlug=slug;}
-let countdownInterval;
-function startCountdown(){clearInterval(countdownInterval);let s=599;const el=document.getElementById("countdown");countdownInterval=setInterval(()=>{if(s<=0){clearInterval(countdownInterval);return;}s--;el.textContent=String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0");},1000);}
-function lockGrid(){document.getElementById("lobby").classList.remove("open");socket.emit("joinRace",{username:myUsername,avatar:myEmoji,slot:selectedSlot});startRaceMode();showOverlay("winner","GRID LOCKED","<strong>@"+myUsername+"</strong> registered for the <strong>"+selectedSlot+"</strong> scramble.<br><br>Stay outside 5KM. GPS is tracking.","<button class='overlay-btn' onclick='closeOverlay()'>RACE READY &#9889;</button> <button class='overlay-btn' style='margin-top:10px;background:rgba(0,255,204,0.15);border-color:var(--teal)' onclick='shareRegistration()'>&#128279; SHARE</button>");}
-
-function startRaceMode(){isRacing=true;document.getElementById("hud").classList.add("show");document.getElementById("hud-slot-time").textContent=selectedSlot;document.getElementById("race-drawer").classList.add("show","collapsed");document.getElementById("ad-ticker").classList.add("show");document.getElementById("lb-slot-label").textContent=selectedSlot+" SCRAMBLE";document.getElementById("peek-name").textContent="@"+(myUsername||"You");startGPS();}
-function startGPS(){if(!navigator.geolocation)return useDemoGPS();navigator.geolocation.watchPosition(pos=>updateMyPos(pos.coords.latitude,pos.coords.longitude),()=>useDemoGPS(),{enableHighAccuracy:true,maximumAge:8000,timeout:20000});}
-function useDemoGPS(){showOverlay("warning","GPS REQUIRED","BriScramble needs live location to race.<br><br>Enable location permissions in your browser settings and reload.","<button class='overlay-btn' onclick='location.reload()'>RELOAD</button>");}
-function updateMyPos(lat,lng){myLat=lat;myLng=lng;const dist=haversine(lat,lng,FINISH[0],FINISH[1]);const firstFix=!myMarker;if(!myMarker){myMarker=L.marker([lat,lng],{icon:makeIcon(myEmoji,"@"+(myUsername||"You"),true),zIndexOffset:1000}).addTo(map);}else{myMarker.setLatLng([lat,lng]);}
-// On first GPS fix, frame view to show player + 5km ring together
-if(firstFix){
-  const bounds=L.latLngBounds([[lat,lng],FINISH]).pad(0.3);
-  map.fitBounds(bounds,{animate:true,duration:1.5});
-  // Flash boundary status
-  const inside=dist<5000;
-  const statusMsg=inside
-    ? "⚠ YOU ARE INSIDE THE 5KM BOUNDARY — switch to a later slot or move further out before your race starts."
-    : "✓ YOU ARE "+fmtDist(dist)+" FROM THE FINISH — outside the 5KM boundary. You are legal to race.";
-  const statusType=inside?"warning":"winner";
-  setTimeout(()=>showOverlay(statusType,inside?"⚠ BOUNDARY CHECK":"✓ BOUNDARY CLEAR",statusMsg,"<button class='overlay-btn' onclick='closeOverlay();mapFollowing=true;if(myLat)map.setView([myLat,myLng],14,{animate:true})'>GOT IT</button>"),800);
-} else if(mapFollowing){
-    // Zoom level scales with distance to finish
-    var zoom;
-    if(dist > 5000)      zoom = 13;  // broad city view
-    else if(dist > 2000) zoom = 14;  // suburb level
-    else if(dist > 800)  zoom = 15;  // street level
-    else if(dist > 300)  zoom = 16;  // block level
-    else if(dist > 100)  zoom = 17;  // building level
-    else                 zoom = 18;  // you are HERE
-    map.setView([lat,lng], zoom, {animate:true, duration:1});
-  }document.getElementById("hud-dist-val").textContent=fmtDist(dist);var now=Date.now();if(!window._lastEmit||now-window._lastEmit>4000){socket.emit("updateLocation",{lat,lng});window._lastEmit=now;}updateRaceUI();}
-function recenterMap(){mapFollowing=true;document.getElementById("btn-recenter").classList.remove("show");if(myLat)map.setView([myLat,myLng],14,{animate:true});}
-
-function updateRaceUI(){const myDist=myLat?haversine(myLat,myLng,FINISH[0],FINISH[1]):99999;const me={id:"me",name:myUsername||"You",emoji:myEmoji,dist:myDist,transport:"You",isYou:true};
-  var all=[me];
-  Object.entries(lastPlayers).forEach(function([id,p]){
-    if(!p.username||p.username===myUsername||!p.lat||!p.lng) return;
-    all.push({id:id,name:p.username,emoji:p.avatar||'🏁',dist:haversine(p.lat,p.lng,FINISH[0],FINISH[1]),transport:'',isYou:false});
-  });
-  all.sort((a,b)=>a.dist-b.dist);const myRank=all.findIndex(r=>r.isYou)+1;const gapToLeader=myDist-all[0].dist;const posEl=document.getElementById("peek-pos");posEl.textContent=myRank;posEl.className="peek-position "+(myRank===1?"p1":myRank===2?"p2":myRank===3?"p3":"back");const gapEl=document.getElementById("peek-gap");const gb=document.getElementById("peek-gap-block");if(myRank===1){gapEl.textContent="LEADING";gb.className="peek-gap closing";}else{gapEl.textContent="+"+fmtDist(gapToLeader);gb.className="peek-gap "+(gapToLeader<500?"closing":"losing");}const maxDist=Math.max(...all.map(r=>r.dist));document.getElementById("lb-rows").innerHTML=all.map((r,i)=>{const rk=i+1,rc=rk===1?"r1":rk===2?"r2":rk===3?"r3":"";const pct=maxDist>0?Math.max(4,Math.round((1-r.dist/maxDist)*100)):50;return "<div class='lb-row "+(r.isYou?"you":"")+"'><div class='lb-rank "+rc+"'>"+(rk)+"</div><div class='lb-emoji'>"+r.emoji+"</div><div class='lb-info'><div class='lb-name "+(r.isYou?"you-name":"")+"'>@"+r.name+"</div><div class='lb-transport'>"+r.transport+"</div><div class='lb-bar-wrap'><div class='lb-bar "+(rk===1?"lead":"")+"' style='width:"+pct+"%'></div></div></div><div class='lb-dist "+(rk===1?"closest":"")+"'>TO FINISH<strong>"+fmtDist(r.dist)+"</strong></div></div>";}).join("");
-
-  // Always update your own marker with distance
-  if(myMarker){
-    myMarker.setIcon(makeIcon(myEmoji, "@"+(myUsername||"You"), true, fmtDist(myDist)+" to finish", false));
-  }
+function checkExistingUsername(){
+    fetch('/api/register-username',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({uid:myUID,username:'__check__'})})
+    .then(function(r){return r.json();})
+    .then(function(d){
+        if(d.username&&d.username!=='__check__'){myUsername=d.username;goToRegister();}
+        else{showScreen('screen-username');}
+    }).catch(function(){showScreen('screen-username');});
 }
 
-function toggleDrawer(){
-  drawerOpen=!drawerOpen;
-  document.getElementById("race-drawer").classList.toggle("collapsed",!drawerOpen);
-  document.getElementById("peek-expand-label").textContent=drawerOpen?"↓ CLOSE":"↑ BOARD";
-  var btn=document.getElementById("btn-recenter");
-  if(btn) btn.style.bottom = drawerOpen ? "320px" : "130px";
-}
-function showOverlay(type,title,msg,a){document.getElementById("overlay-card").className="overlay-card "+type;document.getElementById("overlay-title").innerHTML=title;document.getElementById("overlay-msg").innerHTML=msg;document.getElementById("overlay-actions").innerHTML=a;document.getElementById("overlay").classList.add("show");}
-function closeOverlay(){document.getElementById("overlay").classList.remove("show");}
-
-const GENERIC_AVATARS = [
-  {slug:"train",name:"Train",src:"/avatars/generic/train.svg"},
-  {slug:"bus",name:"Bus",src:"/avatars/generic/bus.svg"},
-  {slug:"bike",name:"Fixie",src:"/avatars/generic/bike.svg"},
-  {slug:"scooter",name:"Scooter",src:"/avatars/generic/scooter.svg"},
-  {slug:"ferry",name:"Ferry",src:"/avatars/generic/ferry.svg"},
-  {slug:"skateboard",name:"Skater",src:"/avatars/generic/skateboard.svg"},
-  {slug:"motorbike",name:"Moto",src:"/avatars/generic/motorbike.svg"},
-  {slug:"taxi",name:"Taxi",src:"/avatars/generic/taxi.svg"},
-  {slug:"tram",name:"Tram",src:"/avatars/generic/tram.svg"},
-  {slug:"walker",name:"Walker",src:"/avatars/generic/walker.svg"},
-  {slug:"story_bridge",name:"Story Bridge",src:"/avatars/generic/story_bridge.svg"},
-  {slug:"big_wheel",name:"Big Wheel",src:"/avatars/generic/big_wheel.svg"},
-  {slug:"south_bank",name:"South Bank",src:"/avatars/generic/south_bank.svg"},
-  {slug:"suncorp",name:"Suncorp",src:"/avatars/generic/suncorp.svg"},
-  {slug:"kangaroo_point",name:"Roo Point",src:"/avatars/generic/kangaroo_point.svg"},
-  {slug:"goma",name:"GOMA",src:"/avatars/generic/goma.svg"},
-  {slug:"gateway_bridge",name:"Gateway",src:"/avatars/generic/gateway_bridge.svg"},
-  {slug:"lang_park",name:"Lang Park",src:"/avatars/generic/lang_park.svg"},
-  {slug:"koala",name:"Koala",src:"/avatars/generic/koala.svg"},
-  {slug:"kangaroo",name:"Kangaroo",src:"/avatars/generic/kangaroo.svg"},
-  {slug:"galah",name:"Galah",src:"/avatars/generic/galah.svg"},
-  {slug:"ibis",name:"Bin Chicken",src:"/avatars/generic/ibis.svg"},
-  {slug:"croc",name:"Croc",src:"/avatars/generic/croc.svg"},
-  {slug:"kookaburra",name:"Kookaburra",src:"/avatars/generic/kookaburra.svg"},
-  {slug:"blue_tongue",name:"Blue Tongue",src:"/avatars/generic/blue_tongue.svg"},
-  {slug:"magpie",name:"Magpie",src:"/avatars/generic/magpie.svg"},
-  {slug:"meat_pie",name:"Meat Pie",src:"/avatars/generic/meat_pie.svg"},
-  {slug:"snag",name:"Bunnings Snag",src:"/avatars/generic/snag.svg"},
-  {slug:"tim_tam",name:"Tim Tam",src:"/avatars/generic/tim_tam.svg"},
-  {slug:"flat_white",name:"Flat White",src:"/avatars/generic/flat_white.svg"},
-  {slug:"coldie",name:"Coldie",src:"/avatars/generic/coldie.svg"},
-  {slug:"pavlova",name:"Pav",src:"/avatars/generic/pavlova.svg"},
-  {slug:"vegemite",name:"Vegemite",src:"/avatars/generic/vegemite.svg"},
-  {slug:"afl_ball",name:"AFL Ball",src:"/avatars/generic/afl_ball.svg"},
-  {slug:"cricket",name:"Cricket",src:"/avatars/generic/cricket.svg"},
-  {slug:"rugby_ball",name:"Rugby Ball",src:"/avatars/generic/rugby_ball.svg"},
-  {slug:"tennis",name:"Tennis",src:"/avatars/generic/tennis.svg"},
-  {slug:"swim",name:"Swimmer",src:"/avatars/generic/swim.svg"},
-  {slug:"cycling",name:"Cyclist",src:"/avatars/generic/cycling.svg"},
-  {slug:"bunnings_snag_stand",name:"Snag Stand",src:"/avatars/generic/bunnings_snag_stand.svg"},
-];
-
-const SPONSOR_AVATARS = [
-  // Sponsor images load from /avatars/sponsors/ — add files to public/avatars/sponsors/ and commit
-  {slug:"cc",name:"C. Cameron",src:"/avatars/sponsors/CC.png"},
-  {slug:"bega_mac",name:"Bega Mac",src:"/avatars/sponsors/begamacandcheese280g.jpeg"},
-];
-// Filter out sponsors whose images don't exist yet
-function checkSponsorImages(){
-  SPONSOR_AVATARS.forEach(function(a){
-    var img=new Image();
-    img.onerror=function(){ a.missing=true; buildAvatarStrip(); };
-    img.src=a.src;
-  });
+function confirmUsername(){
+    var v=document.getElementById('username-input').value.trim().replace(/[^a-zA-Z0-9_]/g,'');
+    var e=document.getElementById('username-error');
+    if(v.length<2){e.textContent='Too short — minimum 2 characters';return;}
+    e.textContent='';
+    fetch('/api/register-username',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({uid:myUID||'demo_'+Date.now(),username:v})})
+    .then(function(r){return r.json();})
+    .then(function(d){
+        if(d.error){e.textContent=d.error;return;}
+        myUsername=d.username;
+        document.getElementById('peek-name').textContent='@'+myUsername;
+        goToRegister();
+    }).catch(function(){myUsername=v;goToRegister();});
 }
 
-// Simulated taken state (in prod comes from server)
-const TAKEN = {"xxxx":"@CRISPY"};
+function showScreen(id){
+    ['screen-auth','screen-username','screen-register'].forEach(function(s){
+        document.getElementById(s).classList.toggle('hidden',s!==id);
+    });
+}
 
-function buildAvatarStrip(){
-  var strip = document.getElementById("avatar-strip");
-  console.log('buildAvatarStrip called, strip:', strip, 'generics:', GENERIC_AVATARS.length);
-  if(!strip) return;
-  var html = "";
+// ── REGISTER SCREEN ──
+function goToRegister(){
+    showScreen('screen-register');
+    buildAvatarStrip();
+    startGPS();
+}
 
-  html += "<div class=\"avatar-card briscramble-card active\" onclick=\"selectAvatar(this,'scrambler','/logo.png')\">"
-        + "<div class=\"avatar-logo-mini\"><img src=\"/logo.png\" alt=\"\"></div>"
-        + "<span class=\"avatar-name\">SCRAMBLER</span>"
-        + "<span class=\"avatar-perk\">DEFAULT</span>"
-        + "</div>";
+function spectateMode(){
+    myUsername='Spectator';
+    showScreen(null);
+    startRaceMode();
+}
 
-  html += "<div style=\"min-width:100%;font-family:var(--mono);font-size:0.55rem;color:rgba(255,170,0,0.6);letter-spacing:2px;padding:6px 2px 4px;flex-shrink:0\">&#9733; SPONSOR IDENTITIES</div>";
-  SPONSOR_AVATARS.forEach(function(a){
-    if(a.missing) return;
-    var taken = TAKEN[a.slug];
-    if(taken){
-      html += "<div class=\"avatar-card sponsor-card taken\">"
-            + "<img class=\"avatar-img\" src=\"" + a.src + "\" alt=\"" + a.name + "\" style=\"opacity:0.2\">"
-            + "<span class=\"avatar-name\">" + a.name + "</span>"
-            + "<div class=\"avatar-taken\">TAKEN<br>" + taken + "</div>"
-            + "</div>";
-    } else {
-      html += "<div class=\"avatar-card sponsor-card\" onclick=\"selectAvatar(this,'" + a.slug + "','" + a.src + "')\">"
-            + "<img class=\"avatar-img\" src=\"" + a.src + "\" alt=\"" + a.name + "\">"
-            + "<span class=\"avatar-name\">" + a.name + "</span>"
-            + "<span class=\"avatar-perk\">SPONSOR</span>"
-            + "</div>";
+function selectSlot(el,time){
+    document.querySelectorAll('.slot-card').forEach(function(c){c.classList.remove('active');});
+    el.classList.add('active');
+    selectedSlot=time;
+}
+
+function selectAvatar(el,slug,src){
+    document.querySelectorAll('.avatar-card:not(.taken)').forEach(function(c){c.classList.remove('active');});
+    el.classList.add('active');
+    myAvatarSlug=slug;
+    myEmoji=src;
+}
+
+function lockGrid(){
+    if(!isEligible) return;
+    socket.emit('joinRace',{username:myUsername,avatar:myEmoji,slot:selectedSlot});
+    showScreen(null);
+    startRaceMode();
+    showOverlay('winner','GRID LOCKED',
+        '<strong>@'+myUsername+'</strong> registered for the <strong>'+selectedSlot+'</strong> scramble.<br><br>Stay outside 5KM. GPS is tracking.',
+        '<button class="overlay-btn" onclick="closeOverlay()">RACE READY &#9889;</button><button class="overlay-btn" style="border-color:var(--teal);color:var(--teal)" onclick="closeOverlay();shareSlot()">&#128279; SHARE</button>');
+}
+
+function shareSlot(){
+    var text='I just entered the '+selectedSlot+' BriScramble — Brisbane\'s morning commute race to King George Square. Join me: briscramble.onrender.com?slot='+encodeURIComponent(selectedSlot);
+    if(navigator.share){navigator.share({title:'BriScramble',text:text,url:'https://briscramble.onrender.com?slot='+encodeURIComponent(selectedSlot)});}
+    else{navigator.clipboard.writeText(text).then(function(){alert('Copied!');});}
+}
+
+// ── GPS ──
+function startGPS(){
+    if(!navigator.geolocation){
+        showEligibility('ineligible','&#10060; GPS not available on this device');
+        return;
     }
-  });
-
-  html += "<div style=\"min-width:100%;font-family:var(--mono);font-size:0.55rem;color:rgba(255,255,255,0.2);letter-spacing:2px;padding:6px 2px 4px;flex-shrink:0\">GENERIC IDENTITIES</div>";
-  GENERIC_AVATARS.forEach(function(a){
-    html += "<div class=\"avatar-card\" onclick=\"selectAvatar(this,'" + a.slug + "','" + a.src + "')\">"
-          + "<img class=\"avatar-img\" src=\"" + a.src + "\" alt=\"" + a.name + "\">"
-          + "<span class=\"avatar-name\">" + a.name + "</span>"
-          + "</div>";
-  });
-
-  strip.innerHTML = html;
+    navigator.geolocation.watchPosition(
+        function(pos){updateMyPos(pos.coords.latitude,pos.coords.longitude);},
+        function(){showEligibility('ineligible','&#10060; Enable location services and reload');},
+        {enableHighAccuracy:true,maximumAge:8000,timeout:20000}
+    );
 }
 
-let myAvatarSlug = "scrambler";
-// Build strip immediately on load
-// buildAvatarStrip called in goToLobby when lobby actually opens
-
-
-function shareRegistration(){
-  const text = "I just entered the " + selectedSlot + " BriScramble — Brisbane's morning commute race. First to King George Square wins. briscramble.onrender.com";
-  if(navigator.share){
-    navigator.share({title:"BriScramble",text:text,url:"https://briscramble.onrender.com"});
-  } else {
-    navigator.clipboard.writeText(text).then(()=>alert("Copied to clipboard!"));
-  }
+function showEligibility(type,msg){
+    var el=document.getElementById('eligibility-box');
+    if(!el) return;
+    el.className='eligibility-box '+type;
+    el.innerHTML=msg;
+    isEligible=(type==='eligible');
+    document.getElementById('btn-lock').disabled=!isEligible;
 }
 
+var _lastEmit=0;
+function updateMyPos(lat,lng){
+    myLat=lat;myLng=lng;
+    var dist=haversine(lat,lng,FINISH[0],FINISH[1]);
+    var firstFix=!myMarker;
 
-// Touch swipe gesture for drawer
+    if(!myMarker){
+        myMarker=L.marker([lat,lng],{icon:makeIcon(myEmoji,'@'+(myUsername||'You'),true,fmtDist(dist)+' to finish',false),zIndexOffset:1000}).addTo(map);
+    } else {
+        myMarker.setLatLng([lat,lng]);
+        if(isRacing) myMarker.setIcon(makeIcon(myEmoji,'@'+(myUsername||'You'),true,fmtDist(dist)+' to finish',false));
+    }
+
+    // Eligibility check on registration screen
+    if(!isRacing){
+        if(dist<EXCLUSION_M){
+            showEligibility('ineligible','&#10060; INELIGIBLE: '+fmtDist(dist)+' from finish (inside 5km)');
+        } else {
+            showEligibility('eligible','&#10003; ELIGIBLE: '+fmtDist(dist)+' away (outside 5km)');
+        }
+    }
+
+    if(firstFix){
+        var bounds=L.latLngBounds([[lat,lng],FINISH]).pad(0.3);
+        map.fitBounds(bounds,{animate:true,duration:1.5});
+    } else if(mapFollowing&&isRacing){
+        var zoom=dist>5000?13:dist>2000?14:dist>800?15:dist>300?16:dist>100?17:18;
+        map.setView([lat,lng],zoom,{animate:true,duration:1});
+    }
+
+    if(isRacing){
+        document.getElementById('hud-dist-val').textContent=fmtDist(dist);
+        var now=Date.now();
+        if(now-_lastEmit>4000){socket.emit('updateLocation',{lat:lat,lng:lng});_lastEmit=now;}
+        updateRaceUI();
+    }
+}
+
+function recenterMap(){
+    mapFollowing=true;
+    document.getElementById('btn-recenter').classList.remove('show');
+    if(myLat) map.setView([myLat,myLng],14,{animate:true});
+}
+
+// ── RACE MODE ──
+function startRaceMode(){
+    isRacing=true;
+    document.getElementById('hud').classList.add('show');
+    document.getElementById('hud-slot-time').textContent=selectedSlot;
+    document.getElementById('race-drawer').classList.add('show','collapsed');
+    document.getElementById('ad-ticker').classList.add('show');
+    document.getElementById('lb-slot-label').textContent=selectedSlot+' SCRAMBLE';
+    document.getElementById('peek-name').textContent='@'+(myUsername||'You');
+}
+
+// ── LEADERBOARD ──
+function updateRaceUI(){
+    var myDist=myLat?haversine(myLat,myLng,FINISH[0],FINISH[1]):99999;
+    var me={id:'me',name:myUsername||'You',avatar:myEmoji,dist:myDist,isYou:true};
+    var all=[me];
+    Object.entries(lastPlayers).forEach(function(entry){
+        var p=entry[1];
+        if(!p.username||p.username===myUsername||!p.lat||!p.lng||p.slot!==selectedSlot) return;
+        all.push({id:entry[0],name:p.username,avatar:p.avatar||'/logo.png',dist:haversine(p.lat,p.lng,FINISH[0],FINISH[1]),isYou:false});
+    });
+    all.sort(function(a,b){return a.dist-b.dist;});
+
+    var myRank=all.findIndex(function(r){return r.isYou;})+1;
+    var leader=all[0];
+    var gapToLeader=myDist-leader.dist;
+
+    var posEl=document.getElementById('peek-pos');
+    posEl.textContent=myRank;
+    posEl.className='peek-position '+(myRank===1?'p1':myRank===2?'p2':myRank===3?'p3':'back');
+    var gapEl=document.getElementById('peek-gap');
+    var gb=document.getElementById('peek-gap-block');
+    if(myRank===1){gapEl.textContent='LEADING';gb.className='peek-gap closing';}
+    else{gapEl.textContent='+'+fmtDist(gapToLeader);gb.className='peek-gap '+(gapToLeader<500?'closing':'losing');}
+
+    var maxDist=Math.max.apply(null,all.map(function(r){return r.dist;}));
+    document.getElementById('lb-rows').innerHTML=all.map(function(r,i){
+        var rk=i+1,rc=rk===1?'r1':rk===2?'r2':rk===3?'r3':'';
+        var pct=maxDist>0?Math.max(4,Math.round((1-r.dist/maxDist)*100)):50;
+        return '<div class="lb-row '+(r.isYou?'you':'')+'"><div class="lb-rank '+rc+'">'+rk+'</div>'
+            +'<img src="'+r.avatar+'" style="width:24px;height:24px;object-fit:contain;border-radius:4px;flex-shrink:0" onerror="this.style.display=\'none\'">'
+            +'<div class="lb-info"><div class="lb-name '+(r.isYou?'you-name':'')+'">@'+r.name+'</div>'
+            +'<div style="width:100%;height:2px;background:rgba(255,255,255,0.06);border-radius:2px;margin-top:4px"><div style="width:'+pct+'%;height:100%;border-radius:2px;background:'+(rk===1?'var(--teal)':'var(--red)')+'"></div></div></div>'
+            +'<div class="lb-dist '+(rk===1?'closest':'')+'">TO FINISH<strong>'+fmtDist(r.dist)+'</strong></div></div>';
+    }).join('');
+
+    // Update rival markers
+    Object.entries(lastPlayers).forEach(function(entry){
+        var p=entry[1];
+        if(!p.lat||!p.lng||p.username===myUsername) return;
+        var rank=all.findIndex(function(r){return r.name===p.username;})+1;
+        var pulse=(rank===1&&!all[0].isYou)||(rank===all.findIndex(function(r){return r.isYou;})+2);
+        var k='live_'+entry[0];
+        if(leafletMarkers[k]){
+            leafletMarkers[k].setIcon(makeIcon(p.avatar||'/logo.png','@'+p.username,false,fmtDist(haversine(p.lat,p.lng,FINISH[0],FINISH[1]))+' to finish',pulse));
+        }
+    });
+}
+
+// ── DRAWER ──
+function toggleDrawer(){
+    drawerOpen=!drawerOpen;
+    document.getElementById('race-drawer').classList.toggle('collapsed',!drawerOpen);
+    document.getElementById('peek-expand-label').textContent=drawerOpen?'&#8595; CLOSE':'&#8593; BOARD';
+    var btn=document.getElementById('btn-recenter');
+    if(btn) btn.style.bottom=drawerOpen?'320px':'130px';
+}
 (function(){
-  var zone = document.getElementById("race-drawer");
-  if(!zone) return;
-  var startY=0, threshold=40;
-  zone.addEventListener("touchstart",function(e){startY=e.touches[0].clientY;},{passive:true});
-  zone.addEventListener("touchend",function(e){
-    var dy = startY - e.changedTouches[0].clientY;
-    if(dy > threshold && !drawerOpen) toggleDrawer();
-    if(dy < -threshold && drawerOpen) toggleDrawer();
-  },{passive:true});
+    var zone=document.getElementById('race-drawer');
+    if(!zone) return;
+    var startY=0;
+    zone.addEventListener('touchstart',function(e){startY=e.touches[0].clientY;},{passive:true});
+    zone.addEventListener('touchend',function(e){
+        var dy=startY-e.changedTouches[0].clientY;
+        if(dy>40&&!drawerOpen) toggleDrawer();
+        if(dy<-40&&drawerOpen) toggleDrawer();
+    },{passive:true});
 })();
 
-function simulateWin(slot){showOverlay("winner","🏆 SLOT CHAMPION","First to King George Square in the <strong>"+slot+"</strong> scramble!","<a href='sms:"+claimPhone+"?body=BRISCRAMBLE%20WIN%20@"+myUsername+"%20"+slot+"' class='overlay-btn'>📱 TEXT TO CLAIM</a>");}
-function simulateProximityWarning(km){showOverlay("warning","⚠ DANGER ZONE","Only <strong>"+km+"km</strong> from finish. Switch slots now!","<button class='overlay-btn' onclick='closeOverlay()'>OK</button>");}
-function simulateGridLockout(km){showOverlay("lockout","🚨 GRID PENALTY","Disqualified — "+km+"km away at race start.","<button class='overlay-btn' onclick='closeOverlay()'>WATCH MAP</button>");}
+// ── OVERLAYS ──
+function showOverlay(type,title,msg,a){
+    document.getElementById('overlay-card').className='overlay-card '+type;
+    document.getElementById('overlay-title').innerHTML=title;
+    document.getElementById('overlay-msg').innerHTML=msg;
+    document.getElementById('overlay-actions').innerHTML=a;
+    document.getElementById('overlay').classList.add('show');
+}
+function closeOverlay(){document.getElementById('overlay').classList.remove('show');}
+
+// ── AVATAR STRIP ──
+const GENERIC_AVATARS=[
+    {slug:"train",name:"Train",src:"/avatars/generic/train.svg"},
+    {slug:"bus",name:"Bus",src:"/avatars/generic/bus.svg"},
+    {slug:"bike",name:"Fixie",src:"/avatars/generic/bike.svg"},
+    {slug:"scooter",name:"Scooter",src:"/avatars/generic/scooter.svg"},
+    {slug:"ferry",name:"Ferry",src:"/avatars/generic/ferry.svg"},
+    {slug:"skateboard",name:"Skater",src:"/avatars/generic/skateboard.svg"},
+    {slug:"motorbike",name:"Moto",src:"/avatars/generic/motorbike.svg"},
+    {slug:"taxi",name:"Taxi",src:"/avatars/generic/taxi.svg"},
+    {slug:"tram",name:"Tram",src:"/avatars/generic/tram.svg"},
+    {slug:"walker",name:"Walker",src:"/avatars/generic/walker.svg"},
+    {slug:"story_bridge",name:"Story Bridge",src:"/avatars/generic/story_bridge.svg"},
+    {slug:"big_wheel",name:"Big Wheel",src:"/avatars/generic/big_wheel.svg"},
+    {slug:"south_bank",name:"South Bank",src:"/avatars/generic/south_bank.svg"},
+    {slug:"suncorp",name:"Suncorp",src:"/avatars/generic/suncorp.svg"},
+    {slug:"kangaroo_point",name:"Roo Point",src:"/avatars/generic/kangaroo_point.svg"},
+    {slug:"goma",name:"GOMA",src:"/avatars/generic/goma.svg"},
+    {slug:"gateway_bridge",name:"Gateway",src:"/avatars/generic/gateway_bridge.svg"},
+    {slug:"lang_park",name:"Lang Park",src:"/avatars/generic/lang_park.svg"},
+    {slug:"koala",name:"Koala",src:"/avatars/generic/koala.svg"},
+    {slug:"kangaroo",name:"Kangaroo",src:"/avatars/generic/kangaroo.svg"},
+    {slug:"galah",name:"Galah",src:"/avatars/generic/galah.svg"},
+    {slug:"ibis",name:"Bin Chicken",src:"/avatars/generic/ibis.svg"},
+    {slug:"croc",name:"Croc",src:"/avatars/generic/croc.svg"},
+    {slug:"kookaburra",name:"Kookaburra",src:"/avatars/generic/kookaburra.svg"},
+    {slug:"blue_tongue",name:"Blue Tongue",src:"/avatars/generic/blue_tongue.svg"},
+    {slug:"magpie",name:"Magpie",src:"/avatars/generic/magpie.svg"},
+    {slug:"meat_pie",name:"Meat Pie",src:"/avatars/generic/meat_pie.svg"},
+    {slug:"snag",name:"Bunnings Snag",src:"/avatars/generic/snag.svg"},
+    {slug:"tim_tam",name:"Tim Tam",src:"/avatars/generic/tim_tam.svg"},
+    {slug:"flat_white",name:"Flat White",src:"/avatars/generic/flat_white.svg"},
+    {slug:"coldie",name:"Coldie",src:"/avatars/generic/coldie.svg"},
+    {slug:"pavlova",name:"Pav",src:"/avatars/generic/pavlova.svg"},
+    {slug:"vegemite",name:"Vegemite",src:"/avatars/generic/vegemite.svg"},
+    {slug:"afl_ball",name:"AFL Ball",src:"/avatars/generic/afl_ball.svg"},
+    {slug:"cricket",name:"Cricket",src:"/avatars/generic/cricket.svg"},
+    {slug:"rugby_ball",name:"Rugby Ball",src:"/avatars/generic/rugby_ball.svg"},
+    {slug:"tennis",name:"Tennis",src:"/avatars/generic/tennis.svg"},
+    {slug:"swim",name:"Swimmer",src:"/avatars/generic/swim.svg"},
+    {slug:"cycling",name:"Cyclist",src:"/avatars/generic/cycling.svg"},
+    {slug:"bunnings_snag_stand",name:"Snag Stand",src:"/avatars/generic/bunnings_snag_stand.svg"}
+];
+
+const SPONSOR_AVATARS=[
+    {slug:"cc",name:"C. Cameron",src:"/avatars/sponsors/CC.png"},
+    {slug:"bega_mac",name:"Bega Mac",src:"/avatars/sponsors/begamacandcheese280g.jpeg"}
+];
+
+const TAKEN={"xxxx":"@CRISPY"};
+
+function buildAvatarStrip(){
+    var strip=document.getElementById('avatar-strip');
+    if(!strip) return;
+    var html='<div class="avatar-card briscramble-card active" onclick="selectAvatar(this,\'scrambler\',\'/logo.png\')">'
+        +'<div class="avatar-logo-mini"><img src="/logo.png" alt=""></div>'
+        +'<span class="avatar-name">SCRAMBLER</span>'
+        +'<span class="avatar-perk">DEFAULT</span>'
+        +'</div>';
+
+    html+='<div style="min-width:100%;font-family:var(--mono);font-size:0.55rem;color:rgba(255,170,0,0.6);letter-spacing:2px;padding:6px 2px 4px;flex-shrink:0">&#9733; SPONSOR</div>';
+    SPONSOR_AVATARS.forEach(function(a){
+        var taken=TAKEN[a.slug];
+        if(taken){
+            html+='<div class="avatar-card sponsor-card taken">'
+                +'<img class="avatar-img" src="'+a.src+'" style="opacity:0.2">'
+                +'<span class="avatar-name">'+a.name+'</span>'
+                +'<div class="avatar-taken">TAKEN<br>'+taken+'</div>'
+                +'</div>';
+        } else {
+            html+='<div class="avatar-card sponsor-card" onclick="selectAvatar(this,\''+a.slug+'\',\''+a.src+'\')">'
+                +'<img class="avatar-img" src="'+a.src+'" onerror="this.parentElement.style.display=\'none\'">'
+                +'<span class="avatar-name">'+a.name+'</span>'
+                +'<span class="avatar-perk">SPONSOR</span>'
+                +'</div>';
+        }
+    });
+
+    html+='<div style="min-width:100%;font-family:var(--mono);font-size:0.55rem;color:rgba(255,255,255,0.2);letter-spacing:2px;padding:6px 2px 4px;flex-shrink:0">GENERIC</div>';
+    GENERIC_AVATARS.forEach(function(a){
+        html+='<div class="avatar-card" onclick="selectAvatar(this,\''+a.slug+'\',\''+a.src+'\')">'
+            +'<img class="avatar-img" src="'+a.src+'">'
+            +'<span class="avatar-name">'+a.name+'</span>'
+            +'</div>';
+    });
+
+    strip.innerHTML=html;
+}
+
+// Auto-select slot from shared URL
+(function(){
+    var params=new URLSearchParams(window.location.search);
+    var slot=params.get('slot');
+    if(slot){
+        selectedSlot=slot;
+        document.querySelectorAll('.slot-card').forEach(function(c){
+            c.classList.toggle('active',c.querySelector('.slot-time')&&c.querySelector('.slot-time').textContent===slot);
+        });
+    }
+})();
 </script>
 </body>
 </html>
