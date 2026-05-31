@@ -69,7 +69,7 @@
         .slot-riders{font-family:var(--mono);font-size:0.6rem;color:rgba(255,255,255,0.35);margin-top:2px;display:block}
 
         /* AVATARS */
-        .avatar-strip{display:flex;gap:10px;overflow-x:auto;padding-bottom:6px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+        .avatar-strip{display:flex;gap:10px;overflow-x:scroll;padding-bottom:6px;-webkit-overflow-scrolling:touch;cursor:grab}
         .avatar-strip::-webkit-scrollbar{display:none}
         .avatar-card{min-width:80px;height:90px;background:var(--panel);border:1px solid var(--border);border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;position:relative;flex-shrink:0;transition:all 0.15s}
         .avatar-card.active{border-color:var(--red);background:rgba(232,0,26,0.1)}
@@ -664,6 +664,18 @@ function toggleDrawer(){
 
 // ── OVERLAYS ──
 function showOverlay(type,title,msg,a){document.getElementById('overlay-card').className='overlay-card '+type;document.getElementById('overlay-title').innerHTML=title;document.getElementById('overlay-msg').innerHTML=msg;document.getElementById('overlay-actions').innerHTML=a;document.getElementById('overlay').classList.add('show');}
+
+// Drag to scroll avatar strip on desktop
+(function(){
+    var strip = document.getElementById('avatar-strip');
+    if(!strip) return;
+    var isDown=false, startX=0, scrollLeft=0;
+    strip.addEventListener('mousedown',function(e){isDown=true;strip.style.cursor='grabbing';startX=e.pageX-strip.offsetLeft;scrollLeft=strip.scrollLeft;});
+    strip.addEventListener('mouseleave',function(){isDown=false;strip.style.cursor='grab';});
+    strip.addEventListener('mouseup',function(){isDown=false;strip.style.cursor='grab';});
+    strip.addEventListener('mousemove',function(e){if(!isDown)return;e.preventDefault();var x=e.pageX-strip.offsetLeft;strip.scrollLeft=scrollLeft-(x-startX)*1.5;});
+})();
+
 function closeOverlay(){document.getElementById('overlay').classList.remove('show');}
 </script>
 </body>
