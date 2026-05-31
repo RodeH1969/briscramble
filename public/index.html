@@ -307,6 +307,27 @@
     </div>
 </div>
 
+
+<!-- PRE-RACE OVERLAY -->
+<div id="pre-race" style="display:none;position:absolute;top:0;left:0;right:0;z-index:40;pointer-events:none">
+    <div style="background:linear-gradient(to bottom,rgba(7,7,8,0.97) 0%,rgba(7,7,8,0.85) 80%,transparent 100%);padding:16px 20px 40px">
+        <div style="max-width:500px;margin:0 auto">
+            <!-- Slot + live count -->
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+                <div style="font-family:var(--mono);font-size:0.6rem;color:var(--teal);letter-spacing:3px;text-transform:uppercase" id="pr-slot-label">7:00 SCRAMBLE</div>
+                <div style="font-family:var(--mono);font-size:0.6rem;color:rgba(255,255,255,0.35);letter-spacing:2px" id="pr-count">1 RACER REGISTERED</div>
+            </div>
+            <!-- BIG COUNTDOWN -->
+            <div style="text-align:center;margin-bottom:12px">
+                <div style="font-family:var(--mono);font-size:0.6rem;color:rgba(255,255,255,0.3);letter-spacing:3px;text-transform:uppercase;margin-bottom:4px">GUN FIRES IN</div>
+                <div id="pr-countdown" style="font-family:var(--head);font-size:5rem;font-weight:900;color:var(--red);line-height:1;letter-spacing:4px;text-shadow:0 0 30px rgba(232,0,26,0.5)">00:00</div>
+            </div>
+            <!-- RACER LIST -->
+            <div id="pr-racers" style="display:flex;flex-direction:column;gap:6px;max-height:160px;overflow-y:auto"></div>
+        </div>
+    </div>
+</div>
+
 <!-- RACE HUD -->
 <div id="hud">
     <div class="hud-logo"><img src="/logo.png" alt=""></div>
@@ -659,6 +680,77 @@ function onPos(lat,lng){
     }
 }
 
+
+// ── PRE-RACE OVERLAY ──
+var _prInterval = null;
+
+function showPreRace(){
+    document.getElementById('pre-race').style.display = 'block';
+    updatePreRace();
+    _prInterval = setInterval(updatePreRace, 1000);
+}
+
+function updatePreRace(){
+    var el = document.getElementById('pr-countdown');
+    if(!el) return;
+
+    var now = new Date();
+    var bne = new Date(now.toLocaleString('en-AU',{timeZone:'Australia/Brisbane'}));
+    var pts = selectedSlot.split(':');
+    var tgt = new Date(bne);
+    tgt.setHours(parseInt(pts[0]), parseInt(pts[1]), 0, 0);
+
+    document.getElementById('pr-slot-label').textContent = selectedSlot + ' SCRAMBLE';
+
+    if(tgt <= bne){
+        // Race has started — hide pre-race overlay
+        el.textContent = 'GO!';
+        el.style.color = 'var(--teal)';
+        el.style.textShadow = '0 0 40px rgba(0,255,204,0.7)';
+        clearInterval(_prInterval);
+        setTimeout(function(){
+            document.getElementById('pre-race').style.display = 'none';
+        }, 2000);
+        speak('Your slot is open. Go go go!');
+        return;
+    }
+
+    var diff = Math.floor((tgt - bne) / 1000);
+    var m = Math.floor(diff / 60), s = diff % 60;
+    el.textContent = String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+
+    // Colour urgency
+    if(diff < 60){ el.style.color = '#FFAA00'; el.style.textShadow = '0 0 30px rgba(255,170,0,0.6)'; }
+    else if(diff < 300){ el.style.color = '#FF6600'; el.style.textShadow = '0 0 30px rgba(255,100,0,0.5)'; }
+    else{ el.style.color = 'var(--red)'; el.style.textShadow = '0 0 30px rgba(232,0,26,0.5)'; }
+}
+
+function updatePreRacers(players){
+    var countEl = document.getElementById('pr-count');
+    var listEl  = document.getElementById('pr-racers');
+    if(!countEl || !listEl) return;
+
+    var all = [];
+    // Add self
+    all.push({username: myUsername||'You', avatar: myAvatar, isMe: true});
+    // Add others in slot
+    Object.entries(players).forEach(function(e){
+        var uid=e[0], p=e[1];
+        if(uid === myUID) return;
+        all.push({username: p.username, avatar: p.avatar||'/logo.png', isMe: false});
+    });
+
+    countEl.textContent = all.length + ' RACER' + (all.length !== 1 ? 'S' : '') + ' REGISTERED';
+
+    listEl.innerHTML = all.map(function(r){
+        return '<div style="display:flex;align-items:center;gap:10px;padding:6px 10px;background:rgba(255,255,255,0.04);border-radius:6px;border:1px solid '+(r.isMe?'rgba(232,0,26,0.3)':'rgba(255,255,255,0.06)')+';">'
+            + '<img src="'+r.avatar+'" style="width:28px;height:28px;object-fit:contain;border-radius:4px" onerror="this.style.display='none'">'
+            + '<span style="font-family:var(--head);font-size:1.1rem;font-weight:700;color:'+(r.isMe?'var(--red)':'var(--white)')+'">@'+r.username+'</span>'
+            + (r.isMe ? '<span style="font-family:var(--mono);font-size:0.55rem;color:var(--red);margin-left:auto;letter-spacing:1px">YOU</span>' : '')
+            + '</div>';
+    }).join('');
+}
+
 // ── LOCK IN ──
 function lockIn(){
     if(!isEligible) return;
@@ -667,6 +759,7 @@ function lockIn(){
     ref.onDisconnect().remove();
     listenToSlot(selectedSlot);
     show(null);
+    showPreRace();
     document.getElementById('hud').classList.add('show');
     document.getElementById('hud-slot').textContent=selectedSlot;
     document.getElementById('drawer').classList.add('show','collapsed');
@@ -681,6 +774,8 @@ function lockIn(){
 function listenToSlot(slot){
     db.ref('scrambles/'+slot+'/players').on('value',function(snap){
         var players=snap.val()||{};
+        // Update pre-race racer list
+        updatePreRacers(players);
         // Remove stale
         Object.keys(markers).forEach(function(k){
             if(!players[k]){map.removeLayer(markers[k]);delete markers[k];}
