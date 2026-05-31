@@ -495,43 +495,40 @@ const SPONSOR_AVATARS = [
 const TAKEN = {"xxxx":"@CRISPY"};
 
 function buildAvatarStrip(){
-  const strip = document.getElementById("avatar-strip");
+  var strip = document.getElementById("avatar-strip");
   if(!strip) return;
-  let html = "";
+  var html = "";
 
-  // Default
-  html += '<div class="avatar-card briscramble-card active" onclick="selectAvatar(this,'scrambler','/logo.png')">'
-        + '<div class="avatar-logo-mini"><img src="/logo.png" alt=""></div>'
-        + '<span class="avatar-name">SCRAMBLER</span>'
-        + '<span class="avatar-perk">DEFAULT</span>'
-        + '</div>';
+  html += "<div class=\"avatar-card briscramble-card active\" onclick=\"selectAvatar(this,'scrambler','/logo.png')\">"
+        + "<div class=\"avatar-logo-mini\"><img src=\"/logo.png\" alt=\"\"></div>"
+        + "<span class=\"avatar-name\">SCRAMBLER</span>"
+        + "<span class=\"avatar-perk\">DEFAULT</span>"
+        + "</div>";
 
-  // Sponsors
-  html += '<div style="min-width:100%;font-family:var(--mono);font-size:0.55rem;color:rgba(255,170,0,0.6);letter-spacing:2px;padding:6px 2px 4px;flex-shrink:0">&#9733; SPONSOR IDENTITIES</div>';
+  html += "<div style=\"min-width:100%;font-family:var(--mono);font-size:0.55rem;color:rgba(255,170,0,0.6);letter-spacing:2px;padding:6px 2px 4px;flex-shrink:0\">&#9733; SPONSOR IDENTITIES</div>";
   SPONSOR_AVATARS.forEach(function(a){
     var taken = TAKEN[a.slug];
     if(taken){
-      html += '<div class="avatar-card sponsor-card taken">'
-            + '<img class="avatar-img" src="' + a.src + '" alt="' + a.name + '" style="opacity:0.2">'
-            + '<span class="avatar-name">' + a.name + '</span>'
-            + '<div class="avatar-taken">TAKEN<br>' + taken + '</div>'
-            + '</div>';
+      html += "<div class=\"avatar-card sponsor-card taken\">"
+            + "<img class=\"avatar-img\" src=\"" + a.src + "\" alt=\"" + a.name + "\" style=\"opacity:0.2\">"
+            + "<span class=\"avatar-name\">" + a.name + "</span>"
+            + "<div class=\"avatar-taken\">TAKEN<br>" + taken + "</div>"
+            + "</div>";
     } else {
-      html += '<div class="avatar-card sponsor-card" onclick="selectAvatar(this,'' + a.slug + '','' + a.src + '')">'
-            + '<img class="avatar-img" src="' + a.src + '" alt="' + a.name + '">'
-            + '<span class="avatar-name">' + a.name + '</span>'
-            + '<span class="avatar-perk">SPONSOR</span>'
-            + '</div>';
+      html += "<div class=\"avatar-card sponsor-card\" onclick=\"selectAvatar(this,'" + a.slug + "','" + a.src + "')\">"
+            + "<img class=\"avatar-img\" src=\"" + a.src + "\" alt=\"" + a.name + "\">"
+            + "<span class=\"avatar-name\">" + a.name + "</span>"
+            + "<span class=\"avatar-perk\">SPONSOR</span>"
+            + "</div>";
     }
   });
 
-  // Generics
-  html += '<div style="min-width:100%;font-family:var(--mono);font-size:0.55rem;color:rgba(255,255,255,0.2);letter-spacing:2px;padding:6px 2px 4px;flex-shrink:0">GENERIC IDENTITIES</div>';
+  html += "<div style=\"min-width:100%;font-family:var(--mono);font-size:0.55rem;color:rgba(255,255,255,0.2);letter-spacing:2px;padding:6px 2px 4px;flex-shrink:0\">GENERIC IDENTITIES</div>";
   GENERIC_AVATARS.forEach(function(a){
-    html += '<div class="avatar-card" onclick="selectAvatar(this,'' + a.slug + '','' + a.src + '')">'
-          + '<img class="avatar-img" src="' + a.src + '" alt="' + a.name + '">'
-          + '<span class="avatar-name">' + a.name + '</span>'
-          + '</div>';
+    html += "<div class=\"avatar-card\" onclick=\"selectAvatar(this,'" + a.slug + "','" + a.src + "')\">"
+          + "<img class=\"avatar-img\" src=\"" + a.src + "\" alt=\"" + a.name + "\">"
+          + "<span class=\"avatar-name\">" + a.name + "</span>"
+          + "</div>";
   });
 
   strip.innerHTML = html;
