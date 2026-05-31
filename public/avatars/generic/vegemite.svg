@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" width="80" height="80">
+  <rect width="80" height="80" rx="12" fill="#111"/>
+  <rect x="22" y="22" width="36" height="44" rx="6" fill="#2C2016"/>
+<rect x="24" y="24" width="32" height="40" rx="4" fill="#1A1208"/>
+<rect x="24" y="34" width="32" height="20" rx="2" fill="#F1C40F"/>
+<text x="40" y="48" text-anchor="middle" fill="#2C2016" font-size="7" font-family="Arial" font-weight="bold">VEGEMITE</text>
+<rect x="24" y="24" width="32" height="12" rx="4" fill="#C0392B"/>
+<rect x="26" y="58" width="28" height="5" rx="2" fill="#2C2016"/>
+</svg>

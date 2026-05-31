@@ -77,6 +77,11 @@
         .avatar-perk{position:absolute;top:4px;right:4px;font-family:var(--mono);font-size:0.5rem;font-weight:bold;background:#FFAA00;color:#000;padding:1px 4px;border-radius:3px}
         .avatar-taken{position:absolute;inset:0;background:rgba(0,0,0,0.75);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:0.55rem;color:var(--red);text-align:center;padding:6px;border-radius:8px;line-height:1.3}
         .avatar-card.briscramble-card{border-color:var(--red);background:rgba(232,0,26,0.08)}
+        .avatar-card .avatar-img{width:52px;height:52px;object-fit:cover;border-radius:6px;}
+        .avatar-card.sponsor-card{border-color:#FFAA00;}
+        .avatar-card.sponsor-card.active{border-color:#FFAA00;background:rgba(255,170,0,0.12);}
+        .avatar-section-head{min-width:100%;font-family:var(--mono);font-size:0.6rem;color:rgba(255,255,255,0.25);letter-spacing:2px;padding:4px 0 6px;text-transform:uppercase;flex-shrink:0;}
+
         .avatar-card.briscramble-card .avatar-logo-mini{width:52px;height:52px;border-radius:50%;overflow:hidden;border:1px solid var(--red)}
         .avatar-card.briscramble-card .avatar-logo-mini img{width:100%;height:100%;object-fit:cover}
         .lobby-footer{padding:16px 20px;padding-bottom:max(env(safe-area-inset-bottom,16px),16px);flex-shrink:0;border-top:1px solid var(--border)}
@@ -263,22 +268,8 @@
         </div>
         <div>
             <div class="section-label">[02] CLAIM IDENTITY <span class="section-badge">LOCKED FOREVER</span></div>
-            <div class="avatar-strip">
-                <div class="avatar-card briscramble-card active" onclick="selectAvatar(this,'&#127937;')">
-                    <div class="avatar-logo-mini"><img src="/logo.png" alt=""></div>
-                    <span class="avatar-name">SCRAMBLER</span>
-                    <span class="avatar-perk">DEFAULT</span>
-                </div>
-                <div class="avatar-card taken premium">
-                    <span class="avatar-emoji" style="opacity:0.2">&#127866;</span>
-                    <span class="avatar-name">XXXX Can</span>
-                    <div class="avatar-taken">TAKEN<br>@CRISPY</div>
-                </div>
-                <div class="avatar-card premium" onclick="selectAvatar(this,'&#127945;')"><span class="avatar-emoji">&#127945;</span><span class="avatar-name">C. Cameron</span><span class="avatar-perk">PERK</span></div>
-                <div class="avatar-card" onclick="selectAvatar(this,'&#128663;')"><span class="avatar-emoji">&#128663;</span><span class="avatar-name">Cruiser</span></div>
-                <div class="avatar-card" onclick="selectAvatar(this,'&#128690;')"><span class="avatar-emoji">&#128690;</span><span class="avatar-name">Fixie</span></div>
-                <div class="avatar-card" onclick="selectAvatar(this,'&#128652;')"><span class="avatar-emoji">&#128652;</span><span class="avatar-name">Busser</span></div>
-                <div class="avatar-card" onclick="selectAvatar(this,'&#128646;')"><span class="avatar-emoji">&#128646;</span><span class="avatar-name">Trainee</span></div>
+            <div class="avatar-strip" id="avatar-strip">
+                <!-- Populated by JS -->
             </div>
         </div>
     </div>
@@ -333,7 +324,22 @@ socket.on("proximityDangerWarning",data=>{if(navigator.vibrate)navigator.vibrate
 const FINISH=[-27.4691,153.0235];
 const map=L.map("map",{zoomControl:false,attributionControl:false}).setView([-27.464,153.024],13);
 L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png").addTo(map);
-L.marker(FINISH,{icon:L.divIcon({html:"<div class='finish-pin'></div>",className:"",iconAnchor:[11,11]})}).addTo(map);
+L.marker(FINISH,{icon:L.divIcon({html:"<div style='width:22px;height:22px;border-radius:50%;background:#E8001A;border:3px solid #fff;box-shadow:0 0 12px #E8001A;animation:finishPing 2s infinite'></div>",className:"",iconAnchor:[11,11]})}).addTo(map);
+// 5KM exclusion ring
+L.circle(FINISH, {
+    radius: 5000,
+    color: '#E8001A',
+    fillColor: '#E8001A',
+    fillOpacity: 0.04,
+    weight: 1.5,
+    dashArray: '8,6',
+    opacity: 0.5
+}).addTo(map);
+// Label
+L.marker([-27.4240, 153.0235], {icon: L.divIcon({
+    html: "<div style='font-family:monospace;font-size:10px;color:rgba(232,0,26,0.7);letter-spacing:2px;white-space:nowrap;text-shadow:0 1px 3px black'>— 5KM BOUNDARY —</div>",
+    className:'', iconAnchor:[60,0]
+})}).addTo(map);
 map.on("dragstart",()=>{mapFollowing=false;document.getElementById("btn-recenter").classList.add("show");});
 
 const demoRacers=[
@@ -382,6 +388,111 @@ function updateRaceUI(){const myDist=myLat?haversine(myLat,myLng,FINISH[0],FINIS
 function toggleDrawer(){drawerOpen=!drawerOpen;document.getElementById("race-drawer").classList.toggle("collapsed",!drawerOpen);document.getElementById("peek-expand-label").textContent=drawerOpen?"↓ CLOSE":"↑ BOARD";}
 function showOverlay(type,title,msg,a){document.getElementById("overlay-card").className="overlay-card "+type;document.getElementById("overlay-title").innerHTML=title;document.getElementById("overlay-msg").innerHTML=msg;document.getElementById("overlay-actions").innerHTML=a;document.getElementById("overlay").classList.add("show");}
 function closeOverlay(){document.getElementById("overlay").classList.remove("show");}
+
+const GENERIC_AVATARS = [
+  {slug:"train",name:"Train",src:"/avatars/generic/train.svg"},
+  {slug:"bus",name:"Bus",src:"/avatars/generic/bus.svg"},
+  {slug:"bike",name:"Fixie",src:"/avatars/generic/bike.svg"},
+  {slug:"scooter",name:"Scooter",src:"/avatars/generic/scooter.svg"},
+  {slug:"ferry",name:"Ferry",src:"/avatars/generic/ferry.svg"},
+  {slug:"skateboard",name:"Skater",src:"/avatars/generic/skateboard.svg"},
+  {slug:"motorbike",name:"Moto",src:"/avatars/generic/motorbike.svg"},
+  {slug:"taxi",name:"Taxi",src:"/avatars/generic/taxi.svg"},
+  {slug:"tram",name:"Tram",src:"/avatars/generic/tram.svg"},
+  {slug:"walker",name:"Walker",src:"/avatars/generic/walker.svg"},
+  {slug:"story_bridge",name:"Story Bridge",src:"/avatars/generic/story_bridge.svg"},
+  {slug:"big_wheel",name:"Big Wheel",src:"/avatars/generic/big_wheel.svg"},
+  {slug:"south_bank",name:"South Bank",src:"/avatars/generic/south_bank.svg"},
+  {slug:"suncorp",name:"Suncorp",src:"/avatars/generic/suncorp.svg"},
+  {slug:"kangaroo_point",name:"Roo Point",src:"/avatars/generic/kangaroo_point.svg"},
+  {slug:"goma",name:"GOMA",src:"/avatars/generic/goma.svg"},
+  {slug:"gateway_bridge",name:"Gateway",src:"/avatars/generic/gateway_bridge.svg"},
+  {slug:"lang_park",name:"Lang Park",src:"/avatars/generic/lang_park.svg"},
+  {slug:"koala",name:"Koala",src:"/avatars/generic/koala.svg"},
+  {slug:"kangaroo",name:"Kangaroo",src:"/avatars/generic/kangaroo.svg"},
+  {slug:"galah",name:"Galah",src:"/avatars/generic/galah.svg"},
+  {slug:"ibis",name:"Bin Chicken",src:"/avatars/generic/ibis.svg"},
+  {slug:"croc",name:"Croc",src:"/avatars/generic/croc.svg"},
+  {slug:"kookaburra",name:"Kookaburra",src:"/avatars/generic/kookaburra.svg"},
+  {slug:"blue_tongue",name:"Blue Tongue",src:"/avatars/generic/blue_tongue.svg"},
+  {slug:"magpie",name:"Magpie",src:"/avatars/generic/magpie.svg"},
+  {slug:"meat_pie",name:"Meat Pie",src:"/avatars/generic/meat_pie.svg"},
+  {slug:"snag",name:"Bunnings Snag",src:"/avatars/generic/snag.svg"},
+  {slug:"tim_tam",name:"Tim Tam",src:"/avatars/generic/tim_tam.svg"},
+  {slug:"flat_white",name:"Flat White",src:"/avatars/generic/flat_white.svg"},
+  {slug:"coldie",name:"Coldie",src:"/avatars/generic/coldie.svg"},
+  {slug:"pavlova",name:"Pav",src:"/avatars/generic/pavlova.svg"},
+  {slug:"vegemite",name:"Vegemite",src:"/avatars/generic/vegemite.svg"},
+  {slug:"afl_ball",name:"AFL Ball",src:"/avatars/generic/afl_ball.svg"},
+  {slug:"cricket",name:"Cricket",src:"/avatars/generic/cricket.svg"},
+  {slug:"rugby_ball",name:"Rugby Ball",src:"/avatars/generic/rugby_ball.svg"},
+  {slug:"tennis",name:"Tennis",src:"/avatars/generic/tennis.svg"},
+  {slug:"swim",name:"Swimmer",src:"/avatars/generic/swim.svg"},
+  {slug:"cycling",name:"Cyclist",src:"/avatars/generic/cycling.svg"},
+  {slug:"bunnings_snag_stand",name:"Snag Stand",src:"/avatars/generic/bunnings_snag_stand.svg"},
+];
+
+const SPONSOR_AVATARS = [
+  {slug:"cc",name:"C. Cameron",src:"/avatars/sponsors/CC.png",takenBy:""},
+  {slug:"bega_mac",name:"Bega Mac",src:"/avatars/sponsors/begamacandcheese280g.jpeg",takenBy:""},
+];
+
+// Simulated taken state (in prod comes from server)
+const TAKEN = {"xxxx":"@CRISPY"};
+
+function buildAvatarStrip(){
+  const strip = document.getElementById("avatar-strip");
+  let html = "";
+
+  // Default — BriScramble logo
+  html += `<div class="avatar-card briscramble-card active" onclick="selectAvatar(this,'scrambler','/logo.png')">
+    <div class="avatar-logo-mini"><img src="/logo.png" alt=""></div>
+    <span class="avatar-name">SCRAMBLER</span>
+    <span class="avatar-perk">DEFAULT</span>
+  </div>`;
+
+  // Sponsor avatars
+  html += `<div style="min-width:100%;font-family:var(--mono);font-size:0.55rem;color:rgba(255,170,0,0.6);letter-spacing:2px;padding:6px 2px 4px;flex-shrink:0">&#9733; SPONSOR IDENTITIES</div>`;
+  SPONSOR_AVATARS.forEach(a => {
+    const taken = TAKEN[a.slug];
+    if(taken){
+      html += `<div class="avatar-card sponsor-card taken">
+        <img class="avatar-img" src="${a.src}" alt="${a.name}" style="opacity:0.2">
+        <span class="avatar-name">${a.name}</span>
+        <div class="avatar-taken">TAKEN<br>${taken}</div>
+      </div>`;
+    } else {
+      html += `<div class="avatar-card sponsor-card" onclick="selectAvatar(this,'${a.slug}','${a.src}')">
+        <img class="avatar-img" src="${a.src}" alt="${a.name}">
+        <span class="avatar-name">${a.name}</span>
+        <span class="avatar-perk">SPONSOR</span>
+      </div>`;
+    }
+  });
+
+  // Generic avatars
+  html += `<div style="min-width:100%;font-family:var(--mono);font-size:0.55rem;color:rgba(255,255,255,0.2);letter-spacing:2px;padding:6px 2px 4px;flex-shrink:0">GENERIC IDENTITIES</div>`;
+  GENERIC_AVATARS.forEach(a => {
+    html += `<div class="avatar-card" onclick="selectAvatar(this,'${a.slug}','${a.src}')">
+      <img class="avatar-img" src="${a.src}" alt="${a.name}">
+      <span class="avatar-name">${a.name}</span>
+    </div>`;
+  });
+
+  strip.innerHTML = html;
+}
+
+// Override selectAvatar to handle image src
+function selectAvatar(el, slug, src){
+  document.querySelectorAll(".avatar-card:not(.taken)").forEach(c=>c.classList.remove("active"));
+  el.classList.add("active");
+  myEmoji = src; // use src as the map marker image reference
+  myAvatarSlug = slug;
+}
+let myAvatarSlug = "scrambler";
+// Build strip immediately on load
+document.addEventListener("DOMContentLoaded", function() { buildAvatarStrip(); });
+
 function simulateWin(slot){showOverlay("winner","🏆 SLOT CHAMPION","First to King George Square in the <strong>"+slot+"</strong> scramble!","<a href='sms:"+claimPhone+"?body=BRISCRAMBLE%20WIN%20@"+myUsername+"%20"+slot+"' class='overlay-btn'>📱 TEXT TO CLAIM</a>");}
 function simulateProximityWarning(km){showOverlay("warning","⚠ DANGER ZONE","Only <strong>"+km+"km</strong> from finish. Switch slots now!","<button class='overlay-btn' onclick='closeOverlay()'>OK</button>");}
 function simulateGridLockout(km){showOverlay("lockout","🚨 GRID PENALTY","Disqualified — "+km+"km away at race start.","<button class='overlay-btn' onclick='closeOverlay()'>WATCH MAP</button>");}
