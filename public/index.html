@@ -406,7 +406,7 @@ function checkExistingUsername(){fetch("/api/register-username",{method:"POST",h
 
 function confirmUsername(){const v=document.getElementById("username-input").value.trim().replace(/[^a-zA-Z0-9_]/g,"");const e=document.getElementById("username-error");if(v.length<2){e.textContent="Too short — minimum 2 characters";return;}e.textContent="";fetch("/api/register-username",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({uid:myUID||"demo_"+Date.now(),username:v})}).then(r=>r.json()).then(d=>{if(d.error){e.textContent=d.error;return;}myUsername=d.username;goToLobby();}).catch(()=>{myUsername=v;goToLobby();});}
 
-function goToLobby(){showScreen(null);document.getElementById("lobby").classList.add("open");startCountdown();}
+function goToLobby(){showScreen(null);document.getElementById("lobby").classList.add("open");startCountdown();buildAvatarStrip();}
 function spectateMode(){myUsername="Spectator";showScreen(null);startRaceMode();}
 function showScreen(id){["screen-auth","screen-username"].forEach(s=>document.getElementById(s).classList.toggle("hidden",s!==id));}
 function closeLobby(){document.getElementById("lobby").classList.remove("open");showScreen("screen-auth");}
@@ -571,7 +571,7 @@ function buildAvatarStrip(){
 
 let myAvatarSlug = "scrambler";
 // Build strip immediately on load
-document.addEventListener("DOMContentLoaded", function() { buildAvatarStrip(); checkSponsorImages(); });
+// buildAvatarStrip called in goToLobby when lobby actually opens
 
 
 function shareRegistration(){
