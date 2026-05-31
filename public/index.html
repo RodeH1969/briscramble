@@ -309,7 +309,7 @@
 
 
 <!-- PRE-RACE OVERLAY -->
-<div id="pre-race" style="display:none;position:absolute;top:0;left:0;right:0;z-index:40;pointer-events:none">
+<div id="pre-race" class="hidden" style="position:absolute;top:0;left:0;right:0;z-index:40;pointer-events:none">
     <div style="background:linear-gradient(to bottom,rgba(7,7,8,0.97) 0%,rgba(7,7,8,0.85) 80%,transparent 100%);padding:16px 20px 40px">
         <div style="max-width:500px;margin:0 auto">
             <!-- Slot + live count -->
@@ -509,8 +509,14 @@ function mkIcon(src,label,isMe,dist,pulse){
 auth.getRedirectResult().then(function(r){if(r&&r.user)afterAuth(r.user);}).catch(function(){});
 auth.onAuthStateChanged(function(u){if(u) afterAuth(u);});
 
-function signInGoogle(){auth.signInWithRedirect(new firebase.auth.GoogleAuthProvider());}
-function signInApple(){auth.signInWithRedirect(new firebase.auth.OAuthProvider('apple.com'));}
+function signInGoogle(){
+    if(typeof firebase==='undefined'||!firebase.auth){setTimeout(signInGoogle,500);return;}
+    auth.signInWithRedirect(new firebase.auth.GoogleAuthProvider());
+}
+function signInApple(){
+    if(typeof firebase==='undefined'||!firebase.auth){setTimeout(signInApple,500);return;}
+    auth.signInWithRedirect(new firebase.auth.OAuthProvider('apple.com'));
+}
 
 function afterAuth(user){
     myUID=user.uid;
@@ -685,7 +691,7 @@ function onPos(lat,lng){
 var _prInterval = null;
 
 function showPreRace(){
-    document.getElementById('pre-race').style.display = 'block';
+    document.getElementById('pre-race').classList.remove('hidden');
     updatePreRace();
     _prInterval = setInterval(updatePreRace, 1000);
 }
@@ -709,7 +715,7 @@ function updatePreRace(){
         el.style.textShadow = '0 0 40px rgba(0,255,204,0.7)';
         clearInterval(_prInterval);
         setTimeout(function(){
-            document.getElementById('pre-race').style.display = 'none';
+            document.getElementById('pre-race').classList.add('hidden');
         }, 2000);
         speak('Your slot is open. Go go go!');
         return;
