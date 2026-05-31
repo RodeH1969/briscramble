@@ -497,7 +497,7 @@ function mkIcon(src,label,isMe,dist,pulse){
     var a=pulse?'animation:rivalPulse 1.2s ease-in-out infinite;':'';
     return L.divIcon({
         html:'<div style="text-align:center;'+a+'filter:drop-shadow(0 2px 6px rgba(0,0,0,0.8))">'
-            +'<img src="'+src+'" style="width:26px;height:26px;object-fit:contain;border-radius:4px" onerror="this.style.display=\'none\'">'
+            +'<img src="'+src+'" style="width:26px;height:26px;object-fit:contain;border-radius:4px" onerror="this.style.opacity=0">'
             +'<br><span style="font-size:8px;background:rgba(7,7,8,0.92);color:'+c+';'+b+';padding:1px 5px;font-family:monospace;border-radius:3px;white-space:nowrap;display:inline-block">'+label+'</span>'
             +(dist?'<div style="font-size:7px;color:'+(isMe?'#fff':pulse?'#00FFCC':'rgba(255,255,255,0.5)')+';background:rgba(0,0,0,0.8);padding:1px 4px;border-radius:2px;margin-top:1px;white-space:nowrap">'+dist+'</div>':'')
             +'</div>',
@@ -750,7 +750,7 @@ function updatePreRacers(players){
 
     listEl.innerHTML = all.map(function(r){
         return '<div style="display:flex;align-items:center;gap:10px;padding:6px 10px;background:rgba(255,255,255,0.04);border-radius:6px;border:1px solid '+(r.isMe?'rgba(232,0,26,0.3)':'rgba(255,255,255,0.06)')+';">'
-            + '<img src="'+r.avatar+'" style="width:28px;height:28px;object-fit:contain;border-radius:4px" onerror="this.style.display='none'">'
+            + '<img src="'+r.avatar+'" style="width:28px;height:28px;object-fit:contain;border-radius:4px" onerror="this.style.opacity=0">' 
             + '<span style="font-family:var(--head);font-size:1.1rem;font-weight:700;color:'+(r.isMe?'var(--red)':'var(--white)')+'">@'+r.username+'</span>'
             + (r.isMe ? '<span style="font-family:var(--mono);font-size:0.55rem;color:var(--red);margin-left:auto;letter-spacing:1px">YOU</span>' : '')
             + '</div>';
@@ -852,7 +852,7 @@ function updateLB(players){
         var pct=maxD>0?Math.max(4,Math.round((1-r.dist/maxD)*100)):50;
         var barColor=rk===1?'var(--teal)':'var(--red)';
         return '<div class="lb-row '+(r.isMe?'me':'')+'"><div class="lb-rank '+rc+'">'+rk+'</div>'
-            +'<img class="lb-av" src="'+r.avatar+'" onerror="this.style.display=\'none\'">'
+            +'<img class="lb-av" src="'+r.avatar+'" onerror="this.style.opacity=0">'
             +'<div class="lb-info"><div class="lb-name '+(r.isMe?'me':'')+'">@'+r.username+'</div>'
             +'<div class="lb-bar-wrap"><div class="lb-bar" style="width:'+pct+'%;background:'+barColor+'"></div></div></div>'
             +'<div class="lb-dist '+(rk===1?'lead':'')+'">TO FINISH<strong>'+fmt(r.dist)+'</strong></div></div>';
