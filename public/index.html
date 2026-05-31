@@ -389,7 +389,9 @@ var _lastEmit=0;
 
 // ── MAP ──
 const map=L.map('map',{zoomControl:false,attributionControl:false}).setView([-27.464,153.024],12);
-L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png').addTo(map);
+L.tileLayer('https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}',{
+    maxZoom:20, attribution:''
+}).addTo(map);
 L.marker(FINISH,{icon:L.divIcon({
     html:"<div style='text-align:center;'>"
         +"<div style='width:28px;height:28px;border-radius:50%;background:#E8001A;border:3px solid #fff;box-shadow:0 0 20px #E8001A;animation:finishPing 2s infinite;margin:0 auto'></div>"
