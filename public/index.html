@@ -10,7 +10,7 @@
         @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;700;900&family=Share+Tech+Mono&display=swap');
         :root{--red:#E8001A;--white:#F5F5F0;--black:#070708;--dark:#0e0e12;--panel:#121217;--border:rgba(255,255,255,0.08);--teal:#00FFCC;--teal-dim:rgba(0,255,204,0.15);--mono:'Share Tech Mono',monospace;--head:'Barlow Condensed',sans-serif}
         *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-        html,body{height:100%;background:var(--black);overflow:hidden;font-family:var(--head);color:var(--white);-webkit-tap-highlight-color:transparent}
+        html,body{height:100%;background:radial-gradient(ellipse at center,#0e0e1f 0%,#070708 100%);overflow:hidden;font-family:var(--head);color:var(--white);-webkit-tap-highlight-color:transparent}
         #map{position:absolute;inset:0;z-index:1}
         .leaflet-marker-icon{transition:transform 1.2s linear!important}
         .leaflet-marker-shadow{transition:transform 1.2s linear!important}
@@ -46,13 +46,13 @@
         .btn-primary{width:100%;max-width:340px;background:var(--red);color:#fff;border:none;padding:18px;font-family:var(--head);font-size:1.5rem;font-weight:900;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:8px;box-shadow:0 6px 24px rgba(232,0,26,0.4)}
 
         /* REGISTER SCREEN */
-        #screen-register{justify-content:flex-start;padding:0;overflow-y:auto}
-        .reg-header{width:100%;background:var(--dark);border-bottom:1px solid var(--border);padding:16px 20px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;position:relative;overflow:hidden}
+        #screen-register{justify-content:flex-start;padding:0;overflow-y:auto;background:radial-gradient(ellipse at top,#0e0e1a 0%,var(--black) 70%)}
+        .reg-header{width:100%;background:linear-gradient(to right,#0e0e18,#12121f);border-bottom:1px solid rgba(232,0,26,0.2);padding:16px 20px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;position:relative;overflow:hidden}
         .reg-logo-bg{position:absolute;right:-10px;top:50%;transform:translateY(-50%);width:100px;height:100px;border-radius:50%;overflow:hidden;opacity:0.1}
         .reg-logo-bg img{width:100%;height:100%;object-fit:cover}
         .reg-title{font-family:var(--head);font-size:2rem;font-weight:900;letter-spacing:3px}
         .reg-title span{color:var(--red)}
-        .reg-body{width:100%;max-width:500px;margin:0 auto;padding:20px;display:flex;flex-direction:column;gap:20px;flex:1}
+        .reg-body{width:100%;max-width:500px;margin:0 auto;padding:20px;display:flex;flex-direction:column;gap:20px;flex:1;background:transparent}
         .section-label{font-family:var(--mono);font-size:0.7rem;color:rgba(255,255,255,0.35);letter-spacing:3px;text-transform:uppercase;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
         .section-badge{font-size:0.6rem;color:var(--teal);background:var(--teal-dim);padding:2px 7px;border-radius:3px}
 
@@ -64,7 +64,7 @@
 
         /* SLOTS */
         .slots-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-        .slot-card{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:12px 8px;text-align:center;cursor:pointer;transition:all 0.15s}
+        .slot-card{background:linear-gradient(135deg,#161620,#0e0e12);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:12px 8px;text-align:center;cursor:pointer;transition:all 0.15s;box-shadow:0 2px 8px rgba(0,0,0,0.4)}
         .slot-card.active{border-color:var(--teal);background:var(--teal-dim)}
         .slot-card.active .slot-time{color:var(--teal)}
         .slot-time{font-family:var(--head);font-size:1.4rem;font-weight:700;display:block}
@@ -219,7 +219,17 @@
             <div id="eligibility-box" class="eligibility-box checking">&#128225; Checking GPS location...</div>
         </div>
         <div>
-            <div class="section-label">[01] SELECT GRID SLOT <span id="slot-countdown" style="font-family:var(--mono);font-size:0.8rem;color:var(--red);letter-spacing:1px">--:--</span></div>
+            <div class="section-label">[01] SELECT GRID SLOT</div>
+            <div id="countdown-block" style="background:linear-gradient(135deg,rgba(232,0,26,0.15),rgba(232,0,26,0.05));border:1px solid rgba(232,0,26,0.4);border-radius:8px;padding:14px 16px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between">
+                <div>
+                    <div style="font-family:var(--mono);font-size:0.6rem;color:rgba(255,255,255,0.4);letter-spacing:2px;text-transform:uppercase">NEXT GUN FIRES IN</div>
+                    <div id="slot-countdown" style="font-family:var(--head);font-size:2.8rem;font-weight:900;color:var(--red);line-height:1;letter-spacing:2px">--:--</div>
+                </div>
+                <div style="text-align:right">
+                    <div style="font-family:var(--mono);font-size:0.6rem;color:rgba(255,255,255,0.4);letter-spacing:2px;text-transform:uppercase">SELECTED SLOT</div>
+                    <div id="countdown-slot" style="font-family:var(--head);font-size:1.8rem;font-weight:900;color:var(--white)">7:00</div>
+                </div>
+            </div>
             <div class="slots-grid">
                 <div class="slot-card active" onclick="selectSlot(this,'7:00')"><span class="slot-time">7:00</span><span class="slot-riders" id="r700">0 / 20</span></div>
                 <div class="slot-card" onclick="selectSlot(this,'7:10')"><span class="slot-time">7:10</span><span class="slot-riders" id="r710">0 / 20</span></div>
@@ -707,19 +717,34 @@ function showOverlay(type,title,msg,a){document.getElementById('overlay-card').c
 // Countdown to selected slot
 function updateSlotCountdown(){
     var el = document.getElementById('slot-countdown');
+    var slotEl = document.getElementById('countdown-slot');
+    var block = document.getElementById('countdown-block');
     if(!el) return;
+    if(slotEl) slotEl.textContent = selectedSlot;
     var now = new Date();
     var bne = new Date(now.toLocaleString('en-AU', {timeZone:'Australia/Brisbane'}));
     var parts = selectedSlot.split(':');
     var target = new Date(bne);
     target.setHours(parseInt(parts[0]), parseInt(parts[1]), 0, 0);
-    if(target <= bne) { el.textContent = 'RACE OPEN'; el.style.color = 'var(--teal)'; return; }
+    if(target <= bne){
+        el.textContent = 'RACE OPEN';
+        el.style.color = 'var(--teal)';
+        el.style.fontSize = '2rem';
+        if(block) block.style.borderColor = 'rgba(0,255,204,0.5)';
+        return;
+    }
     var diff = Math.floor((target - bne) / 1000);
-    var h = Math.floor(diff/3600);
-    var m = Math.floor((diff%3600)/60);
-    var s = diff%60;
-    el.textContent = (h>0?String(h).padStart(2,'0')+':':'') + String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
-    el.style.color = diff < 300 ? '#FFAA00' : 'var(--red)';
+    var hr = Math.floor(diff/3600);
+    var mn = Math.floor((diff%3600)/60);
+    var sc = diff%60;
+    el.textContent = (hr>0?String(hr).padStart(2,'0')+':':'') + String(mn).padStart(2,'0') + ':' + String(sc).padStart(2,'0');
+    if(diff < 300){
+        el.style.color = '#FFAA00';
+        if(block) block.style.borderColor = 'rgba(255,170,0,0.6)';
+    } else {
+        el.style.color = 'var(--red)';
+        if(block) block.style.borderColor = 'rgba(232,0,26,0.4)';
+    }
 }
 setInterval(updateSlotCountdown, 1000);
 updateSlotCountdown();
