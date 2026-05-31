@@ -169,6 +169,7 @@
         @keyframes finishPing{0%{transform:scale(1);box-shadow:0 0 0 0 rgba(232,0,26,0.8)}70%{transform:scale(1.15);box-shadow:0 0 0 18px rgba(232,0,26,0)}100%{transform:scale(1);box-shadow:0 0 0 0 rgba(232,0,26,0)}}
         .finish-pin{width:22px;height:22px;border-radius:50%;background:var(--red);border:3px solid #fff;box-shadow:0 0 12px var(--red);animation:finishPing 2s infinite}
         @keyframes youPulse{0%,100%{box-shadow:0 0 0 4px rgba(232,0,26,0.25)}50%{box-shadow:0 0 0 8px rgba(232,0,26,0.1)}}
+        @keyframes rivalPulse{0%,100%{opacity:1;filter:drop-shadow(0 0 4px rgba(0,255,204,0.8))}50%{opacity:0.75;filter:drop-shadow(0 0 10px rgba(0,255,204,0.4))}}
         .you-dot{width:16px;height:16px;border-radius:50%;background:#fff;border:2px solid var(--red);animation:youPulse 1.5s ease-in-out infinite}
     </style>
 </head>
@@ -354,7 +355,20 @@ setInterval(()=>{demoRacers.forEach(r=>{r.lat+=r.dLat+(Math.random()-0.5)*0.0000
 
 function renderOtherPlayers(players){Object.entries(players).forEach(([id,p])=>{if(p.username===myUsername)return;const k="live_"+id;if(!leafletMarkers[k]){leafletMarkers[k]=L.marker([p.lat||0,p.lng||0],{icon:makeIcon(p.avatar||"🏁","@"+p.username,false)}).addTo(map);}else if(p.lat&&p.lng){leafletMarkers[k].setLatLng([p.lat,p.lng]);}});}
 
-function makeIcon(emoji,label,isYou){const c=isYou?"#E8001A":"rgba(255,255,255,0.7)";const b=isYou?"border:1.5px solid #E8001A":"border:1px solid rgba(232,0,26,0.6)";return L.divIcon({html:"<div style='text-align:center;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.8))'><div style='font-size:20px'>"+emoji+"</div><span style='font-size:8px;background:rgba(7,7,8,0.9);color:"+c+";"+b+";padding:1px 5px;font-family:monospace;border-radius:3px;white-space:nowrap;display:inline-block;margin-top:1px'>"+label+"</span></div>",className:"",iconAnchor:[22,22]});}
+function makeIcon(emoji, label, isYou, distLabel, pulse){
+  var c = isYou ? "#E8001A" : pulse ? "#00FFCC" : "rgba(255,255,255,0.7)";
+  var b = isYou ? "border:1.5px solid #E8001A" : pulse ? "border:1.5px solid #00FFCC" : "border:1px solid rgba(232,0,26,0.6)";
+  var anim = pulse ? "animation:rivalPulse 1.2s ease-in-out infinite;" : "";
+  var distHtml = distLabel ? "<div style='font-family:monospace;font-size:8px;color:"+(isYou?"#fff":pulse?"#00FFCC":"rgba(255,255,255,0.5)")+";background:rgba(0,0,0,0.85);padding:1px 5px;border-radius:3px;margin-top:2px;white-space:nowrap'>"+distLabel+"</div>" : "";
+  return L.divIcon({
+    html: "<div style='text-align:center;filter:drop-shadow(0 2px 6px rgba(0,0,0,0.9));"+anim+"'>"
+        + "<div style='font-size:20px'>"+emoji+"</div>"
+        + "<span style='font-size:8px;background:rgba(7,7,8,0.9);color:"+c+";"+b+";padding:1px 5px;font-family:monospace;border-radius:3px;white-space:nowrap;display:inline-block;margin-top:1px'>"+label+"</span>"
+        + distHtml
+        + "</div>",
+    className:"", iconAnchor:[22,28]
+  });
+}
 
 function haversine(lat1,lng1,lat2,lng2){const R=6371000,dLat=(lat2-lat1)*Math.PI/180,dLng=(lng2-lng1)*Math.PI/180;const a=Math.sin(dLat/2)**2+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLng/2)**2;return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));}
 function fmtDist(m){return m>=1000?(m/1000).toFixed(1)+"km":Math.round(m)+"m";}
@@ -375,7 +389,7 @@ function selectSlot(el,t){document.querySelectorAll(".slot-card").forEach(c=>c.c
 function selectAvatar(el,e){document.querySelectorAll(".avatar-card:not(.taken)").forEach(c=>c.classList.remove("active"));el.classList.add("active");myEmoji=e;}
 let countdownInterval;
 function startCountdown(){clearInterval(countdownInterval);let s=599;const el=document.getElementById("countdown");countdownInterval=setInterval(()=>{if(s<=0){clearInterval(countdownInterval);return;}s--;el.textContent=String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0");},1000);}
-function lockGrid(){document.getElementById("lobby").classList.remove("open");socket.emit("joinRace",{username:myUsername,avatar:myEmoji,slot:selectedSlot});startRaceMode();showOverlay("winner","GRID LOCKED","<strong>@"+myUsername+"</strong> registered for the <strong>"+selectedSlot+"</strong> scramble.<br><br>Stay outside 5KM. GPS is tracking.","<button class='overlay-btn' onclick='closeOverlay()'>RACE READY &#9889;</button>");}
+function lockGrid(){document.getElementById("lobby").classList.remove("open");socket.emit("joinRace",{username:myUsername,avatar:myEmoji,slot:selectedSlot});startRaceMode();showOverlay("winner","GRID LOCKED","<strong>@"+myUsername+"</strong> registered for the <strong>"+selectedSlot+"</strong> scramble.<br><br>Stay outside 5KM. GPS is tracking.","<button class='overlay-btn' onclick='closeOverlay()'>RACE READY &#9889;</button> <button class='overlay-btn' style='margin-top:10px;background:rgba(0,255,204,0.15);border-color:var(--teal)' onclick='shareRegistration()'>&#128279; SHARE</button>");}
 
 function startRaceMode(){isRacing=true;document.getElementById("hud").classList.add("show");document.getElementById("hud-slot-time").textContent=selectedSlot;document.getElementById("race-drawer").classList.add("show","collapsed");document.getElementById("ad-ticker").classList.add("show");document.getElementById("lb-slot-label").textContent=selectedSlot+" SCRAMBLE";document.getElementById("peek-name").textContent="@"+(myUsername||"You");startGPS();}
 function startGPS(){if(!navigator.geolocation)return useDemoGPS();navigator.geolocation.watchPosition(pos=>updateMyPos(pos.coords.latitude,pos.coords.longitude),()=>useDemoGPS(),{enableHighAccuracy:true,maximumAge:5000,timeout:10000});}
@@ -392,10 +406,38 @@ if(firstFix){
     : "✓ YOU ARE "+fmtDist(dist)+" FROM THE FINISH — outside the 5KM boundary. You are legal to race.";
   const statusType=inside?"warning":"winner";
   setTimeout(()=>showOverlay(statusType,inside?"⚠ BOUNDARY CHECK":"✓ BOUNDARY CLEAR",statusMsg,"<button class='overlay-btn' onclick='closeOverlay();mapFollowing=true;if(myLat)map.setView([myLat,myLng],14,{animate:true})'>GOT IT</button>"),800);
-} else if(mapFollowing){map.setView([lat,lng],14,{animate:true,duration:1});}document.getElementById("hud-dist-val").textContent=fmtDist(dist);socket.emit("updateLocation",{lat,lng});updateRaceUI();}
+} else if(mapFollowing){
+    // Zoom level scales with distance to finish
+    var zoom;
+    if(dist > 5000)      zoom = 13;  // broad city view
+    else if(dist > 2000) zoom = 14;  // suburb level
+    else if(dist > 800)  zoom = 15;  // street level
+    else if(dist > 300)  zoom = 16;  // block level
+    else if(dist > 100)  zoom = 17;  // building level
+    else                 zoom = 18;  // you are HERE
+    map.setView([lat,lng], zoom, {animate:true, duration:1});
+  }document.getElementById("hud-dist-val").textContent=fmtDist(dist);socket.emit("updateLocation",{lat,lng});updateRaceUI();}
 function recenterMap(){mapFollowing=true;document.getElementById("btn-recenter").classList.remove("show");if(myLat)map.setView([myLat,myLng],14,{animate:true});}
 
-function updateRaceUI(){const myDist=myLat?haversine(myLat,myLng,FINISH[0],FINISH[1]):99999;const me={id:"me",name:myUsername||"You",emoji:myEmoji,dist:myDist,transport:"You",isYou:true};const all=[...demoRacers.map(r=>({...r,isYou:false})),me];all.sort((a,b)=>a.dist-b.dist);const myRank=all.findIndex(r=>r.isYou)+1;const gapToLeader=myDist-all[0].dist;const posEl=document.getElementById("peek-pos");posEl.textContent=myRank;posEl.className="peek-position "+(myRank===1?"p1":myRank===2?"p2":myRank===3?"p3":"back");const gapEl=document.getElementById("peek-gap");const gb=document.getElementById("peek-gap-block");if(myRank===1){gapEl.textContent="LEADING";gb.className="peek-gap closing";}else{gapEl.textContent="+"+fmtDist(gapToLeader);gb.className="peek-gap "+(gapToLeader<500?"closing":"losing");}const maxDist=Math.max(...all.map(r=>r.dist));document.getElementById("lb-rows").innerHTML=all.map((r,i)=>{const rk=i+1,rc=rk===1?"r1":rk===2?"r2":rk===3?"r3":"";const pct=maxDist>0?Math.max(4,Math.round((1-r.dist/maxDist)*100)):50;return "<div class='lb-row "+(r.isYou?"you":"")+"'><div class='lb-rank "+rc+"'>"+(rk)+"</div><div class='lb-emoji'>"+r.emoji+"</div><div class='lb-info'><div class='lb-name "+(r.isYou?"you-name":"")+"'>@"+r.name+"</div><div class='lb-transport'>"+r.transport+"</div><div class='lb-bar-wrap'><div class='lb-bar "+(rk===1?"lead":"")+"' style='width:"+pct+"%'></div></div></div><div class='lb-dist "+(rk===1?"closest":"")+"'>TO FINISH<strong>"+fmtDist(r.dist)+"</strong></div></div>";}).join("");}
+function updateRaceUI(){const myDist=myLat?haversine(myLat,myLng,FINISH[0],FINISH[1]):99999;const me={id:"me",name:myUsername||"You",emoji:myEmoji,dist:myDist,transport:"You",isYou:true};const all=[...demoRacers.map(r=>({...r,isYou:false})),me];all.sort((a,b)=>a.dist-b.dist);const myRank=all.findIndex(r=>r.isYou)+1;const gapToLeader=myDist-all[0].dist;const posEl=document.getElementById("peek-pos");posEl.textContent=myRank;posEl.className="peek-position "+(myRank===1?"p1":myRank===2?"p2":myRank===3?"p3":"back");const gapEl=document.getElementById("peek-gap");const gb=document.getElementById("peek-gap-block");if(myRank===1){gapEl.textContent="LEADING";gb.className="peek-gap closing";}else{gapEl.textContent="+"+fmtDist(gapToLeader);gb.className="peek-gap "+(gapToLeader<500?"closing":"losing");}const maxDist=Math.max(...all.map(r=>r.dist));document.getElementById("lb-rows").innerHTML=all.map((r,i)=>{const rk=i+1,rc=rk===1?"r1":rk===2?"r2":rk===3?"r3":"";const pct=maxDist>0?Math.max(4,Math.round((1-r.dist/maxDist)*100)):50;return "<div class='lb-row "+(r.isYou?"you":"")+"'><div class='lb-rank "+rc+"'>"+(rk)+"</div><div class='lb-emoji'>"+r.emoji+"</div><div class='lb-info'><div class='lb-name "+(r.isYou?"you-name":"")+"'>@"+r.name+"</div><div class='lb-transport'>"+r.transport+"</div><div class='lb-bar-wrap'><div class='lb-bar "+(rk===1?"lead":"")+"' style='width:"+pct+"%'></div></div></div><div class='lb-dist "+(rk===1?"closest":"")+"'>TO FINISH<strong>"+fmtDist(r.dist)+"</strong></div></div>";}).join("");
+
+  // Update demo racer markers — leader pulses teal, nearest rival pulses teal
+  var leader = all[0];
+  var nearestRival = all.find(function(r){ return !r.isYou && r.id !== leader.id; });
+  demoRacers.forEach(function(r){
+    if(!leafletMarkers[r.id]) return;
+    var isLeader = (leader && !leader.isYou && r.id === leader.id);
+    var isRival  = (nearestRival && r.id === nearestRival.id);
+    var pulse    = isLeader || isRival;
+    var icon = makeIcon(r.emoji, "@"+r.name, false, fmtDist(r.dist)+" to finish", pulse);
+    leafletMarkers[r.id].setIcon(icon);
+  });
+
+  // Always update your own marker with distance
+  if(myMarker){
+    myMarker.setIcon(makeIcon(myEmoji, "@"+(myUsername||"You"), true, fmtDist(myDist)+" to finish", false));
+  }
+}
 
 function toggleDrawer(){drawerOpen=!drawerOpen;document.getElementById("race-drawer").classList.toggle("collapsed",!drawerOpen);document.getElementById("peek-expand-label").textContent=drawerOpen?"↓ CLOSE":"↑ BOARD";}
 function showOverlay(type,title,msg,a){document.getElementById("overlay-card").className="overlay-card "+type;document.getElementById("overlay-title").innerHTML=title;document.getElementById("overlay-msg").innerHTML=msg;document.getElementById("overlay-actions").innerHTML=a;document.getElementById("overlay").classList.add("show");}
@@ -454,56 +496,60 @@ const TAKEN = {"xxxx":"@CRISPY"};
 
 function buildAvatarStrip(){
   const strip = document.getElementById("avatar-strip");
+  if(!strip) return;
   let html = "";
 
-  // Default — BriScramble logo
-  html += `<div class="avatar-card briscramble-card active" onclick="selectAvatar(this,'scrambler','/logo.png')">
-    <div class="avatar-logo-mini"><img src="/logo.png" alt=""></div>
-    <span class="avatar-name">SCRAMBLER</span>
-    <span class="avatar-perk">DEFAULT</span>
-  </div>`;
+  // Default
+  html += '<div class="avatar-card briscramble-card active" onclick="selectAvatar(this,'scrambler','/logo.png')">'
+        + '<div class="avatar-logo-mini"><img src="/logo.png" alt=""></div>'
+        + '<span class="avatar-name">SCRAMBLER</span>'
+        + '<span class="avatar-perk">DEFAULT</span>'
+        + '</div>';
 
-  // Sponsor avatars
-  html += `<div style="min-width:100%;font-family:var(--mono);font-size:0.55rem;color:rgba(255,170,0,0.6);letter-spacing:2px;padding:6px 2px 4px;flex-shrink:0">&#9733; SPONSOR IDENTITIES</div>`;
-  SPONSOR_AVATARS.forEach(a => {
-    const taken = TAKEN[a.slug];
+  // Sponsors
+  html += '<div style="min-width:100%;font-family:var(--mono);font-size:0.55rem;color:rgba(255,170,0,0.6);letter-spacing:2px;padding:6px 2px 4px;flex-shrink:0">&#9733; SPONSOR IDENTITIES</div>';
+  SPONSOR_AVATARS.forEach(function(a){
+    var taken = TAKEN[a.slug];
     if(taken){
-      html += `<div class="avatar-card sponsor-card taken">
-        <img class="avatar-img" src="${a.src}" alt="${a.name}" style="opacity:0.2">
-        <span class="avatar-name">${a.name}</span>
-        <div class="avatar-taken">TAKEN<br>${taken}</div>
-      </div>`;
+      html += '<div class="avatar-card sponsor-card taken">'
+            + '<img class="avatar-img" src="' + a.src + '" alt="' + a.name + '" style="opacity:0.2">'
+            + '<span class="avatar-name">' + a.name + '</span>'
+            + '<div class="avatar-taken">TAKEN<br>' + taken + '</div>'
+            + '</div>';
     } else {
-      html += `<div class="avatar-card sponsor-card" onclick="selectAvatar(this,'${a.slug}','${a.src}')">
-        <img class="avatar-img" src="${a.src}" alt="${a.name}">
-        <span class="avatar-name">${a.name}</span>
-        <span class="avatar-perk">SPONSOR</span>
-      </div>`;
+      html += '<div class="avatar-card sponsor-card" onclick="selectAvatar(this,'' + a.slug + '','' + a.src + '')">'
+            + '<img class="avatar-img" src="' + a.src + '" alt="' + a.name + '">'
+            + '<span class="avatar-name">' + a.name + '</span>'
+            + '<span class="avatar-perk">SPONSOR</span>'
+            + '</div>';
     }
   });
 
-  // Generic avatars
-  html += `<div style="min-width:100%;font-family:var(--mono);font-size:0.55rem;color:rgba(255,255,255,0.2);letter-spacing:2px;padding:6px 2px 4px;flex-shrink:0">GENERIC IDENTITIES</div>`;
-  GENERIC_AVATARS.forEach(a => {
-    html += `<div class="avatar-card" onclick="selectAvatar(this,'${a.slug}','${a.src}')">
-      <img class="avatar-img" src="${a.src}" alt="${a.name}">
-      <span class="avatar-name">${a.name}</span>
-    </div>`;
+  // Generics
+  html += '<div style="min-width:100%;font-family:var(--mono);font-size:0.55rem;color:rgba(255,255,255,0.2);letter-spacing:2px;padding:6px 2px 4px;flex-shrink:0">GENERIC IDENTITIES</div>';
+  GENERIC_AVATARS.forEach(function(a){
+    html += '<div class="avatar-card" onclick="selectAvatar(this,'' + a.slug + '','' + a.src + '')">'
+          + '<img class="avatar-img" src="' + a.src + '" alt="' + a.name + '">'
+          + '<span class="avatar-name">' + a.name + '</span>'
+          + '</div>';
   });
 
   strip.innerHTML = html;
 }
 
-// Override selectAvatar to handle image src
-function selectAvatar(el, slug, src){
-  document.querySelectorAll(".avatar-card:not(.taken)").forEach(c=>c.classList.remove("active"));
-  el.classList.add("active");
-  myEmoji = src; // use src as the map marker image reference
-  myAvatarSlug = slug;
-}
 let myAvatarSlug = "scrambler";
 // Build strip immediately on load
 document.addEventListener("DOMContentLoaded", function() { buildAvatarStrip(); });
+
+
+function shareRegistration(){
+  const text = "I just entered the " + selectedSlot + " BriScramble — Brisbane's morning commute race. First to King George Square wins. briscramble.onrender.com";
+  if(navigator.share){
+    navigator.share({title:"BriScramble",text:text,url:"https://briscramble.onrender.com"});
+  } else {
+    navigator.clipboard.writeText(text).then(()=>alert("Copied to clipboard!"));
+  }
+}
 
 function simulateWin(slot){showOverlay("winner","🏆 SLOT CHAMPION","First to King George Square in the <strong>"+slot+"</strong> scramble!","<a href='sms:"+claimPhone+"?body=BRISCRAMBLE%20WIN%20@"+myUsername+"%20"+slot+"' class='overlay-btn'>📱 TEXT TO CLAIM</a>");}
 function simulateProximityWarning(km){showOverlay("warning","⚠ DANGER ZONE","Only <strong>"+km+"km</strong> from finish. Switch slots now!","<button class='overlay-btn' onclick='closeOverlay()'>OK</button>");}
