@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>BRISCRAMBLE</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%23E8001A'/><circle cx='50' cy='50' r='30' fill='none' stroke='white' stroke-width='4' stroke-dasharray='8,6'/><circle cx='50' cy='50' r='8' fill='white'/></svg>">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    <link rel="stylesheet" href="/lib/leaflet.css"/>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;700;900&family=Share+Tech+Mono&display=swap');
         :root{--red:#E8001A;--white:#F5F5F0;--black:#070708;--dark:#0e0e12;--panel:#121217;--border:rgba(255,255,255,0.08);--teal:#00FFCC;--teal-dim:rgba(0,255,204,0.15);--mono:'Share Tech Mono',monospace;--head:'Barlow Condensed',sans-serif}
@@ -25,7 +25,7 @@
         @keyframes pulse{0%,100%{box-shadow:0 0 0 6px rgba(232,0,26,0.15),0 0 40px rgba(232,0,26,0.2)}50%{box-shadow:0 0 0 12px rgba(232,0,26,0.08),0 0 60px rgba(232,0,26,0.4)}}
         .game-title{font-size:3.2rem;font-weight:900;letter-spacing:3px;margin-bottom:4px}
         .game-title span{color:var(--red)}
-        .game-sub{font-family:var(--mono);font-size:0.65rem;color:rgba(255,255,255,0.35);letter-spacing:4px;text-transform:uppercase;margin-bottom:40px}
+        .game-sub{font-family:var(--head);font-size:1rem;font-weight:700;color:#fff;letter-spacing:3px;text-transform:uppercase;margin-bottom:40px}
         .btn-signin{width:100%;max-width:320px;background:#fff;color:#111;border:none;padding:15px 20px;border-radius:8px;font-size:1rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:10px}
         .btn-signin img{width:20px;height:20px}
         .btn-signin.apple{background:#111;color:#fff;border:1px solid rgba(255,255,255,0.2)}
@@ -211,6 +211,27 @@
     <button class="btn-red" onclick="saveName()">LOCK IT IN</button>
 </div>
 
+
+<!-- LOCATION PERMISSION SCREEN -->
+<div id="s-location" class="screen hidden">
+    <div style="text-align:center;max-width:320px">
+        <div style="font-size:4rem;margin-bottom:16px">&#128205;</div>
+        <div class="s-title" style="margin-bottom:10px">ALLOW LOCATION</div>
+        <div class="s-sub" style="margin-bottom:28px">
+            BriScramble tracks your GPS to race you toward King George Square.<br><br>
+            When prompted, tap <strong style="color:var(--teal)">Allow</strong> to join the race.
+        </div>
+        <div style="background:rgba(0,255,204,0.06);border:1px solid rgba(0,255,204,0.3);border-radius:8px;padding:14px;margin-bottom:24px;font-family:var(--mono);font-size:0.65rem;color:rgba(255,255,255,0.5);letter-spacing:1px;line-height:1.6;text-align:left">
+            &#128274; Your location is only shared with other players in your race slot.<br>
+            &#128683; Never stored beyond your active race session.
+        </div>
+        <button class="btn-red" onclick="requestLocation()">ALLOW &amp; CONTINUE</button>
+        <div style="font-family:var(--mono);font-size:0.6rem;color:rgba(255,255,255,0.2);margin-top:14px;letter-spacing:1px">
+            Location access is required to race
+        </div>
+    </div>
+</div>
+
 <!-- SCREEN 3: REGISTER -->
 <div id="s-reg" class="screen hidden">
     <div class="reg-top">
@@ -391,7 +412,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 <script src="/api/config.js"></script>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="/lib/leaflet.js"></script>
 <script>
 // ── FIREBASE ──
 firebase.initializeApp({
@@ -506,8 +527,23 @@ function mkIcon(src,label,isMe,dist,pulse){
 }
 
 // ── AUTH ──
-auth.getRedirectResult().then(function(r){if(r&&r.user)afterAuth(r.user);}).catch(function(){});
-auth.onAuthStateChanged(function(u){if(u) afterAuth(u);});
+// Handle redirect result first, then fall through to onAuthStateChanged
+auth.getRedirectResult().then(function(r){
+    if(r&&r.user){ afterAuth(r.user); }
+}).catch(function(e){ console.log('redirect result error:',e.code); });
+
+// onAuthStateChanged handles both redirect return AND existing sessions
+auth.onAuthStateChanged(function(u){
+    if(u){ afterAuth(u); }
+    // If no user and we're not on auth screen, show auth screen
+    else {
+        var reg = document.getElementById('s-reg');
+        var name = document.getElementById('s-name');
+        if(reg && !reg.classList.contains('hidden')) return;
+        if(name && !name.classList.contains('hidden')) return;
+        show('s-auth');
+    }
+});
 
 function signInGoogle(){
     if(typeof firebase==='undefined'||!firebase.auth){setTimeout(signInGoogle,500);return;}
@@ -518,12 +554,15 @@ function signInApple(){
     auth.signInWithRedirect(new firebase.auth.OAuthProvider('apple.com'));
 }
 
+var _authDone = false;
 function afterAuth(user){
+    if(_authDone) return;
+    _authDone = true;
     myUID=user.uid;
     fetch('/api/register-username',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({uid:myUID,username:'__check__'})})
     .then(function(r){return r.json();})
     .then(function(d){
-        if(d.username&&d.username!=='__check__'){myUsername=d.username;goRegister();}
+        if(d.username&&d.username!=='__check__'){myUsername=d.username;show('s-location');}
         else{show('s-name');}
     }).catch(function(){show('s-name');});
 }
@@ -536,11 +575,17 @@ function saveName(){
     e.textContent='';
     fetch('/api/register-username',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({uid:myUID||'u_'+Date.now(),username:v})})
     .then(function(r){return r.json();})
-    .then(function(d){if(d.error){e.textContent=d.error;return;}myUsername=d.username;goRegister();})
+    .then(function(d){if(d.error){e.textContent=d.error;return;}myUsername=d.username;show('s-location');})
     .catch(function(){myUsername=v;goRegister();});
 }
 
 // ── REGISTER SCREEN ──
+
+function requestLocation(){
+    show('s-reg');
+    goRegister();
+}
+
 function goRegister(){
     show('s-reg');
     document.getElementById('reg-username').textContent='@'+myUsername;
@@ -554,7 +599,7 @@ function goRegister(){
 }
 
 function show(id){
-    ['s-auth','s-name','s-reg'].forEach(function(s){document.getElementById(s).classList.toggle('hidden',s!==id);});
+    ['s-auth','s-name','s-location','s-reg'].forEach(function(s){document.getElementById(s).classList.toggle('hidden',s!==id);});
 }
 
 function pickSlot(el,time){
