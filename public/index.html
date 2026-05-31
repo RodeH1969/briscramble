@@ -273,7 +273,7 @@
     <div class="reg-footer">
         <button id="btn-lock" class="btn-lock" onclick="lockGrid()" disabled>&#9889; SECURE GRID POSITION</button>
         <button class="btn-share-slot" onclick="shareSlot()">&#128279; SHARE THIS SLOT</button>
-        <p class="fine-print">GPS required. Must be 5km+ from King George Square.</p>
+        <p class="fine-print">GPS required. Must be 4km+ from King George Square.</p>
     </div>
 </div>
 
@@ -361,7 +361,7 @@ const claimPhone = window.claimPhone || '+61400000000';
 
 // ── STATE ──
 const FINISH = [-27.4691, 153.0235];
-const EXCLUSION_M = 5000;
+const EXCLUSION_M = 4000;
 let myUID=null, myUsername=null, myEmoji='/logo.png', myAvatarSlug='scrambler';
 let selectedSlot='7:00', isRacing=false, drawerOpen=false;
 let mapFollowing=true, myLat=null, myLng=null, isEligible=false;
@@ -374,7 +374,7 @@ const map=L.map('map',{zoomControl:false,attributionControl:false}).setView([-27
 L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png').addTo(map);
 L.marker(FINISH,{icon:L.divIcon({html:"<div style='width:22px;height:22px;border-radius:50%;background:#E8001A;border:3px solid #fff;box-shadow:0 0 12px #E8001A;animation:finishPing 2s infinite'></div>",className:'',iconAnchor:[11,11]})}).addTo(map);
 L.circle(FINISH,{radius:EXCLUSION_M,color:'#E8001A',weight:1.5,fill:true,fillColor:'#E8001A',fillOpacity:0.04,dashArray:'8,6',opacity:0.5}).addTo(map);
-L.marker([-27.424,153.0235],{icon:L.divIcon({html:"<div style='font-family:monospace;font-size:10px;color:rgba(232,0,26,0.7);letter-spacing:2px;white-space:nowrap;text-shadow:0 1px 3px black'>&#8212; 5KM BOUNDARY &#8212;</div>",className:'',iconAnchor:[60,0]})}).addTo(map);
+L.marker([-27.424,153.0235],{icon:L.divIcon({html:"<div style='font-family:monospace;font-size:10px;color:rgba(232,0,26,0.7);letter-spacing:2px;white-space:nowrap;text-shadow:0 1px 3px black'>&#8212; 4KM BOUNDARY &#8212;</div>",className:'',iconAnchor:[60,0]})}).addTo(map);
 map.on('dragstart',function(){mapFollowing=false;document.getElementById('btn-recenter').classList.add('show');});
 
 // ── UTILS ──
@@ -484,7 +484,7 @@ function lockGrid(){
     // Listen to this slot
     listenToSlot(selectedSlot);
     showOverlay('winner','GRID LOCKED',
-        '<strong>@'+myUsername+'</strong> registered for the <strong>'+selectedSlot+'</strong> scramble.<br><br>Stay outside 5KM. GPS is tracking.',
+        '<strong>@'+myUsername+'</strong> registered for the <strong>'+selectedSlot+'</strong> scramble.<br><br>Stay outside 4KM. GPS is tracking.',
         '<button class="overlay-btn" onclick="closeOverlay()">RACE READY &#9889;</button>'
         +'<button class="overlay-btn" style="border-color:var(--teal);color:var(--teal)" onclick="closeOverlay();shareSlot()">&#128279; SHARE</button>');
 }
@@ -560,8 +560,8 @@ function updateMyPos(lat,lng){
         myMarker.setIcon(makeIcon(myEmoji,'@'+(myUsername||'You'),true,fmtDist(dist)+' to finish',false));
     }
     if(!isRacing){
-        if(dist<EXCLUSION_M){showEligibility('ineligible','&#10060; INSIDE 5KM — '+fmtDist(dist)+' from finish. Move further out.');}
-        else{showEligibility('eligible','&#10003; ELIGIBLE — '+fmtDist(dist)+' from finish. Outside 5KM boundary.');}
+        if(dist<EXCLUSION_M){showEligibility('ineligible','&#10060; INSIDE 4KM — '+fmtDist(dist)+' from finish. Move further out.');}
+        else{showEligibility('eligible','&#10003; ELIGIBLE — '+fmtDist(dist)+' from finish. Outside 4KM boundary.');}
     }
     if(firstFix){map.fitBounds(L.latLngBounds([[lat,lng],FINISH]).pad(0.3),{animate:true,duration:1.5});}
     else if(mapFollowing&&isRacing){
