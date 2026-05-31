@@ -390,7 +390,13 @@ var _lastEmit=0;
 // ── MAP ──
 const map=L.map('map',{zoomControl:false,attributionControl:false}).setView([-27.464,153.024],12);
 L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png').addTo(map);
-L.marker(FINISH,{icon:L.divIcon({html:"<div style='width:22px;height:22px;border-radius:50%;background:#E8001A;border:3px solid #fff;box-shadow:0 0 12px #E8001A;animation:finishPing 2s infinite'></div>",className:'',iconAnchor:[11,11]})}).addTo(map);
+L.marker(FINISH,{icon:L.divIcon({
+    html:"<div style='text-align:center;'>"
+        +"<div style='width:28px;height:28px;border-radius:50%;background:#E8001A;border:3px solid #fff;box-shadow:0 0 20px #E8001A;animation:finishPing 2s infinite;margin:0 auto'></div>"
+        +"<div style='font-family:monospace;font-size:10px;font-weight:bold;color:#fff;background:#E8001A;padding:2px 6px;border-radius:3px;margin-top:3px;letter-spacing:2px;white-space:nowrap;animation:finishPing 2s infinite'>FINISH</div>"
+        +"</div>",
+    className:'', iconAnchor:[14,0]
+})}).addTo(map);
 L.circle(FINISH,{radius:EXCLUSION_M,color:'#E8001A',weight:1.5,fill:true,fillColor:'#E8001A',fillOpacity:0.04,dashArray:'8,6',opacity:0.5}).addTo(map);
 L.marker([-27.424,153.0235],{icon:L.divIcon({html:"<div style='font-family:monospace;font-size:10px;color:rgba(232,0,26,0.7);letter-spacing:2px;white-space:nowrap;text-shadow:0 1px 3px black'>&#8212; 4KM BOUNDARY &#8212;</div>",className:'',iconAnchor:[60,0]})}).addTo(map);
 map.on('dragstart',function(){mapFollowing=false;document.getElementById('btn-recenter').classList.add('show');});
