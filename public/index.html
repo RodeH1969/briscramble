@@ -373,7 +373,7 @@ function makeIcon(emoji, label, isYou, distLabel, pulse){
 function haversine(lat1,lng1,lat2,lng2){const R=6371000,dLat=(lat2-lat1)*Math.PI/180,dLng=(lng2-lng1)*Math.PI/180;const a=Math.sin(dLat/2)**2+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLng/2)**2;return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));}
 function fmtDist(m){return m>=1000?(m/1000).toFixed(1)+"km":Math.round(m)+"m";}
 
-function signInGoogle(){const p=new firebase.auth.GoogleAuthProvider();auth.signInWithPopup(p).then(handleAuth).catch(e=>alert(e.message));}
+function signInGoogle(){if(typeof firebase==='undefined'){alert('Still loading, try again');return;}const p=new firebase.auth.GoogleAuthProvider();auth.signInWithPopup(p).then(handleAuth).catch(e=>alert(e.message));}
 function signInApple(){const p=new firebase.auth.OAuthProvider("apple.com");auth.signInWithPopup(p).then(handleAuth).catch(e=>alert(e.message));}
 function handleAuth(result){myUID=result.user.uid;checkExistingUsername();}
 auth.onAuthStateChanged(user=>{if(user){myUID=user.uid;checkExistingUsername();}});
@@ -386,7 +386,7 @@ function spectateMode(){myUsername="Spectator";showScreen(null);startRaceMode();
 function showScreen(id){["screen-auth","screen-username"].forEach(s=>document.getElementById(s).classList.toggle("hidden",s!==id));}
 function closeLobby(){document.getElementById("lobby").classList.remove("open");showScreen("screen-auth");}
 function selectSlot(el,t){document.querySelectorAll(".slot-card").forEach(c=>c.classList.remove("active"));el.classList.add("active");selectedSlot=t;}
-function selectAvatar(el,e){document.querySelectorAll(".avatar-card:not(.taken)").forEach(c=>c.classList.remove("active"));el.classList.add("active");myEmoji=e;}
+function selectAvatar(el,slug,src){document.querySelectorAll(".avatar-card:not(.taken)").forEach(c=>c.classList.remove("active"));el.classList.add("active");myEmoji=src||slug;myAvatarSlug=slug;}
 let countdownInterval;
 function startCountdown(){clearInterval(countdownInterval);let s=599;const el=document.getElementById("countdown");countdownInterval=setInterval(()=>{if(s<=0){clearInterval(countdownInterval);return;}s--;el.textContent=String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0");},1000);}
 function lockGrid(){document.getElementById("lobby").classList.remove("open");socket.emit("joinRace",{username:myUsername,avatar:myEmoji,slot:selectedSlot});startRaceMode();showOverlay("winner","GRID LOCKED","<strong>@"+myUsername+"</strong> registered for the <strong>"+selectedSlot+"</strong> scramble.<br><br>Stay outside 5KM. GPS is tracking.","<button class='overlay-btn' onclick='closeOverlay()'>RACE READY &#9889;</button> <button class='overlay-btn' style='margin-top:10px;background:rgba(0,255,204,0.15);border-color:var(--teal)' onclick='shareRegistration()'>&#128279; SHARE</button>");}
