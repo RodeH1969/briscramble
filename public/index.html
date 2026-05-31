@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>BRISCRAMBLE</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%23E8001A'/><circle cx='50' cy='50' r='30' fill='none' stroke='white' stroke-width='4' stroke-dasharray='8,6'/><circle cx='50' cy='50' r='8' fill='white'/></svg>">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;700;900&family=Share+Tech+Mono&display=swap');
@@ -392,9 +393,14 @@ function makeIcon(emoji, label, isYou, distLabel, pulse){
 function haversine(lat1,lng1,lat2,lng2){const R=6371000,dLat=(lat2-lat1)*Math.PI/180,dLng=(lng2-lng1)*Math.PI/180;const a=Math.sin(dLat/2)**2+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLng/2)**2;return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));}
 function fmtDist(m){return m>=1000?(m/1000).toFixed(1)+"km":Math.round(m)+"m";}
 
-function signInGoogle(){if(typeof firebase==='undefined'){alert('Still loading, try again');return;}const p=new firebase.auth.GoogleAuthProvider();auth.signInWithPopup(p).then(handleAuth).catch(e=>alert(e.message));}
+function signInGoogle(){if(typeof firebase==='undefined'){alert('Still loading, try again');return;}const p=new firebase.auth.GoogleAuthProvider();auth.signInWithRedirect(p).catch(e=>alert(e.message));}
 function signInApple(){const p=new firebase.auth.OAuthProvider("apple.com");auth.signInWithPopup(p).then(handleAuth).catch(e=>alert(e.message));}
 function handleAuth(result){myUID=result.user.uid;checkExistingUsername();}
+// Handle redirect result after Google/Apple sign-in
+auth.getRedirectResult().then(function(result){
+  if(result && result.user) handleAuth(result);
+}).catch(function(e){ if(e.code !== 'auth/no-current-user') console.error(e); });
+
 auth.onAuthStateChanged(user=>{if(user){myUID=user.uid;checkExistingUsername();}});
 function checkExistingUsername(){fetch("/api/register-username",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({uid:myUID,username:"__check__"})}).then(r=>r.json()).then(d=>{if(d.username&&d.username!=="__check__"){myUsername=d.username;goToLobby();}else{showScreen("screen-username");}}).catch(()=>showScreen("screen-username"));}
 
@@ -506,9 +512,18 @@ const GENERIC_AVATARS = [
 ];
 
 const SPONSOR_AVATARS = [
-  {slug:"cc",name:"C. Cameron",src:"/avatars/sponsors/CC.png",takenBy:""},
-  {slug:"bega_mac",name:"Bega Mac",src:"/avatars/sponsors/begamacandcheese280g.jpeg",takenBy:""},
+  // Sponsor images load from /avatars/sponsors/ — add files to public/avatars/sponsors/ and commit
+  {slug:"cc",name:"C. Cameron",src:"/avatars/sponsors/CC.png"},
+  {slug:"bega_mac",name:"Bega Mac",src:"/avatars/sponsors/begamacandcheese280g.jpeg"},
 ];
+// Filter out sponsors whose images don't exist yet
+function checkSponsorImages(){
+  SPONSOR_AVATARS.forEach(function(a){
+    var img=new Image();
+    img.onerror=function(){ a.missing=true; buildAvatarStrip(); };
+    img.src=a.src;
+  });
+}
 
 // Simulated taken state (in prod comes from server)
 const TAKEN = {"xxxx":"@CRISPY"};
@@ -526,6 +541,7 @@ function buildAvatarStrip(){
 
   html += "<div style=\"min-width:100%;font-family:var(--mono);font-size:0.55rem;color:rgba(255,170,0,0.6);letter-spacing:2px;padding:6px 2px 4px;flex-shrink:0\">&#9733; SPONSOR IDENTITIES</div>";
   SPONSOR_AVATARS.forEach(function(a){
+    if(a.missing) return;
     var taken = TAKEN[a.slug];
     if(taken){
       html += "<div class=\"avatar-card sponsor-card taken\">"
@@ -555,7 +571,7 @@ function buildAvatarStrip(){
 
 let myAvatarSlug = "scrambler";
 // Build strip immediately on load
-document.addEventListener("DOMContentLoaded", function() { buildAvatarStrip(); });
+document.addEventListener("DOMContentLoaded", function() { buildAvatarStrip(); checkSponsorImages(); });
 
 
 function shareRegistration(){
