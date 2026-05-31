@@ -551,11 +551,31 @@ auth.onAuthStateChanged(function(u){
 
 function signInGoogle(){
     if(typeof firebase==='undefined'||!firebase.auth){setTimeout(signInGoogle,500);return;}
-    auth.signInWithRedirect(new firebase.auth.GoogleAuthProvider());
+    var provider = new firebase.auth.GoogleAuthProvider();
+    // Use popup on mobile (stays on page), redirect on desktop
+    auth.signInWithPopup(provider).then(function(r){
+        afterAuth(r.user);
+    }).catch(function(e){
+        // Popup blocked — fall back to redirect
+        if(e.code==='auth/popup-blocked'||e.code==='auth/popup-closed-by-user'){
+            auth.signInWithRedirect(provider);
+        } else {
+            console.error(e);
+        }
+    });
 }
 function signInApple(){
     if(typeof firebase==='undefined'||!firebase.auth){setTimeout(signInApple,500);return;}
-    auth.signInWithRedirect(new firebase.auth.OAuthProvider('apple.com'));
+    var provider = new firebase.auth.OAuthProvider('apple.com');
+    auth.signInWithPopup(provider).then(function(r){
+        afterAuth(r.user);
+    }).catch(function(e){
+        if(e.code==='auth/popup-blocked'||e.code==='auth/popup-closed-by-user'){
+            auth.signInWithRedirect(provider);
+        } else {
+            console.error(e);
+        }
+    });
 }
 
 var _authDone = false;
