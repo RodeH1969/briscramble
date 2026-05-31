@@ -343,15 +343,9 @@ L.marker([-27.4240, 153.0235], {icon: L.divIcon({
 })}).addTo(map);
 map.on("dragstart",()=>{mapFollowing=false;document.getElementById("btn-recenter").classList.add("show");});
 
-const demoRacers=[
-    {id:"d1",name:"MoggillMick",emoji:"🚗",lat:-27.4850,lng:152.9920,dLat:0.00020,dLng:0.00038,transport:"Ipswich Line",dist:0},
-    {id:"d2",name:"MiltonMover",emoji:"🍺",lat:-27.4660,lng:153.0050,dLat:0.00000,dLng:0.00028,transport:"Bus 375",dist:0},
-    {id:"d3",name:"ValleyViper",emoji:"🚌",lat:-27.4980,lng:153.0420,dLat:0.00035,dLng:-0.00025,transport:"Bus 196",dist:0},
-    {id:"d4",name:"CharlieCamFan",emoji:"🏉",lat:-27.4420,lng:153.0330,dLat:-0.00030,dLng:-0.00012,transport:"Cleveland Line",dist:0},
-    {id:"d5",name:"ToombulTrain",emoji:"🚆",lat:-27.4520,lng:153.0110,dLat:-0.00010,dLng:0.00015,transport:"Airport Link",dist:0}
-];
-demoRacers.forEach(r=>{r.dist=haversine(r.lat,r.lng,FINISH[0],FINISH[1]);leafletMarkers[r.id]=L.marker([r.lat,r.lng],{icon:makeIcon(r.emoji,"@"+r.name,false)}).addTo(map);});
-setInterval(()=>{demoRacers.forEach(r=>{r.lat+=r.dLat+(Math.random()-0.5)*0.00004;r.lng+=r.dLng+(Math.random()-0.5)*0.00004;r.dist=haversine(r.lat,r.lng,FINISH[0],FINISH[1]);if(leafletMarkers[r.id])leafletMarkers[r.id].setLatLng([r.lat,r.lng]);if(r.dist<50){r.lat-=r.dLat*60;r.lng-=r.dLng*60;}});if(isRacing)updateRaceUI();},1000);
+const demoRacers=[];
+
+setInterval(()=>{if(isRacing)updateRaceUI();},1000);
 
 function renderOtherPlayers(players){
   // Remove stale markers for players who have dropped
@@ -442,19 +436,7 @@ if(firstFix){
   }document.getElementById("hud-dist-val").textContent=fmtDist(dist);var now=Date.now();if(!window._lastEmit||now-window._lastEmit>4000){socket.emit("updateLocation",{lat,lng});window._lastEmit=now;}updateRaceUI();}
 function recenterMap(){mapFollowing=true;document.getElementById("btn-recenter").classList.remove("show");if(myLat)map.setView([myLat,myLng],14,{animate:true});}
 
-function updateRaceUI(){const myDist=myLat?haversine(myLat,myLng,FINISH[0],FINISH[1]):99999;const me={id:"me",name:myUsername||"You",emoji:myEmoji,dist:myDist,transport:"You",isYou:true};const all=[...demoRacers.map(r=>({...r,isYou:false})),me];all.sort((a,b)=>a.dist-b.dist);const myRank=all.findIndex(r=>r.isYou)+1;const gapToLeader=myDist-all[0].dist;const posEl=document.getElementById("peek-pos");posEl.textContent=myRank;posEl.className="peek-position "+(myRank===1?"p1":myRank===2?"p2":myRank===3?"p3":"back");const gapEl=document.getElementById("peek-gap");const gb=document.getElementById("peek-gap-block");if(myRank===1){gapEl.textContent="LEADING";gb.className="peek-gap closing";}else{gapEl.textContent="+"+fmtDist(gapToLeader);gb.className="peek-gap "+(gapToLeader<500?"closing":"losing");}const maxDist=Math.max(...all.map(r=>r.dist));document.getElementById("lb-rows").innerHTML=all.map((r,i)=>{const rk=i+1,rc=rk===1?"r1":rk===2?"r2":rk===3?"r3":"";const pct=maxDist>0?Math.max(4,Math.round((1-r.dist/maxDist)*100)):50;return "<div class='lb-row "+(r.isYou?"you":"")+"'><div class='lb-rank "+rc+"'>"+(rk)+"</div><div class='lb-emoji'>"+r.emoji+"</div><div class='lb-info'><div class='lb-name "+(r.isYou?"you-name":"")+"'>@"+r.name+"</div><div class='lb-transport'>"+r.transport+"</div><div class='lb-bar-wrap'><div class='lb-bar "+(rk===1?"lead":"")+"' style='width:"+pct+"%'></div></div></div><div class='lb-dist "+(rk===1?"closest":"")+"'>TO FINISH<strong>"+fmtDist(r.dist)+"</strong></div></div>";}).join("");
-
-  // Update demo racer markers — leader pulses teal, nearest rival pulses teal
-  var leader = all[0];
-  var nearestRival = all.find(function(r){ return !r.isYou && r.id !== leader.id; });
-  demoRacers.forEach(function(r){
-    if(!leafletMarkers[r.id]) return;
-    var isLeader = (leader && !leader.isYou && r.id === leader.id);
-    var isRival  = (nearestRival && r.id === nearestRival.id);
-    var pulse    = isLeader || isRival;
-    var icon = makeIcon(r.emoji, "@"+r.name, false, fmtDist(r.dist)+" to finish", pulse);
-    leafletMarkers[r.id].setIcon(icon);
-  });
+function updateRaceUI(){const myDist=myLat?haversine(myLat,myLng,FINISH[0],FINISH[1]):99999;const me={id:"me",name:myUsername||"You",emoji:myEmoji,dist:myDist,transport:"You",isYou:true};const all=[me];all.sort((a,b)=>a.dist-b.dist);const myRank=all.findIndex(r=>r.isYou)+1;const gapToLeader=myDist-all[0].dist;const posEl=document.getElementById("peek-pos");posEl.textContent=myRank;posEl.className="peek-position "+(myRank===1?"p1":myRank===2?"p2":myRank===3?"p3":"back");const gapEl=document.getElementById("peek-gap");const gb=document.getElementById("peek-gap-block");if(myRank===1){gapEl.textContent="LEADING";gb.className="peek-gap closing";}else{gapEl.textContent="+"+fmtDist(gapToLeader);gb.className="peek-gap "+(gapToLeader<500?"closing":"losing");}const maxDist=Math.max(...all.map(r=>r.dist));document.getElementById("lb-rows").innerHTML=all.map((r,i)=>{const rk=i+1,rc=rk===1?"r1":rk===2?"r2":rk===3?"r3":"";const pct=maxDist>0?Math.max(4,Math.round((1-r.dist/maxDist)*100)):50;return "<div class='lb-row "+(r.isYou?"you":"")+"'><div class='lb-rank "+rc+"'>"+(rk)+"</div><div class='lb-emoji'>"+r.emoji+"</div><div class='lb-info'><div class='lb-name "+(r.isYou?"you-name":"")+"'>@"+r.name+"</div><div class='lb-transport'>"+r.transport+"</div><div class='lb-bar-wrap'><div class='lb-bar "+(rk===1?"lead":"")+"' style='width:"+pct+"%'></div></div></div><div class='lb-dist "+(rk===1?"closest":"")+"'>TO FINISH<strong>"+fmtDist(r.dist)+"</strong></div></div>";}).join("");
 
   // Always update your own marker with distance
   if(myMarker){
