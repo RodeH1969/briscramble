@@ -73,8 +73,8 @@
         .avatar-strip::-webkit-scrollbar{display:none}
         .avatar-card{min-width:80px;height:90px;background:var(--panel);border:1px solid var(--border);border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;position:relative;flex-shrink:0;transition:all 0.15s}
         .avatar-card.active{border-color:var(--red);background:rgba(232,0,26,0.1)}
-        .avatar-card.sponsor-card{border-color:#FFAA00}
-        .avatar-card.sponsor-card.active{border-color:#FFAA00;background:rgba(255,170,0,0.12)}
+        
+        
         .avatar-card.taken{opacity:0.4;cursor:not-allowed;border-style:dashed}
         .avatar-img{width:48px;height:48px;object-fit:contain;border-radius:6px}
         .avatar-name{font-family:var(--mono);font-size:0.55rem;color:rgba(255,255,255,0.5);text-align:center;padding:0 4px}
@@ -223,22 +223,12 @@
             </div>
         </div>
         <div>
-            <div class="section-label">[02] CLAIM IDENTITY <span class="section-badge">LOCKED FOREVER</span></div>
+            <div class="section-label">[02] CLAIM IDENTITY </div>
             <div class="avatar-strip" id="avatar-strip">
                 <div class="avatar-card briscramble-card active" onclick="selectAvatar(this,'scrambler','/logo.png')">
                     <div class="avatar-logo-mini"><img src="/logo.png" alt=""></div>
                     <span class="avatar-name">SCRAMBLER</span>
                     <span class="avatar-perk">DEFAULT</span>
-                </div>
-                <div class="avatar-card sponsor-card" onclick="selectAvatar(this,'cc','/avatars/sponsors/CC.png')">
-                    <img class="avatar-img" src="/avatars/sponsors/CC.png" onerror="this.parentElement.style.display='none'">
-                    <span class="avatar-name">C. Cameron</span>
-                    <span class="avatar-perk">SPONSOR</span>
-                </div>
-                <div class="avatar-card sponsor-card" onclick="selectAvatar(this,'bega','/avatars/sponsors/begamacandcheese280g.jpeg')">
-                    <img class="avatar-img" src="/avatars/sponsors/begamacandcheese280g.jpeg" onerror="this.parentElement.style.display='none'">
-                    <span class="avatar-name">Bega Mac</span>
-                    <span class="avatar-perk">SPONSOR</span>
                 </div>
                 <div class="avatar-card" onclick="selectAvatar(this,'train','/avatars/generic/train.svg')"><img class="avatar-img" src="/avatars/generic/train.svg"><span class="avatar-name">Train</span></div>
                 <div class="avatar-card" onclick="selectAvatar(this,'bus','/avatars/generic/bus.svg')"><img class="avatar-img" src="/avatars/generic/bus.svg"><span class="avatar-name">Bus</span></div>
