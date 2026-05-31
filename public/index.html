@@ -333,7 +333,7 @@
     </div>
     <div class="reg-footer">
         <button class="btn-lock" id="btn-lock" onclick="lockIn()" disabled>&#9889; LOCK IN &amp; RACE</button>
-        <div class="lock-note">Must be outside the 4KM boundary to race</div>
+        <div class="lock-note" id="lock-note">Outside 4KM = eligible to win &bull; Inside = DQ but you still get a time</div>
     </div>
 </div>
 
@@ -361,13 +361,15 @@
 <!-- RACE HUD -->
 <div id="hud">
     <div class="hud-logo"><img src="/logo.png" alt=""></div>
-    <div class="hud-mid">
+    <div class="hud-mid" style="cursor:pointer" onclick="tryChangeSlot()">
         <div class="hud-slot-label">SLOT</div>
         <div class="hud-slot-val" id="hud-slot">7:00</div>
+        <div id="hud-change-slot" style="font-family:var(--mono);font-size:0.5rem;color:rgba(0,255,204,0.6);letter-spacing:1px">TAP TO CHANGE</div>
     </div>
     <div class="hud-right">
         <div class="hud-dist-label">TO FINISH</div>
         <div class="hud-dist-val" id="hud-dist">&#8212;</div>
+        <div id="hud-timer" style="font-family:var(--mono);font-size:0.7rem;color:rgba(255,255,255,0.4);display:none">&#9201; <span id="hud-timer-val">00:00</span></div>
         <div class="live-pill"><span class="live-dot"></span>LIVE</div>
     </div>
 </div>
@@ -438,10 +440,11 @@ const db   = firebase.database();
 const claimPhone = window.claimPhone || '+61400000000';
 
 // ── CONSTANTS ──
-const FINISH   = [-27.4691, 153.0235];
+const FINISH   = [-27.4698, 153.0251]; // GPO, 261 Queen St Brisbane
 const BOUNDARY = 4000;
 
 // ── STATE ──
+let isDQ=false, raceStartTime=null, raceTimerInterval=null;
 let myUID=null, myUsername=null, myAvatar='/logo.png', mySlug='scrambler';
 let selectedSlot='7:00', isRacing=false, drawerOpen=false;
 let mapFollowing=true, myLat=null, myLng=null, isEligible=false;
@@ -458,13 +461,13 @@ L.tileLayer('https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}',{maxZoom:20}).a
 L.circle(FINISH,{radius:BOUNDARY,color:'#E8001A',weight:10,fill:true,fillColor:'#E8001A',fillOpacity:0.06,opacity:0.9}).addTo(map);
 L.circle(FINISH,{radius:BOUNDARY,color:'#ff4444',weight:5,fill:false,opacity:0.6,dashArray:'12,8'}).addTo(map);
 L.circle(FINISH,{radius:BOUNDARY+60,color:'#E8001A',weight:2,fill:false,opacity:0.25}).addTo(map);
-L.marker([-27.433,153.0235],{icon:L.divIcon({html:"<div style='font-family:monospace;font-size:10px;font-weight:bold;color:rgba(232,0,26,0.8);background:rgba(0,0,0,0.7);padding:2px 6px;border-radius:3px;white-space:nowrap;border:1px solid rgba(232,0,26,0.3)'>&#8212; 4KM BOUNDARY &#8212;</div>",className:'',iconAnchor:[70,0]})}).addTo(map);
+L.marker([-27.433,153.0235],{icon:L.divIcon({html:"<div style='font-family:monospace;font-size:10px;font-weight:bold;color:rgba(232,0,26,0.8);background:rgba(0,0,0,0.7);padding:2px 6px;border-radius:3px;white-space:nowrap;border:1px solid rgba(232,0,26,0.3)'>&#8212; 4KM EXCLUSION &#8212;</div>",className:'',iconAnchor:[70,0]})}).addTo(map);
 
 // Finish marker
 L.marker(FINISH,{icon:L.divIcon({
     html:"<div style='text-align:center'>"
         +"<div style='width:26px;height:26px;border-radius:50%;background:#E8001A;border:3px solid #fff;box-shadow:0 0 20px #E8001A;animation:finishPing 2s infinite;margin:0 auto'></div>"
-        +"<div style='font-family:monospace;font-size:9px;font-weight:bold;color:#fff;background:#E8001A;padding:2px 6px;border-radius:3px;margin-top:3px;letter-spacing:2px;animation:finishPing 2s infinite'>FINISH</div>"
+        +"<div style='font-family:monospace;font-size:9px;font-weight:bold;color:#fff;background:#E8001A;padding:2px 6px;border-radius:3px;margin-top:3px;letter-spacing:2px;animation:finishPing 2s infinite'>GPO FINISH</div>"
         +"</div>",
     className:'',iconAnchor:[13,0]
 })}).addTo(map);
@@ -710,7 +713,8 @@ function setElig(type,msg){
     el.innerHTML=msg;
     isEligible=(type==='ok');
     var btn=document.getElementById('btn-lock');
-    if(btn) btn.disabled=!isEligible;
+    // Always allow locking in — DQ'd players race with timer but no prize
+    if(btn && type !== 'checking') btn.disabled=false;
 }
 
 function onPos(lat,lng){
@@ -726,7 +730,17 @@ function onPos(lat,lng){
     }
 
     if(!isRacing){
-        if(dist<BOUNDARY) setElig('no','&#10060; INSIDE 4KM — '+fmt(dist)+' from finish. Move further out to race.');
+        if(dist<BOUNDARY) setElig('no','&#10060; INSIDE 4KM — '+fmt(dist)+' from finish.');
+        // DQ only triggers if crossing boundary BEFORE slot gun fires
+        if(!isRacing && !isDQ && dist < BOUNDARY){
+            isDQ = true;
+            var dqDiv=document.createElement('div');
+            dqDiv.style.cssText='position:fixed;top:80px;left:50%;transform:translateX(-50%);z-index:400;background:rgba(232,0,26,0.95);color:#fff;font-family:var(--head);font-size:1.1rem;font-weight:900;padding:12px 24px;border-radius:8px;letter-spacing:1px;white-space:nowrap;pointer-events:none';
+            dqDiv.textContent='\u26a0 DQ \u2014 crossed boundary before gun. Timer runs but no prize.';
+            document.body.appendChild(dqDiv);
+            setTimeout(function(){dqDiv.remove();},5000);
+            speak('Disqualified. You crossed the 4 kilometre boundary before your slot fired. Your timer will still run but you cannot win.');
+        }
         else setElig('ok','&#10003; ELIGIBLE — '+fmt(dist)+' from finish. Outside boundary.');
     }
 
@@ -743,10 +757,13 @@ function onPos(lat,lng){
         if(now-_lastEmit>4000&&myUID){
             db.ref('scrambles/'+selectedSlot+'/players/'+myUID).update({lat:lat,lng:lng,dist:dist,ts:firebase.database.ServerValue.TIMESTAMP});
             _lastEmit=now;
-            if(dist<=20){
-                db.ref('scrambles/'+selectedSlot+'/winner').once('value').then(function(s){
-                    if(!s.exists()) db.ref('scrambles/'+selectedSlot+'/winner').set({username:myUsername,uid:myUID,ts:firebase.database.ServerValue.TIMESTAMP});
-                });
+            if(dist<=10){
+                showFinished();
+                if(!isDQ){
+                    db.ref('scrambles/'+selectedSlot+'/winner').once('value').then(function(s){
+                        if(!s.exists()) db.ref('scrambles/'+selectedSlot+'/winner').set({username:myUsername,uid:myUID,time:getElapsedTime(),ts:firebase.database.ServerValue.TIMESTAMP});
+                    });
+                }
             }
             // Audio proximity alerts
             if(_lastMyDist!==null){
@@ -786,8 +803,19 @@ function updatePreRace(){
         el.style.color = 'var(--teal)';
         el.style.textShadow = '0 0 40px rgba(0,255,204,0.7)';
         clearInterval(_prInterval);
+        // Timer starts exactly at slot time
+        var pts = selectedSlot.split(':');
+        var now2 = new Date();
+        var bne2 = new Date(now2.toLocaleString('en-AU',{timeZone:'Australia/Brisbane'}));
+        var slotExact = new Date(bne2);
+        slotExact.setHours(parseInt(pts[0]),parseInt(pts[1]),0,0);
+        raceStartTime = slotExact.getTime();
+        startRaceTimer();
         setTimeout(function(){
             document.getElementById('pre-race').classList.add('hidden');
+            // Hide change slot option once gun fires
+            var chg = document.getElementById('hud-change-slot');
+            if(chg) chg.style.display='none';
         }, 2000);
         speak('Your slot is open. Go go go!');
         return;
@@ -829,9 +857,110 @@ function updatePreRacers(players){
     }).join('');
 }
 
+
+
+// ── CHANGE SLOT ──
+function tryChangeSlot(){
+    // Can't change if already DQ'd or race has started
+    if(isDQ){
+        alert('You are DQ\'d and cannot change slot.');
+        return;
+    }
+    var now = new Date();
+    var bne = new Date(now.toLocaleString('en-AU',{timeZone:'Australia/Brisbane'}));
+    var pts = selectedSlot.split(':');
+    var slotTime = new Date(bne);
+    slotTime.setHours(parseInt(pts[0]),parseInt(pts[1]),0,0);
+    if(bne >= slotTime){
+        alert('Your slot has already fired. You cannot change race.');
+        return;
+    }
+    // Check not inside boundary
+    if(myLat && haversine(myLat,myLng,FINISH[0],FINISH[1]) < BOUNDARY){
+        alert('You are inside the 4KM boundary. You cannot change race.');
+        return;
+    }
+    // Show slot picker overlay
+    var slotOverlay = document.createElement('div');
+    slotOverlay.id = 'slot-change-overlay';
+    slotOverlay.style.cssText = 'position:fixed;inset:0;z-index:400;background:rgba(7,7,8,0.96);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:24px';
+    var slots = ['7:00','7:10','7:20','7:30','7:40','7:50'];
+    var btns = slots.map(function(s){
+        return '<button onclick="changeSlotTo(\''+s+'\')" style="width:100%;max-width:300px;background:'+(s===selectedSlot?'var(--teal)':'var(--panel)')+';color:'+(s===selectedSlot?'#000':'#fff')+';border:1px solid '+(s===selectedSlot?'var(--teal)':'var(--border)')+';padding:16px;font-family:var(--head);font-size:1.4rem;font-weight:900;border-radius:8px;cursor:pointer;letter-spacing:2px">'+s+(s===selectedSlot?' (CURRENT)':'')+'</button>';
+    }).join('');
+    slotOverlay.innerHTML = '<div style="font-family:var(--head);font-size:1.5rem;font-weight:900;letter-spacing:2px;margin-bottom:8px">CHANGE SLOT</div>'
+        +'<div style="font-family:var(--mono);font-size:0.65rem;color:rgba(255,255,255,0.35);letter-spacing:2px;margin-bottom:16px">SELECT NEW RACE WINDOW</div>'
+        + btns
+        +'<button onclick="document.getElementById(\'slot-change-overlay\').remove()" style="background:none;border:1px solid var(--border);color:rgba(255,255,255,0.4);padding:10px 24px;font-family:var(--mono);font-size:0.7rem;border-radius:6px;cursor:pointer;margin-top:8px">CANCEL</button>';
+    document.body.appendChild(slotOverlay);
+}
+
+function changeSlotTo(newSlot){
+    // Remove from old slot in Firebase
+    if(myUID) db.ref('scrambles/'+selectedSlot+'/players/'+myUID).remove();
+    selectedSlot = newSlot;
+    document.getElementById('hud-slot').textContent = newSlot;
+    document.getElementById('lb-slot-lbl').textContent = newSlot + ' SCRAMBLE';
+    // Register in new slot
+    if(myUID && myLat){
+        var ref = db.ref('scrambles/'+newSlot+'/players/'+myUID);
+        ref.set({username:myUsername,avatar:myAvatar,lat:myLat,lng:myLng,dist:haversine(myLat,myLng,FINISH[0],FINISH[1]),ts:firebase.database.ServerValue.TIMESTAMP});
+        ref.onDisconnect().remove();
+        listenToSlot(newSlot);
+    }
+    // Restart countdown
+    if(_prInterval) clearInterval(_prInterval);
+    document.getElementById('pre-race').classList.remove('hidden');
+    updatePreRace();
+    _prInterval = setInterval(updatePreRace, 1000);
+    document.getElementById('slot-change-overlay').remove();
+    speak('Slot changed to ' + newSlot);
+}
+
+// ── RACE TIMER ──
+function startRaceTimer(){
+    var timerEl = document.getElementById('hud-timer');
+    var timerVal = document.getElementById('hud-timer-val');
+    if(timerEl) timerEl.style.display='block';
+    raceTimerInterval = setInterval(function(){
+        if(!raceStartTime) return;
+        var elapsed = Math.floor((Date.now()-raceStartTime)/1000);
+        var m = Math.floor(elapsed/60), s = elapsed%60;
+        if(timerVal) timerVal.textContent = String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+    }, 1000);
+}
+
+function getElapsedTime(){
+    if(!raceStartTime) return '—';
+    var elapsed = Math.floor((Date.now()-raceStartTime)/1000);
+    var m = Math.floor(elapsed/60), s = elapsed%60;
+    return String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+}
+
+function showFinished(){
+    clearInterval(raceTimerInterval);
+    var t = getElapsedTime();
+    var dqNote = isDQ ? '<br><br><span style="color:#FFAA00;font-size:0.85rem">&#9888; DQ — started inside boundary. Time recorded but no prize.</span>' : '';
+    var claimBtn = !isDQ ? '<br><br><a href="sms:'+claimPhone+'?body=BRISCRAMBLE%20WIN%20@'+myUsername+'%20'+selectedSlot+'" style="display:inline-block;margin-top:8px;padding:12px 24px;background:var(--teal);color:#000;font-family:var(--head);font-size:1.1rem;font-weight:900;border-radius:6px;text-decoration:none;letter-spacing:1px">&#128241; TEXT TO CLAIM</a>' : '';
+    
+    // Show finish overlay
+    var overlay = document.createElement('div');
+    overlay.style.cssText = 'position:fixed;inset:0;z-index:300;background:rgba(7,7,8,0.96);display:flex;align-items:center;justify-content:center';
+    overlay.innerHTML = '<div style="text-align:center;padding:40px 28px;max-width:340px">'
+        +'<div style="font-size:3rem;margin-bottom:8px">'+(isDQ?'&#9888;':'&#127942;')+'</div>'
+        +'<div style="font-family:var(--head);font-size:2.5rem;font-weight:900;letter-spacing:3px;color:'+(isDQ?'#FFAA00':'var(--teal)')+'">'+( isDQ?'FINISHED':'SLOT CHAMPION')+'</div>'
+        +'<div style="font-family:var(--mono);font-size:0.7rem;color:rgba(255,255,255,0.4);letter-spacing:2px;margin:8px 0">YOUR TIME</div>'
+        +'<div style="font-family:var(--head);font-size:4rem;font-weight:900;color:#fff;letter-spacing:4px">'+t+'</div>'
+        +dqNote+claimBtn
+        +'</div>';
+    document.body.appendChild(overlay);
+    speak(isDQ ? 'Finished. Your time is '+t+'. Disqualified — you started inside the boundary.' : 'Slot champion! You reached the GPO in '+t+'.');
+}
+
 // ── LOCK IN ──
 function lockIn(){
-    if(!isEligible) return;
+    if(!isEligible) isDQ=true;
+    // Remove disabled state so DQ players can still lock in
     var ref=db.ref('scrambles/'+selectedSlot+'/players/'+myUID);
     ref.set({username:myUsername,avatar:myAvatar,lat:myLat,lng:myLng,dist:haversine(myLat,myLng,FINISH[0],FINISH[1]),ts:firebase.database.ServerValue.TIMESTAMP});
     ref.onDisconnect().remove();
