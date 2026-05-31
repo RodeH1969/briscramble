@@ -150,7 +150,7 @@
         .lb-footer-note{padding:10px 0 max(env(safe-area-inset-bottom,10px),10px);text-align:center;font-family:var(--mono);font-size:0.55rem;color:rgba(255,255,255,0.15);letter-spacing:2px}
 
         /* RECENTER */
-        #btn-recenter{display:none;position:absolute;right:14px;bottom:180px;z-index:35;width:42px;height:42px;background:var(--panel);border:1px solid var(--border);border-radius:50%;color:rgba(255,255,255,0.6);font-size:1.1rem;cursor:pointer;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(0,0,0,0.5)}
+        #btn-recenter{display:none;position:absolute;right:14px;bottom:130px;z-index:35;width:42px;height:42px;background:var(--panel);border:1px solid var(--border);border-radius:50%;color:rgba(255,255,255,0.6);font-size:1.1rem;cursor:pointer;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(0,0,0,0.5);transition:bottom 0.3s}
         #btn-recenter.show{display:flex}
 
         /* OVERLAYS */
@@ -353,7 +353,30 @@ const demoRacers=[
 demoRacers.forEach(r=>{r.dist=haversine(r.lat,r.lng,FINISH[0],FINISH[1]);leafletMarkers[r.id]=L.marker([r.lat,r.lng],{icon:makeIcon(r.emoji,"@"+r.name,false)}).addTo(map);});
 setInterval(()=>{demoRacers.forEach(r=>{r.lat+=r.dLat+(Math.random()-0.5)*0.00004;r.lng+=r.dLng+(Math.random()-0.5)*0.00004;r.dist=haversine(r.lat,r.lng,FINISH[0],FINISH[1]);if(leafletMarkers[r.id])leafletMarkers[r.id].setLatLng([r.lat,r.lng]);if(r.dist<50){r.lat-=r.dLat*60;r.lng-=r.dLng*60;}});if(isRacing)updateRaceUI();},1000);
 
-function renderOtherPlayers(players){Object.entries(players).forEach(([id,p])=>{if(p.username===myUsername)return;const k="live_"+id;if(!leafletMarkers[k]){leafletMarkers[k]=L.marker([p.lat||0,p.lng||0],{icon:makeIcon(p.avatar||"🏁","@"+p.username,false)}).addTo(map);}else if(p.lat&&p.lng){leafletMarkers[k].setLatLng([p.lat,p.lng]);}});}
+function renderOtherPlayers(players){
+  // Remove stale markers for players who have dropped
+  Object.keys(leafletMarkers).forEach(function(k){
+    if(!k.startsWith("live_")) return;
+    var id = k.replace("live_","");
+    if(!players[id]){
+      map.removeLayer(leafletMarkers[k]);
+      delete leafletMarkers[k];
+    }
+  });
+  // Add/update active players
+  Object.entries(players).forEach(function([id,p]){
+    if(p.username===myUsername) return;
+    var k="live_"+id;
+    if(!p.lat||!p.lng) return;
+    var icon = makeIcon(p.avatar||"🏁","@"+p.username,false,fmtDist(haversine(p.lat,p.lng,FINISH[0],FINISH[1]))+" to finish",false);
+    if(!leafletMarkers[k]){
+      leafletMarkers[k]=L.marker([p.lat,p.lng],{icon:icon}).addTo(map);
+    } else {
+      leafletMarkers[k].setLatLng([p.lat,p.lng]);
+      leafletMarkers[k].setIcon(icon);
+    }
+  });
+}
 
 function makeIcon(emoji, label, isYou, distLabel, pulse){
   var c = isYou ? "#E8001A" : pulse ? "#00FFCC" : "rgba(255,255,255,0.7)";
@@ -393,7 +416,7 @@ function lockGrid(){document.getElementById("lobby").classList.remove("open");so
 
 function startRaceMode(){isRacing=true;document.getElementById("hud").classList.add("show");document.getElementById("hud-slot-time").textContent=selectedSlot;document.getElementById("race-drawer").classList.add("show","collapsed");document.getElementById("ad-ticker").classList.add("show");document.getElementById("lb-slot-label").textContent=selectedSlot+" SCRAMBLE";document.getElementById("peek-name").textContent="@"+(myUsername||"You");startGPS();}
 function startGPS(){if(!navigator.geolocation)return useDemoGPS();navigator.geolocation.watchPosition(pos=>updateMyPos(pos.coords.latitude,pos.coords.longitude),()=>useDemoGPS(),{enableHighAccuracy:true,maximumAge:5000,timeout:10000});}
-function useDemoGPS(){let lat=-27.499,lng=152.975;setInterval(()=>{lat+=0.00022+(Math.random()-0.5)*0.00005;lng+=0.00040+(Math.random()-0.5)*0.00005;updateMyPos(lat,lng);},2000);}
+function useDemoGPS(){showOverlay("warning","GPS REQUIRED","BriScramble needs live location to race.<br><br>Enable location permissions in your browser settings and reload.","<button class='overlay-btn' onclick='location.reload()'>RELOAD</button>");}
 function updateMyPos(lat,lng){myLat=lat;myLng=lng;const dist=haversine(lat,lng,FINISH[0],FINISH[1]);const firstFix=!myMarker;if(!myMarker){myMarker=L.marker([lat,lng],{icon:makeIcon(myEmoji,"@"+(myUsername||"You"),true),zIndexOffset:1000}).addTo(map);}else{myMarker.setLatLng([lat,lng]);}
 // On first GPS fix, frame view to show player + 5km ring together
 if(firstFix){
@@ -416,7 +439,7 @@ if(firstFix){
     else if(dist > 100)  zoom = 17;  // building level
     else                 zoom = 18;  // you are HERE
     map.setView([lat,lng], zoom, {animate:true, duration:1});
-  }document.getElementById("hud-dist-val").textContent=fmtDist(dist);socket.emit("updateLocation",{lat,lng});updateRaceUI();}
+  }document.getElementById("hud-dist-val").textContent=fmtDist(dist);var now=Date.now();if(!window._lastEmit||now-window._lastEmit>4000){socket.emit("updateLocation",{lat,lng});window._lastEmit=now;}updateRaceUI();}
 function recenterMap(){mapFollowing=true;document.getElementById("btn-recenter").classList.remove("show");if(myLat)map.setView([myLat,myLng],14,{animate:true});}
 
 function updateRaceUI(){const myDist=myLat?haversine(myLat,myLng,FINISH[0],FINISH[1]):99999;const me={id:"me",name:myUsername||"You",emoji:myEmoji,dist:myDist,transport:"You",isYou:true};const all=[...demoRacers.map(r=>({...r,isYou:false})),me];all.sort((a,b)=>a.dist-b.dist);const myRank=all.findIndex(r=>r.isYou)+1;const gapToLeader=myDist-all[0].dist;const posEl=document.getElementById("peek-pos");posEl.textContent=myRank;posEl.className="peek-position "+(myRank===1?"p1":myRank===2?"p2":myRank===3?"p3":"back");const gapEl=document.getElementById("peek-gap");const gb=document.getElementById("peek-gap-block");if(myRank===1){gapEl.textContent="LEADING";gb.className="peek-gap closing";}else{gapEl.textContent="+"+fmtDist(gapToLeader);gb.className="peek-gap "+(gapToLeader<500?"closing":"losing");}const maxDist=Math.max(...all.map(r=>r.dist));document.getElementById("lb-rows").innerHTML=all.map((r,i)=>{const rk=i+1,rc=rk===1?"r1":rk===2?"r2":rk===3?"r3":"";const pct=maxDist>0?Math.max(4,Math.round((1-r.dist/maxDist)*100)):50;return "<div class='lb-row "+(r.isYou?"you":"")+"'><div class='lb-rank "+rc+"'>"+(rk)+"</div><div class='lb-emoji'>"+r.emoji+"</div><div class='lb-info'><div class='lb-name "+(r.isYou?"you-name":"")+"'>@"+r.name+"</div><div class='lb-transport'>"+r.transport+"</div><div class='lb-bar-wrap'><div class='lb-bar "+(rk===1?"lead":"")+"' style='width:"+pct+"%'></div></div></div><div class='lb-dist "+(rk===1?"closest":"")+"'>TO FINISH<strong>"+fmtDist(r.dist)+"</strong></div></div>";}).join("");
@@ -439,7 +462,13 @@ function updateRaceUI(){const myDist=myLat?haversine(myLat,myLng,FINISH[0],FINIS
   }
 }
 
-function toggleDrawer(){drawerOpen=!drawerOpen;document.getElementById("race-drawer").classList.toggle("collapsed",!drawerOpen);document.getElementById("peek-expand-label").textContent=drawerOpen?"↓ CLOSE":"↑ BOARD";}
+function toggleDrawer(){
+  drawerOpen=!drawerOpen;
+  document.getElementById("race-drawer").classList.toggle("collapsed",!drawerOpen);
+  document.getElementById("peek-expand-label").textContent=drawerOpen?"↓ CLOSE":"↑ BOARD";
+  var btn=document.getElementById("btn-recenter");
+  if(btn) btn.style.bottom = drawerOpen ? "320px" : "130px";
+}
 function showOverlay(type,title,msg,a){document.getElementById("overlay-card").className="overlay-card "+type;document.getElementById("overlay-title").innerHTML=title;document.getElementById("overlay-msg").innerHTML=msg;document.getElementById("overlay-actions").innerHTML=a;document.getElementById("overlay").classList.add("show");}
 function closeOverlay(){document.getElementById("overlay").classList.remove("show");}
 
@@ -547,6 +576,20 @@ function shareRegistration(){
     navigator.clipboard.writeText(text).then(()=>alert("Copied to clipboard!"));
   }
 }
+
+
+// Touch swipe gesture for drawer
+(function(){
+  var zone = document.getElementById("race-drawer");
+  if(!zone) return;
+  var startY=0, threshold=40;
+  zone.addEventListener("touchstart",function(e){startY=e.touches[0].clientY;},{passive:true});
+  zone.addEventListener("touchend",function(e){
+    var dy = startY - e.changedTouches[0].clientY;
+    if(dy > threshold && !drawerOpen) toggleDrawer();
+    if(dy < -threshold && drawerOpen) toggleDrawer();
+  },{passive:true});
+})();
 
 function simulateWin(slot){showOverlay("winner","🏆 SLOT CHAMPION","First to King George Square in the <strong>"+slot+"</strong> scramble!","<a href='sms:"+claimPhone+"?body=BRISCRAMBLE%20WIN%20@"+myUsername+"%20"+slot+"' class='overlay-btn'>📱 TEXT TO CLAIM</a>");}
 function simulateProximityWarning(km){showOverlay("warning","⚠ DANGER ZONE","Only <strong>"+km+"km</strong> from finish. Switch slots now!","<button class='overlay-btn' onclick='closeOverlay()'>OK</button>");}
