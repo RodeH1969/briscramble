@@ -212,7 +212,7 @@
             <div id="eligibility-box" class="eligibility-box checking">&#128225; Checking GPS location...</div>
         </div>
         <div>
-            <div class="section-label">[01] SELECT GRID SLOT</div>
+            <div class="section-label">[01] SELECT GRID SLOT <span id="slot-countdown" style="font-family:var(--mono);font-size:0.8rem;color:var(--red);letter-spacing:1px">--:--</span></div>
             <div class="slots-grid">
                 <div class="slot-card active" onclick="selectSlot(this,'7:00')"><span class="slot-time">7:00</span><span class="slot-riders" id="r700">0 / 20</span></div>
                 <div class="slot-card" onclick="selectSlot(this,'7:10')"><span class="slot-time">7:10</span><span class="slot-riders" id="r710">0 / 20</span></div>
@@ -675,6 +675,27 @@ function showOverlay(type,title,msg,a){document.getElementById('overlay-card').c
     strip.addEventListener('mouseup',function(){isDown=false;strip.style.cursor='grab';});
     strip.addEventListener('mousemove',function(e){if(!isDown)return;e.preventDefault();var x=e.pageX-strip.offsetLeft;strip.scrollLeft=scrollLeft-(x-startX)*1.5;});
 })();
+
+
+// Countdown to selected slot
+function updateSlotCountdown(){
+    var el = document.getElementById('slot-countdown');
+    if(!el) return;
+    var now = new Date();
+    var bne = new Date(now.toLocaleString('en-AU', {timeZone:'Australia/Brisbane'}));
+    var parts = selectedSlot.split(':');
+    var target = new Date(bne);
+    target.setHours(parseInt(parts[0]), parseInt(parts[1]), 0, 0);
+    if(target <= bne) { el.textContent = 'RACE OPEN'; el.style.color = 'var(--teal)'; return; }
+    var diff = Math.floor((target - bne) / 1000);
+    var h = Math.floor(diff/3600);
+    var m = Math.floor((diff%3600)/60);
+    var s = diff%60;
+    el.textContent = (h>0?String(h).padStart(2,'0')+':':'') + String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+    el.style.color = diff < 300 ? '#FFAA00' : 'var(--red)';
+}
+setInterval(updateSlotCountdown, 1000);
+updateSlotCountdown();
 
 function closeOverlay(){document.getElementById('overlay').classList.remove('show');}
 </script>
