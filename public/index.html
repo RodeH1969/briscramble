@@ -16,21 +16,26 @@
         .leaflet-marker-icon{transition:transform 1.2s linear!important}
         .hidden{display:none!important}
 
-        /* ── SCREEN WRAPPER ── */
+        /* LOADING */
+        #s-loading{position:fixed;inset:0;z-index:200;background:#070708;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px}
+        #s-loading .logo{width:80px;height:80px;border-radius:50%;overflow:hidden;border:3px solid var(--red);box-shadow:0 0 30px rgba(232,0,26,0.4)}
+        #s-loading .logo img{width:100%;height:100%;object-fit:cover}
+
+        /* SCREENS */
         .screen{position:fixed;inset:0;z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(ellipse at center,#0e0e1f 0%,#070708 100%);padding:28px}
 
-        /* ── SCREEN 1: SIGN IN ── */
-        #s-auth .logo{width:140px;height:140px;border-radius:50%;overflow:hidden;border:3px solid var(--red);box-shadow:0 0 0 6px rgba(232,0,26,0.15),0 0 40px rgba(232,0,26,0.3);margin-bottom:20px;animation:pulse 3s ease-in-out infinite}
+        /* AUTH */
+        #s-auth .logo{width:150px;height:150px;border-radius:50%;overflow:hidden;border:3px solid var(--red);box-shadow:0 0 0 6px rgba(232,0,26,0.15),0 0 50px rgba(232,0,26,0.3);margin-bottom:20px;animation:pulse 3s ease-in-out infinite}
         #s-auth .logo img{width:100%;height:100%;object-fit:cover}
         @keyframes pulse{0%,100%{box-shadow:0 0 0 6px rgba(232,0,26,0.15),0 0 40px rgba(232,0,26,0.2)}50%{box-shadow:0 0 0 12px rgba(232,0,26,0.08),0 0 60px rgba(232,0,26,0.4)}}
-        .game-title{font-size:3.2rem;font-weight:900;letter-spacing:3px;margin-bottom:4px}
+        .game-title{font-size:3.2rem;font-weight:900;letter-spacing:3px;margin-bottom:6px}
         .game-title span{color:var(--red)}
         .game-sub{font-family:var(--head);font-size:1rem;font-weight:700;color:#fff;letter-spacing:3px;text-transform:uppercase;margin-bottom:40px}
         .btn-signin{width:100%;max-width:320px;background:#fff;color:#111;border:none;padding:15px 20px;border-radius:8px;font-size:1rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:10px}
         .btn-signin img{width:20px;height:20px}
         .btn-signin.apple{background:#111;color:#fff;border:1px solid rgba(255,255,255,0.2)}
 
-        /* ── SCREEN 2: USERNAME (first time only) ── */
+        /* USERNAME */
         #s-name{gap:14px}
         .s-title{font-size:2rem;font-weight:900;letter-spacing:2px;text-align:center}
         .s-sub{font-family:var(--mono);font-size:0.65rem;color:rgba(255,255,255,0.35);letter-spacing:2px;text-align:center;line-height:1.7}
@@ -44,7 +49,10 @@
         .input-note strong{color:#FFAA00}
         .btn-red{width:100%;max-width:320px;background:var(--red);color:#fff;border:none;padding:17px;font-family:var(--head);font-size:1.5rem;font-weight:900;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:8px;box-shadow:0 6px 24px rgba(232,0,26,0.4)}
 
-        /* ── SCREEN 3: REGISTER ── */
+        /* LOCATION PERMISSION */
+        #s-location{gap:16px}
+
+        /* REGISTER */
         #s-reg{justify-content:flex-start;padding:0;overflow-y:auto;align-items:stretch}
         .reg-top{background:linear-gradient(to right,#0e0e18,#12121f);border-bottom:1px solid rgba(232,0,26,0.25);padding:14px 20px;display:flex;align-items:center;gap:12px;flex-shrink:0;position:relative;overflow:hidden}
         .reg-top-logo{width:38px;height:38px;border-radius:50%;overflow:hidden;border:1.5px solid var(--red);flex-shrink:0}
@@ -53,37 +61,25 @@
         .reg-top-title span{color:var(--red)}
         .reg-top-user{font-family:var(--mono);font-size:0.65rem;color:var(--teal);letter-spacing:1px;margin-left:auto}
         .reg-body{padding:16px 20px;display:flex;flex-direction:column;gap:18px;max-width:520px;width:100%;margin:0 auto}
+        .sec-label{font-family:var(--mono);font-size:0.6rem;color:rgba(255,255,255,0.3);letter-spacing:3px;text-transform:uppercase;margin-bottom:8px}
 
-        /* Countdown */
-        .countdown-block{background:linear-gradient(135deg,rgba(232,0,26,0.12),rgba(232,0,26,0.04));border:1px solid rgba(232,0,26,0.35);border-radius:10px;padding:14px 18px;display:flex;align-items:center;justify-content:space-between}
-        .cd-left{display:flex;flex-direction:column;gap:2px}
-        .cd-label{font-family:var(--mono);font-size:0.55rem;color:rgba(255,255,255,0.35);letter-spacing:2px;text-transform:uppercase}
-        .cd-time{font-family:var(--head);font-size:3rem;font-weight:900;color:var(--red);line-height:1;letter-spacing:2px}
-        .cd-right{text-align:right}
-        .cd-slot{font-family:var(--head);font-size:1.6rem;font-weight:900;color:var(--white)}
+        /* HOW IT WORKS BOX */
+        .how-box{background:linear-gradient(135deg,rgba(0,255,204,0.06),rgba(0,255,204,0.02));border:1px solid rgba(0,255,204,0.25);border-radius:10px;padding:16px}
+        .how-step{display:flex;align-items:flex-start;gap:12px;margin-bottom:12px}
+        .how-step:last-child{margin-bottom:0}
+        .how-num{width:28px;height:28px;border-radius:50%;background:var(--red);color:#fff;font-family:var(--head);font-size:1rem;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+        .how-text{font-family:var(--mono);font-size:0.65rem;color:rgba(255,255,255,0.6);letter-spacing:1px;line-height:1.6;padding-top:4px}
+        .how-text strong{color:var(--white)}
 
-        /* Eligibility */
+        /* BOUNDARY STATUS */
         .elig-box{padding:12px 16px;border-radius:8px;font-family:var(--mono);font-size:0.75rem;letter-spacing:1px;line-height:1.4}
         .elig-box.checking{background:rgba(255,255,255,0.04);color:rgba(255,255,255,0.45);border:1px dashed rgba(255,255,255,0.1)}
         .elig-box.ok{background:rgba(0,255,204,0.06);border:1px solid rgba(0,255,204,0.4);color:var(--teal)}
-        .elig-box.no{background:rgba(232,0,26,0.08);border:1px solid rgba(232,0,26,0.4);color:var(--red)}
+        .elig-box.dq{background:rgba(232,0,26,0.08);border:1px solid rgba(232,0,26,0.4);color:var(--red)}
 
-        /* Section labels */
-        .sec-label{font-family:var(--mono);font-size:0.6rem;color:rgba(255,255,255,0.3);letter-spacing:3px;text-transform:uppercase;margin-bottom:8px}
-
-        /* Slots */
-        .slots-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-        .slot-card{background:linear-gradient(135deg,#161620,#0e0e12);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:12px 8px;text-align:center;cursor:pointer;transition:all 0.15s;box-shadow:0 2px 8px rgba(0,0,0,0.4)}
-        .slot-card.active{border-color:var(--teal);background:var(--teal-dim)}
-        .slot-card.active .slot-time{color:var(--teal)}
-        .slot-time{font-family:var(--head);font-size:1.4rem;font-weight:700;display:block}
-        .slot-count{font-family:var(--mono);font-size:0.55rem;color:rgba(255,255,255,0.3);margin-top:2px;display:block}
-        .slot-card.active .slot-count{color:var(--teal);opacity:0.7}
-
-        /* Avatars */
+        /* AVATAR */
         .avatar-strip{display:flex;gap:8px;overflow-x:scroll;padding-bottom:6px;cursor:grab;-webkit-overflow-scrolling:touch}
         .avatar-strip::-webkit-scrollbar{height:3px}
-        .avatar-strip::-webkit-scrollbar-track{background:rgba(255,255,255,0.05)}
         .avatar-strip::-webkit-scrollbar-thumb{background:var(--red);border-radius:3px}
         .av-card{min-width:76px;height:86px;background:linear-gradient(135deg,#161620,#0e0e12);border:1px solid rgba(255,255,255,0.08);border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;flex-shrink:0;transition:all 0.15s;position:relative}
         .av-card.active{border-color:var(--red);background:rgba(232,0,26,0.1)}
@@ -93,29 +89,36 @@
         .av-logo{width:44px;height:44px;border-radius:50%;overflow:hidden;border:1px solid var(--red)}
         .av-logo img{width:100%;height:100%;object-fit:cover}
 
-        /* Lock button */
+        /* LOCK BUTTON */
         .reg-footer{padding:14px 20px;padding-bottom:max(env(safe-area-inset-bottom,14px),14px);border-top:1px solid var(--border);flex-shrink:0;max-width:520px;width:100%;margin:0 auto}
-        .btn-lock{width:100%;background:var(--red);color:#fff;border:none;padding:18px;font-family:var(--head);font-size:1.6rem;font-weight:900;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:8px;box-shadow:0 6px 24px rgba(232,0,26,0.45);transition:transform 0.1s}
-        .btn-lock:active{transform:scale(0.98)}
-        .btn-lock:disabled{background:#222;color:#555;box-shadow:none;cursor:not-allowed}
+        .btn-lock{width:100%;background:var(--red);color:#fff;border:none;padding:18px;font-family:var(--head);font-size:1.6rem;font-weight:900;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:8px;box-shadow:0 6px 24px rgba(232,0,26,0.45)}
         .lock-note{font-family:var(--mono);font-size:0.55rem;color:rgba(255,255,255,0.2);text-align:center;margin-top:8px;letter-spacing:1px}
 
-        /* ── RACE HUD ── */
+        /* HUD */
         #hud{display:none;position:absolute;top:0;left:0;right:0;z-index:30;padding:10px 14px;padding-top:max(env(safe-area-inset-top,10px),10px);background:linear-gradient(to bottom,rgba(7,7,8,0.95) 0%,transparent 100%);align-items:center;justify-content:space-between;gap:10px}
         #hud.show{display:flex}
         .hud-logo{width:38px;height:38px;border-radius:50%;overflow:hidden;border:1.5px solid var(--red);flex-shrink:0}
         .hud-logo img{width:100%;height:100%;object-fit:cover}
         .hud-mid{display:flex;flex-direction:column;align-items:center;gap:1px}
-        .hud-slot-label{font-family:var(--mono);font-size:0.55rem;color:var(--teal);letter-spacing:2px}
-        .hud-slot-val{font-family:var(--head);font-size:1.1rem;font-weight:900;color:#fff;line-height:1}
-        .hud-right{display:flex;flex-direction:column;align-items:flex-end;gap:2px}
-        .hud-dist-label{font-family:var(--mono);font-size:0.55rem;color:rgba(255,255,255,0.4);letter-spacing:1px}
-        .hud-dist-val{font-family:var(--head);font-size:1.3rem;font-weight:900;color:#fff;line-height:1}
+        .hud-label{font-family:var(--mono);font-size:0.5rem;color:rgba(255,255,255,0.35);letter-spacing:2px;text-transform:uppercase}
+        .hud-val{font-family:var(--head);font-size:1.2rem;font-weight:900;color:#fff;line-height:1}
+        .hud-right{display:flex;flex-direction:column;align-items:flex-end;gap:3px}
         .live-pill{display:flex;align-items:center;gap:3px;font-family:var(--mono);font-size:0.55rem;color:var(--red)}
         .live-dot{width:5px;height:5px;border-radius:50%;background:var(--red);animation:blink 1s ease-in-out infinite}
         @keyframes blink{0%,100%{opacity:1}50%{opacity:0.2}}
 
-        /* ── RACE DRAWER ── */
+        /* RACE STATUS BANNER */
+        #race-banner{display:none;position:absolute;top:70px;left:50%;transform:translateX(-50%);z-index:35;white-space:nowrap}
+        #race-banner.show{display:block}
+        .banner-inner{background:rgba(7,7,8,0.92);border:1px solid var(--border);border-radius:8px;padding:10px 20px;text-align:center;backdrop-filter:blur(8px)}
+        .banner-status{font-family:var(--mono);font-size:0.6rem;color:rgba(255,255,255,0.4);letter-spacing:3px;text-transform:uppercase}
+        .banner-main{font-family:var(--head);font-size:2rem;font-weight:900;line-height:1}
+        .banner-main.waiting{color:rgba(255,255,255,0.5)}
+        .banner-main.racing{color:var(--teal)}
+        .banner-main.dq{color:#FFAA00}
+        .banner-sub{font-family:var(--mono);font-size:0.6rem;color:rgba(255,255,255,0.3);letter-spacing:1px;margin-top:2px}
+
+        /* LEADERBOARD DRAWER */
         #drawer{display:none;position:absolute;bottom:36px;left:0;right:0;z-index:30}
         #drawer.show{display:block}
         #drawer.collapsed .drawer-body{display:none}
@@ -123,35 +126,31 @@
         .drawer-pull{display:flex;justify-content:center;padding:8px 0;cursor:pointer}
         .drawer-handle{width:32px;height:3px;background:rgba(255,255,255,0.2);border-radius:2px}
         .drawer-peek{padding:8px 16px 10px;display:flex;align-items:center;justify-content:space-between;gap:10px;cursor:pointer}
-        .peek-pos{font-family:var(--head);font-size:2.4rem;font-weight:900;line-height:1;min-width:32px}
-        .peek-pos.p1{color:var(--teal)}.peek-pos.p2{color:#FFD700}.peek-pos.p3{color:#CD7F32}.peek-pos.back{color:rgba(255,255,255,0.35)}
+        .peek-rank{font-family:var(--head);font-size:2.2rem;font-weight:900;line-height:1;min-width:32px}
+        .peek-rank.p1{color:var(--teal)}.peek-rank.p2{color:#FFD700}.peek-rank.p3{color:#CD7F32}.peek-rank.back{color:rgba(255,255,255,0.35)}
         .peek-info{flex:1}
         .peek-name{font-family:var(--head);font-size:1rem;font-weight:700;color:var(--white)}
-        .peek-sublabel{font-family:var(--mono);font-size:0.55rem;color:rgba(255,255,255,0.3);letter-spacing:1px}
-        .peek-gap-block{text-align:center}
-        .peek-gap-val{font-family:var(--head);font-size:1.1rem;font-weight:900;color:var(--white)}
-        .peek-gap-val.closing{color:var(--teal)}.peek-gap-val.losing{color:var(--red)}
-        .peek-gap-spd{font-family:var(--mono);font-size:0.5rem;color:rgba(255,255,255,0.25);margin-top:1px}
+        .peek-sub{font-family:var(--mono);font-size:0.55rem;color:rgba(255,255,255,0.3);letter-spacing:1px}
+        .peek-time-block{text-align:right}
+        .peek-time{font-family:var(--head);font-size:1.1rem;font-weight:900;color:var(--white)}
         .peek-expand{font-family:var(--mono);font-size:0.55rem;color:rgba(255,255,255,0.2);text-transform:uppercase;white-space:nowrap}
         .drawer-body{padding:0 16px 6px}
         .lb-head{display:flex;justify-content:space-between;padding:8px 0 6px;border-bottom:1px solid var(--border);margin-bottom:6px;font-family:var(--mono);font-size:0.6rem;color:rgba(255,255,255,0.3);letter-spacing:2px;text-transform:uppercase}
-        .lb-slot{color:var(--teal)}
+        .lb-date{color:var(--teal)}
         .lb-row{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,0.03)}
         .lb-row.me{background:rgba(232,0,26,0.07);border-radius:6px;padding-left:8px;margin:0 -8px;border-bottom:none}
+        .lb-row.dq-row{opacity:0.5}
         .lb-rank{font-family:var(--head);font-size:1.3rem;font-weight:900;width:26px;text-align:center;flex-shrink:0}
         .lb-rank.r1{color:var(--teal)}.lb-rank.r2{color:#FFD700}.lb-rank.r3{color:#CD7F32}
         .lb-av{width:26px;height:26px;object-fit:contain;border-radius:4px;flex-shrink:0}
         .lb-info{flex:1;min-width:0}
         .lb-name{font-family:var(--head);font-size:0.95rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
         .lb-name.me{color:var(--red)}
-        .lb-bar-wrap{width:100%;height:2px;background:rgba(255,255,255,0.05);border-radius:2px;margin-top:3px}
-        .lb-bar{height:100%;border-radius:2px;transition:width 1s ease}
-        .lb-dist{font-family:var(--mono);font-size:0.7rem;color:rgba(255,255,255,0.45);text-align:right;flex-shrink:0}
-        .lb-dist strong{display:block;color:var(--white);font-size:0.8rem}
-        .lb-dist.lead strong{color:var(--teal)}
+        .lb-time{font-family:var(--mono);font-size:0.8rem;color:var(--white);text-align:right;flex-shrink:0;font-weight:bold}
+        .lb-time.best{color:var(--teal)}
         .lb-note{padding:8px 0 max(env(safe-area-inset-bottom,8px),8px);text-align:center;font-family:var(--mono);font-size:0.5rem;color:rgba(255,255,255,0.12);letter-spacing:2px}
 
-        /* ── AD TICKER ── */
+        /* AD TICKER */
         #ticker{display:none;position:absolute;bottom:0;left:0;right:0;z-index:25;background:rgba(7,7,8,0.92);border-top:1px solid var(--border);overflow:hidden;height:34px}
         #ticker.show{display:block}
         .ticker-inner{display:flex;gap:60px;white-space:nowrap;animation:tick 35s linear infinite;padding:7px 0}
@@ -159,41 +158,38 @@
         .ticker-inner span strong{color:#FFAA00}
         @keyframes tick{0%{transform:translateX(100vw)}100%{transform:translateX(-100%)}}
 
-        /* ── RECENTER ── */
-        #btn-re{display:none;position:absolute;right:12px;bottom:130px;z-index:35;width:40px;height:40px;background:rgba(14,14,18,0.9);border:1px solid var(--border);border-radius:50%;color:rgba(255,255,255,0.6);font-size:1rem;cursor:pointer;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(0,0,0,0.5);transition:bottom 0.3s}
-        #btn-re.show{display:flex}
+        /* RECENTER + SHARE */
+        .map-btn{position:absolute;right:12px;z-index:35;width:40px;height:40px;background:rgba(14,14,18,0.9);border:1px solid var(--border);border-radius:50%;color:rgba(255,255,255,0.6);font-size:1rem;cursor:pointer;display:none;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(0,0,0,0.5)}
+        .map-btn.show{display:flex}
+        #btn-re{bottom:130px}
+        #btn-share{bottom:180px;border-color:rgba(0,255,204,0.3);color:var(--teal)}
 
-        /* ── SHARE BUTTON (race mode) ── */
-        #btn-share{display:none;position:absolute;right:12px;bottom:180px;z-index:35;width:40px;height:40px;background:rgba(14,14,18,0.9);border:1px solid rgba(0,255,204,0.3);border-radius:50%;color:var(--teal);font-size:1rem;cursor:pointer;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(0,0,0,0.5)}
-        #btn-share.show{display:flex}
-
-        /* ── CHECKPOINTS ── */
-        @keyframes cpPulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.3);opacity:0.7}}
-        .cp-pin{width:16px;height:16px;border-radius:50%;background:#FFAA00;border:2px solid #fff;box-shadow:0 0 8px #FFAA00;animation:cpPulse 2s ease-in-out infinite}
-        .cp-label{font-family:var(--mono);font-size:8px;color:#FFAA00;background:rgba(0,0,0,0.85);padding:2px 5px;border-radius:3px;white-space:nowrap;border:1px solid rgba(255,170,0,0.3)}
+        /* CHECKPOINTS */
+        @keyframes cpPing{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.3);opacity:0.7}}
+        .cp-pin{width:14px;height:14px;border-radius:50%;background:#FFAA00;border:2px solid #fff;box-shadow:0 0 8px #FFAA00;animation:cpPing 2s ease-in-out infinite}
+        .cp-lbl{font-family:var(--mono);font-size:8px;color:#FFAA00;background:rgba(0,0,0,0.85);padding:2px 5px;border-radius:3px;white-space:nowrap;border:1px solid rgba(255,170,0,0.3)}
         .badge-toast{position:fixed;top:80px;left:50%;transform:translateX(-50%);z-index:500;background:rgba(255,170,0,0.95);color:#000;font-family:var(--head);font-size:1rem;font-weight:900;letter-spacing:1px;padding:10px 20px;border-radius:8px;white-space:nowrap;pointer-events:none;animation:toastIn 0.3s ease}
         @keyframes toastIn{0%{opacity:0;top:60px}100%{opacity:1;top:80px}}
 
-        /* MAP MARKERS */
+        /* MAP ANIMATIONS */
         @keyframes finishPing{0%{transform:scale(1);box-shadow:0 0 0 0 rgba(232,0,26,0.8)}70%{transform:scale(1.1);box-shadow:0 0 0 16px rgba(232,0,26,0)}100%{transform:scale(1);box-shadow:0 0 0 0 rgba(232,0,26,0)}}
         @keyframes rivalPulse{0%,100%{filter:drop-shadow(0 0 4px rgba(0,255,204,0.8))}50%{filter:drop-shadow(0 0 8px rgba(0,255,204,0.3))}}
+        @keyframes ghostPulse{0%,100%{filter:drop-shadow(0 0 4px rgba(150,100,255,0.8))}50%{filter:drop-shadow(0 0 8px rgba(150,100,255,0.3))}}
     </style>
 </head>
 <body>
 
 <div id="map"></div>
 
-<!-- LOADING SCREEN -->
-<div id="s-loading" style="position:fixed;inset:0;z-index:200;background:#070708;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px">
-    <div style="width:80px;height:80px;border-radius:50%;overflow:hidden;border:3px solid var(--red);box-shadow:0 0 30px rgba(232,0,26,0.4)">
-        <img src="/logo.png" style="width:100%;height:100%;object-fit:cover">
-    </div>
+<!-- LOADING -->
+<div id="s-loading">
+    <div class="logo"><img src="/logo.png" alt=""></div>
     <div style="font-family:var(--head);font-size:2rem;font-weight:900;letter-spacing:3px">BRIS<span style="color:var(--red)">CRAMBLE</span></div>
-    <div style="font-family:var(--mono);font-size:0.65rem;color:rgba(255,255,255,0.3);letter-spacing:3px">LOADING...</div>
+    <div style="font-family:var(--mono);font-size:0.6rem;color:rgba(255,255,255,0.3);letter-spacing:3px">LOADING...</div>
 </div>
 
-<!-- SCREEN 1: SIGN IN -->
-<div id="s-auth" class="screen">
+<!-- AUTH -->
+<div id="s-auth" class="screen hidden">
     <div class="logo"><img src="/logo.png" alt="BriScramble"></div>
     <div class="game-title">BRIS<span>CRAMBLE</span></div>
     <div class="game-sub">Brisbane's Morning Commute Race</div>
@@ -207,10 +203,10 @@
     </button>
 </div>
 
-<!-- SCREEN 2: USERNAME (first time only) -->
+<!-- USERNAME -->
 <div id="s-name" class="screen hidden">
     <div class="s-title">WHAT DO YOU RACE AS?</div>
-    <div class="s-sub">Your race identity — set once,<br>yours forever.</div>
+    <div class="s-sub">Your race identity — set once, yours forever.</div>
     <div class="input-wrap">
         <span class="input-at">@</span>
         <input type="text" id="name-input" placeholder="YourHandle" maxlength="18" autocomplete="off" autocorrect="off" spellcheck="false">
@@ -220,28 +216,21 @@
     <button class="btn-red" onclick="saveName()">LOCK IT IN</button>
 </div>
 
-
-<!-- LOCATION PERMISSION SCREEN -->
+<!-- LOCATION PERMISSION -->
 <div id="s-location" class="screen hidden">
     <div style="text-align:center;max-width:320px">
         <div style="font-size:4rem;margin-bottom:16px">&#128205;</div>
         <div class="s-title" style="margin-bottom:10px">ALLOW LOCATION</div>
-        <div class="s-sub" style="margin-bottom:28px">
-            BriScramble tracks your GPS to race you toward King George Square.<br><br>
-            When prompted, tap <strong style="color:var(--teal)">Allow</strong> to join the race.
+        <div class="s-sub" style="margin-bottom:28px">BriScramble tracks your GPS to race you to the GPO.<br><br>When prompted, tap <strong style="color:var(--teal)">Allow</strong>.</div>
+        <div style="background:rgba(0,255,204,0.05);border:1px solid rgba(0,255,204,0.2);border-radius:8px;padding:14px;margin-bottom:24px;font-family:var(--mono);font-size:0.6rem;color:rgba(255,255,255,0.4);letter-spacing:1px;line-height:1.6;text-align:left">
+            &#128274; Only shared with players in active races<br>
+            &#128683; Never stored beyond your race session
         </div>
-        <div style="background:rgba(0,255,204,0.06);border:1px solid rgba(0,255,204,0.3);border-radius:8px;padding:14px;margin-bottom:24px;font-family:var(--mono);font-size:0.65rem;color:rgba(255,255,255,0.5);letter-spacing:1px;line-height:1.6;text-align:left">
-            &#128274; Your location is only shared with other players in your race slot.<br>
-            &#128683; Never stored beyond your active race session.
-        </div>
-        <button class="btn-red" onclick="requestLocation()">ALLOW &amp; CONTINUE</button>
-        <div style="font-family:var(--mono);font-size:0.6rem;color:rgba(255,255,255,0.2);margin-top:14px;letter-spacing:1px">
-            Location access is required to race
-        </div>
+        <button class="btn-red" onclick="goRegister()">ALLOW &amp; CONTINUE</button>
     </div>
 </div>
 
-<!-- SCREEN 3: REGISTER -->
+<!-- REGISTER -->
 <div id="s-reg" class="screen hidden">
     <div class="reg-top">
         <div class="reg-top-logo"><img src="/logo.png" alt=""></div>
@@ -250,40 +239,31 @@
     </div>
     <div class="reg-body">
 
-        <!-- COUNTDOWN -->
-        <div class="countdown-block" id="cd-block">
-            <div class="cd-left">
-                <div class="cd-label">NEXT GUN FIRES IN</div>
-                <div class="cd-time" id="cd-time">--:--</div>
+        <!-- HOW IT WORKS -->
+        <div class="how-box">
+            <div class="how-step">
+                <div class="how-num">1</div>
+                <div class="how-text">Register from <strong>outside the 4KM boundary</strong> — any time during your commute</div>
             </div>
-            <div class="cd-right">
-                <div class="cd-label">YOUR SLOT</div>
-                <div class="cd-slot" id="cd-slot">7:00</div>
+            <div class="how-step">
+                <div class="how-num">2</div>
+                <div class="how-text">Your <strong>timer starts automatically</strong> the moment you cross the 4KM line</div>
+            </div>
+            <div class="how-step">
+                <div class="how-num">3</div>
+                <div class="how-text">First to reach <strong>the GPO, Queen Street</strong> — fastest time wins today's leaderboard</div>
             </div>
         </div>
 
-        <!-- BOUNDARY CHECK -->
+        <!-- BOUNDARY STATUS -->
         <div>
-            <div class="sec-label">BOUNDARY CHECK</div>
-            <div id="elig-box" class="elig-box checking">&#128225; Getting your GPS location...</div>
-        </div>
-
-        <!-- SLOT SELECTION -->
-        <div>
-            <div class="sec-label">[01] SELECT YOUR SLOT</div>
-            <div class="slots-grid">
-                <div class="slot-card active" onclick="pickSlot(this,'7:00')"><span class="slot-time">7:00</span><span class="slot-count" id="sc700">0 racing</span></div>
-                <div class="slot-card" onclick="pickSlot(this,'7:10')"><span class="slot-time">7:10</span><span class="slot-count" id="sc710">0 racing</span></div>
-                <div class="slot-card" onclick="pickSlot(this,'7:20')"><span class="slot-time">7:20</span><span class="slot-count" id="sc720">0 racing</span></div>
-                <div class="slot-card" onclick="pickSlot(this,'7:30')"><span class="slot-time">7:30</span><span class="slot-count" id="sc730">0 racing</span></div>
-                <div class="slot-card" onclick="pickSlot(this,'7:40')"><span class="slot-time">7:40</span><span class="slot-count" id="sc740">0 racing</span></div>
-                <div class="slot-card" onclick="pickSlot(this,'7:50')"><span class="slot-time">7:50</span><span class="slot-count" id="sc750">0 racing</span></div>
-            </div>
+            <div class="sec-label">YOUR POSITION</div>
+            <div id="elig-box" class="elig-box checking">&#128225; Getting GPS location...</div>
         </div>
 
         <!-- AVATAR -->
         <div>
-            <div class="sec-label">[02] PICK YOUR AVATAR</div>
+            <div class="sec-label">PICK YOUR AVATAR — DRAG TO SCROLL</div>
             <div class="avatar-strip" id="av-strip">
                 <div class="av-card active" onclick="pickAvatar(this,'scrambler','/logo.png')">
                     <div class="av-logo"><img src="/logo.png" alt=""></div>
@@ -332,78 +312,61 @@
 
     </div>
     <div class="reg-footer">
-        <button class="btn-lock" id="btn-lock" onclick="lockIn()" disabled>&#9889; LOCK IN &amp; RACE</button>
-        <div class="lock-note" id="lock-note">Outside 4KM = eligible to win &bull; Inside = DQ but you still get a time</div>
-    </div>
-</div>
-
-
-<!-- PRE-RACE OVERLAY -->
-<div id="pre-race" class="hidden" style="position:absolute;top:0;left:0;right:0;z-index:40;pointer-events:none">
-    <div style="background:linear-gradient(to bottom,rgba(7,7,8,0.97) 0%,rgba(7,7,8,0.85) 80%,transparent 100%);padding:16px 20px 40px">
-        <div style="max-width:500px;margin:0 auto">
-            <!-- Slot + live count -->
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-                <div style="font-family:var(--mono);font-size:0.6rem;color:var(--teal);letter-spacing:3px;text-transform:uppercase" id="pr-slot-label">7:00 SCRAMBLE</div>
-                <div style="font-family:var(--mono);font-size:0.6rem;color:rgba(255,255,255,0.35);letter-spacing:2px" id="pr-count">1 RACER REGISTERED</div>
-            </div>
-            <!-- BIG COUNTDOWN -->
-            <div style="text-align:center;margin-bottom:12px">
-                <div style="font-family:var(--mono);font-size:0.6rem;color:rgba(255,255,255,0.3);letter-spacing:3px;text-transform:uppercase;margin-bottom:4px">GUN FIRES IN</div>
-                <div id="pr-countdown" style="font-family:var(--head);font-size:5rem;font-weight:900;color:var(--red);line-height:1;letter-spacing:4px;text-shadow:0 0 30px rgba(232,0,26,0.5)">00:00</div>
-            </div>
-            <!-- RACER LIST -->
-            <div id="pr-racers" style="display:flex;flex-direction:column;gap:6px;max-height:160px;overflow-y:auto"></div>
-        </div>
+        <button class="btn-lock" id="btn-lock" onclick="lockIn()">&#9889; ENTER THE RACE</button>
+        <div class="lock-note">Outside 4KM = race for the leaderboard &bull; Inside = time trial only</div>
     </div>
 </div>
 
 <!-- RACE HUD -->
 <div id="hud">
     <div class="hud-logo"><img src="/logo.png" alt=""></div>
-    <div class="hud-mid" style="cursor:pointer" onclick="tryChangeSlot()">
-        <div class="hud-slot-label">SLOT</div>
-        <div class="hud-slot-val" id="hud-slot">7:00</div>
-        <div id="hud-change-slot" style="font-family:var(--mono);font-size:0.5rem;color:rgba(0,255,204,0.6);letter-spacing:1px">TAP TO CHANGE</div>
+    <div class="hud-mid">
+        <div class="hud-label">TO FINISH</div>
+        <div class="hud-val" id="hud-dist">&#8212;</div>
     </div>
     <div class="hud-right">
-        <div class="hud-dist-label">TO FINISH</div>
-        <div class="hud-dist-val" id="hud-dist">&#8212;</div>
-        <div id="hud-timer" style="font-family:var(--mono);font-size:0.7rem;color:rgba(255,255,255,0.4);display:none">&#9201; <span id="hud-timer-val">00:00</span></div>
+        <div class="hud-label">YOUR TIME</div>
+        <div class="hud-val" id="hud-timer" style="color:var(--teal)">&#8212;</div>
         <div class="live-pill"><span class="live-dot"></span>LIVE</div>
     </div>
 </div>
 
-<!-- RECENTER -->
-<button id="btn-re" onclick="recentre()">&#8982;</button>
+<!-- RACE STATUS BANNER -->
+<div id="race-banner">
+    <div class="banner-inner">
+        <div class="banner-status" id="banner-status">WAITING TO CROSS BOUNDARY</div>
+        <div class="banner-main waiting" id="banner-main" id="banner-dist">&#8212;</div>
+        <div class="banner-sub" id="banner-sub">Cross the 4KM line and your timer starts</div>
+    </div>
+</div>
 
-<!-- SHARE (race mode) -->
-<button id="btn-share" onclick="doShare()" title="Share">&#128279;</button>
+<!-- RECENTER + SHARE -->
+<button class="map-btn" id="btn-re" onclick="recentre()">&#8982;</button>
+<button class="map-btn" id="btn-share" onclick="doShare()" title="Share">&#128279;</button>
 
-<!-- RACE DRAWER -->
+<!-- LEADERBOARD DRAWER -->
 <div id="drawer">
     <div class="drawer-panel">
         <div class="drawer-pull" onclick="toggleDrawer()"><div class="drawer-handle"></div></div>
         <div class="drawer-peek" onclick="toggleDrawer()">
-            <div class="peek-pos back" id="pk-pos">1</div>
+            <div class="peek-rank back" id="pk-rank">#&#8212;</div>
             <div class="peek-info">
                 <div class="peek-name" id="pk-name">@You</div>
-                <div class="peek-sublabel">YOUR POSITION</div>
+                <div class="peek-sub" id="pk-sub">TODAY'S LEADERBOARD</div>
             </div>
-            <div class="peek-gap-block">
-                <div class="peek-gap-val" id="pk-gap">LEADING</div>
-                <div class="peek-gap-spd" id="pk-spd"></div>
-                <div class="peek-sublabel">LEADER GAP</div>
+            <div class="peek-time-block">
+                <div class="peek-time" id="pk-time">&#8212;</div>
+                <div class="peek-sub">YOUR TIME</div>
             </div>
             <div class="peek-expand" id="pk-expand">&#8593; BOARD</div>
         </div>
         <div class="drawer-body" id="drawer-body">
             <div class="lb-head">
-                <span>LIVE LEADERBOARD</span>
-                <span class="lb-slot" id="lb-slot-lbl">7:00 SCRAMBLE</span>
+                <span>TODAY'S FASTEST — GPO TIME TRIAL</span>
+                <span class="lb-date" id="lb-date"></span>
             </div>
             <div id="lb-rows"></div>
-            <div class="lb-note">YOUR SLOT ONLY &mdash; FIREBASE REALTIME</div>
+            <div class="lb-note">DAILY RESET AT MIDNIGHT BRISBANE TIME</div>
         </div>
     </div>
 </div>
@@ -414,7 +377,7 @@
         <span>&#9749; <strong>SPONSORED</strong> &mdash; XXXX GOLD &mdash; CRACK ONE OPEN AT THE FINISH LINE</span>
         <span>&#127828; <strong>HUNGRY JACK'S</strong> &mdash; WINNER EATS FREE &mdash; SHOW YOUR WIN SCREEN</span>
         <span>&#9749; <strong>BOOST JUICE</strong> &mdash; FUEL YOUR SCRAMBLE &mdash; BRISBANE CBD</span>
-        <span>&#127942; <strong>TODAY'S PRIZE</strong> &mdash; $3 COFFEE VOUCHER &mdash; FIRST TO KING GEORGE SQUARE WINS</span>
+        <span>&#127942; <strong>TODAY'S PRIZE</strong> &mdash; FASTEST TO THE GPO WINS</span>
         <span>&#9749; <strong>SPONSORED</strong> &mdash; XXXX GOLD &mdash; CRACK ONE OPEN AT THE FINISH LINE</span>
     </div>
 </div>
@@ -440,42 +403,48 @@ const db   = firebase.database();
 const claimPhone = window.claimPhone || '+61400000000';
 
 // ── CONSTANTS ──
-const FINISH   = [-27.4698, 153.0251]; // GPO, 261 Queen St Brisbane
-const BOUNDARY = 4000;
+const FINISH   = [-27.4698, 153.0251]; // GPO, 261 Queen St
+const BOUNDARY = 4000;  // 4km
+const FINISH_RADIUS = 10; // 10 metres to finish
+
+// Brisbane date key for daily leaderboard
+function brisDateKey(){
+    return new Date().toLocaleDateString('en-AU',{timeZone:'Australia/Brisbane'}).replace(/\//g,'-');
+}
 
 // ── STATE ──
-let isDQ=false, raceStartTime=null, raceTimerInterval=null;
-let myUID=null, myUsername=null, myAvatar='/logo.png', mySlug='scrambler';
-let selectedSlot='7:00', isRacing=false, drawerOpen=false;
-let mapFollowing=true, myLat=null, myLng=null, isEligible=false;
-const markers={};
-let myMarker=null, slotRef=null;
-let _lastEmit=0, _lastMyDist=null, _lastRivalDist={}, _prevGapData={};
+var myUID=null, myUsername=null, myAvatar='/logo.png', mySlug='scrambler';
+var isRacing=false, isDQ=false, timerStarted=false, finished=false;
+var raceStartTime=null, timerInterval=null;
+var myLat=null, myLng=null, mapFollowing=true;
+var _authDone=false, _lastEmit=0;
+var _drawerOpen=false;
+const markers={}, ghostMarkers={};
+var myMarker=null;
 
 // ── MAP ──
 const map = L.map('map',{zoomControl:false,attributionControl:false}).setView(FINISH,13);
 L.tileLayer('https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}',{maxZoom:20}).addTo(map);
 
-// Boundary ring
-// Pulsing boundary — three concentric rings for maximum visibility
+// Boundary rings
 L.circle(FINISH,{radius:BOUNDARY,color:'#E8001A',weight:10,fill:true,fillColor:'#E8001A',fillOpacity:0.06,opacity:0.9}).addTo(map);
-L.circle(FINISH,{radius:BOUNDARY,color:'#ff4444',weight:5,fill:false,opacity:0.6,dashArray:'12,8'}).addTo(map);
-L.circle(FINISH,{radius:BOUNDARY+60,color:'#E8001A',weight:2,fill:false,opacity:0.25}).addTo(map);
-L.marker([-27.433,153.0235],{icon:L.divIcon({html:"<div style='font-family:monospace;font-size:10px;font-weight:bold;color:rgba(232,0,26,0.8);background:rgba(0,0,0,0.7);padding:2px 6px;border-radius:3px;white-space:nowrap;border:1px solid rgba(232,0,26,0.3)'>&#8212; 4KM EXCLUSION &#8212;</div>",className:'',iconAnchor:[70,0]})}).addTo(map);
+L.circle(FINISH,{radius:BOUNDARY,color:'#ff4444',weight:4,fill:false,opacity:0.5,dashArray:'12,8'}).addTo(map);
+L.circle(FINISH,{radius:BOUNDARY+60,color:'#E8001A',weight:2,fill:false,opacity:0.2}).addTo(map);
+L.marker([-27.433,153.0251],{icon:L.divIcon({html:"<div style='font-family:monospace;font-size:10px;font-weight:bold;color:rgba(232,0,26,0.9);background:rgba(0,0,0,0.75);padding:2px 8px;border-radius:3px;white-space:nowrap;border:1px solid rgba(232,0,26,0.4)'>&#8212; 4KM BOUNDARY &#8212;</div>",className:'',iconAnchor:[70,0]})}).addTo(map);
 
-// Finish marker
+// Finish marker — GPO
 L.marker(FINISH,{icon:L.divIcon({
     html:"<div style='text-align:center'>"
-        +"<div style='width:26px;height:26px;border-radius:50%;background:#E8001A;border:3px solid #fff;box-shadow:0 0 20px #E8001A;animation:finishPing 2s infinite;margin:0 auto'></div>"
-        +"<div style='font-family:monospace;font-size:9px;font-weight:bold;color:#fff;background:#E8001A;padding:2px 6px;border-radius:3px;margin-top:3px;letter-spacing:2px;animation:finishPing 2s infinite'>GPO FINISH</div>"
+        +"<div style='width:28px;height:28px;border-radius:50%;background:#E8001A;border:3px solid #fff;box-shadow:0 0 20px #E8001A;animation:finishPing 2s infinite;margin:0 auto'></div>"
+        +"<div style='font-family:monospace;font-size:9px;font-weight:bold;color:#fff;background:#E8001A;padding:3px 7px;border-radius:3px;margin-top:3px;letter-spacing:2px;animation:finishPing 2s infinite;white-space:nowrap'>GPO FINISH</div>"
         +"</div>",
-    className:'',iconAnchor:[13,0]
+    className:'',iconAnchor:[14,0]
 })}).addTo(map);
 
 map.on('dragstart',function(){mapFollowing=false;document.getElementById('btn-re').classList.add('show');});
 
 // ── CHECKPOINTS ──
-const CPS=[
+var CPS=[
     {id:'regatta',  name:'Regatta Ferry',  lat:-27.4988,lng:152.9994,r:80, badge:'&#9972; Regatta Rider'},
     {id:'story',    name:'Story Bridge',   lat:-27.4694,lng:153.0348,r:100,badge:'&#127311; Bridge Crosser'},
     {id:'roma',     name:'Roma Street',    lat:-27.4648,lng:153.0163,r:100,badge:'&#128649; Roma Rusher'},
@@ -483,36 +452,22 @@ const CPS=[
 ];
 var earned={};
 CPS.forEach(function(cp){
-    L.marker([cp.lat,cp.lng],{icon:L.divIcon({html:"<div class='cp-pin'></div>",className:'',iconAnchor:[8,8]})}).addTo(map);
-    L.marker([cp.lat,cp.lng],{icon:L.divIcon({html:"<div class='cp-label'>&#9733; "+cp.name+"</div>",className:'',iconAnchor:[-4,18]})}).addTo(map);
+    L.marker([cp.lat,cp.lng],{icon:L.divIcon({html:"<div class='cp-pin'></div>",className:'',iconAnchor:[7,7]})}).addTo(map);
+    L.marker([cp.lat,cp.lng],{icon:L.divIcon({html:"<div class='cp-lbl'>&#9733; "+cp.name+"</div>",className:'',iconAnchor:[-4,16]})}).addTo(map);
 });
-
-function checkCPs(lat,lng){
-    CPS.forEach(function(cp){
-        if(earned[cp.id]) return;
-        if(haversine(lat,lng,cp.lat,cp.lng)<=cp.r){
-            earned[cp.id]=true;
-            var el=document.createElement('div');
-            el.className='badge-toast';
-            el.innerHTML=cp.badge+' UNLOCKED';
-            document.body.appendChild(el);
-            setTimeout(function(){el.remove();},3500);
-            speak('Checkpoint unlocked. '+cp.name+'.');
-        }
-    });
-}
 
 // ── UTILS ──
 function haversine(a,b,c,d){var R=6371000,dL=(c-a)*Math.PI/180,dl=(d-b)*Math.PI/180;var x=Math.sin(dL/2)*Math.sin(dL/2)+Math.cos(a*Math.PI/180)*Math.cos(c*Math.PI/180)*Math.sin(dl/2)*Math.sin(dl/2);return R*2*Math.atan2(Math.sqrt(x),Math.sqrt(1-x));}
 function fmt(m){return m>=1000?(m/1000).toFixed(1)+'km':Math.round(m)+'m';}
+function fmtTime(ms){var s=Math.floor(ms/1000),m=Math.floor(s/60),sec=s%60;return String(m).padStart(2,'0')+':'+String(sec).padStart(2,'0');}
+function fmtTimeStr(s){var m=Math.floor(s/60),sec=s%60;return String(m).padStart(2,'0')+':'+String(sec).padStart(2,'0');}
 
 // ── SPEECH ──
 var _lastSpeak=0;
 function speak(msg){
     if(!window.speechSynthesis) return;
-    var now=Date.now();
-    if(now-_lastSpeak<10000) return;
-    _lastSpeak=now;
+    if(Date.now()-_lastSpeak<10000) return;
+    _lastSpeak=Date.now();
     window.speechSynthesis.cancel();
     var u=new SpeechSynthesisUtterance(msg);
     u.rate=1.05;u.pitch=0.9;u.volume=0.9;
@@ -524,112 +479,62 @@ function speak(msg){
 if(window.speechSynthesis) window.speechSynthesis.onvoiceschanged=function(){window.speechSynthesis.getVoices();};
 
 // ── MARKER ICONS ──
-function mkIcon(src,label,isMe,dist,pulse){
-    var c=isMe?'#E8001A':pulse?'#00FFCC':'rgba(255,255,255,0.8)';
-    var b=isMe?'border:1.5px solid #E8001A':pulse?'border:1.5px solid #00FFCC':'border:1px solid rgba(255,255,255,0.3)';
-    var a=pulse?'animation:rivalPulse 1.2s ease-in-out infinite;':'';
+function mkIcon(src,label,isMe,dist,pulse,ghost){
+    var c=isMe?'#E8001A':ghost?'rgba(180,130,255,0.9)':pulse?'#00FFCC':'rgba(255,255,255,0.8)';
+    var b=isMe?'border:1.5px solid #E8001A':ghost?'border:1px solid rgba(180,130,255,0.6)':pulse?'border:1.5px solid #00FFCC':'border:1px solid rgba(255,255,255,0.3)';
+    var a=ghost?'animation:ghostPulse 1.5s ease-in-out infinite;':pulse?'animation:rivalPulse 1.2s ease-in-out infinite;':'';
     return L.divIcon({
         html:'<div style="text-align:center;'+a+'filter:drop-shadow(0 2px 6px rgba(0,0,0,0.8))">'
             +'<img src="'+src+'" style="width:26px;height:26px;object-fit:contain;border-radius:4px" onerror="this.style.opacity=0">'
             +'<br><span style="font-size:8px;background:rgba(7,7,8,0.92);color:'+c+';'+b+';padding:1px 5px;font-family:monospace;border-radius:3px;white-space:nowrap;display:inline-block">'+label+'</span>'
-            +(dist?'<div style="font-size:7px;color:'+(isMe?'#fff':pulse?'#00FFCC':'rgba(255,255,255,0.5)')+';background:rgba(0,0,0,0.8);padding:1px 4px;border-radius:2px;margin-top:1px;white-space:nowrap">'+dist+'</div>':'')
+            +(dist?'<div style="font-size:7px;color:'+(isMe?'#fff':ghost?'rgba(180,130,255,0.8)':'rgba(255,255,255,0.5)')+';background:rgba(0,0,0,0.8);padding:1px 4px;border-radius:2px;margin-top:1px;white-space:nowrap">'+dist+'</div>':'')
             +'</div>',
         className:'',iconAnchor:[20,30]
     });
 }
 
 // ── AUTH ──
-// Handle redirect result first, then fall through to onAuthStateChanged
-auth.getRedirectResult().then(function(r){
-    if(r&&r.user){ afterAuth(r.user); }
-}).catch(function(e){ console.log('redirect result error:',e.code); });
-
-// onAuthStateChanged handles both redirect return AND existing sessions
+auth.getRedirectResult().then(function(r){if(r&&r.user)afterAuth(r.user);}).catch(function(){});
 auth.onAuthStateChanged(function(u){
     if(u){ afterAuth(u); }
-    else {
-        show('s-auth');
-    }
+    else { showScreen('s-auth'); }
 });
 
 function signInGoogle(){
     if(typeof firebase==='undefined'||!firebase.auth){setTimeout(signInGoogle,500);return;}
-    var provider = new firebase.auth.GoogleAuthProvider();
-    // Use popup on mobile (stays on page), redirect on desktop
-    auth.signInWithPopup(provider).then(function(r){
-        afterAuth(r.user);
-    }).catch(function(e){
-        // Popup blocked — fall back to redirect
-        if(e.code==='auth/popup-blocked'||e.code==='auth/popup-closed-by-user'){
-            auth.signInWithRedirect(provider);
-        } else {
-            console.error(e);
-        }
+    var p=new firebase.auth.GoogleAuthProvider();
+    auth.signInWithPopup(p).then(function(r){afterAuth(r.user);}).catch(function(e){
+        if(e.code==='auth/popup-blocked'||e.code==='auth/popup-closed-by-user') auth.signInWithRedirect(p);
+        else console.error(e);
     });
 }
 function signInApple(){
     if(typeof firebase==='undefined'||!firebase.auth){setTimeout(signInApple,500);return;}
-    var provider = new firebase.auth.OAuthProvider('apple.com');
-    auth.signInWithPopup(provider).then(function(r){
-        afterAuth(r.user);
-    }).catch(function(e){
-        if(e.code==='auth/popup-blocked'||e.code==='auth/popup-closed-by-user'){
-            auth.signInWithRedirect(provider);
-        } else {
-            console.error(e);
-        }
+    var p=new firebase.auth.OAuthProvider('apple.com');
+    auth.signInWithPopup(p).then(function(r){afterAuth(r.user);}).catch(function(e){
+        if(e.code==='auth/popup-blocked'||e.code==='auth/popup-closed-by-user') auth.signInWithRedirect(p);
+        else console.error(e);
     });
 }
 
-var _authDone = false;
 function afterAuth(user){
     if(_authDone) return;
-    _authDone = true;
+    _authDone=true;
     myUID=user.uid;
-
     // Restore saved state
-    var savedSlot   = localStorage.getItem('bsc_slot');
-    var savedAvatar = localStorage.getItem('bsc_avatar');
-    var savedSlug   = localStorage.getItem('bsc_slug');
-    var wasLocked   = localStorage.getItem('bsc_locked');
-    if(savedSlot)   selectedSlot = savedSlot;
-    if(savedAvatar) myAvatar     = savedAvatar;
-    if(savedSlug)   mySlug       = savedSlug;
-
+    var sv=localStorage.getItem('bsc_avatar'), ss=localStorage.getItem('bsc_slug'), sl=localStorage.getItem('bsc_locked');
+    if(sv) myAvatar=sv;
+    if(ss) mySlug=ss;
     fetch('/api/register-username',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({uid:myUID,username:'__check__'})})
-    .then(function(r){return r.json();})
-    .then(function(d){
+    .then(function(r){return r.json();}).then(function(d){
         if(d.username&&d.username!=='__check__'){
             myUsername=d.username;
-            // If they already locked in, go straight to race
-            if(wasLocked==='1'){
-                rejoinRace();
-            } else {
-                show('s-location');
-            }
+            if(sl==='1') rejoinRace();
+            else showScreen('s-location');
         } else {
-            show('s-name');
+            showScreen('s-name');
         }
-    }).catch(function(){show('s-name');});
-}
-
-function rejoinRace(){
-    // Re-register in Firebase with saved state
-    var ref = db.ref('scrambles/'+selectedSlot+'/players/'+myUID);
-    ref.set({username:myUsername,avatar:myAvatar,lat:myLat||0,lng:myLng||0,dist:9999,ts:firebase.database.ServerValue.TIMESTAMP});
-    ref.onDisconnect().remove();
-    listenToSlot(selectedSlot);
-    show(null);
-    document.getElementById('hud').classList.add('show');
-    document.getElementById('hud-slot').textContent=selectedSlot;
-    document.getElementById('drawer').classList.add('show','collapsed');
-    document.getElementById('ticker').classList.add('show');
-    document.getElementById('btn-re').classList.add('show');
-    document.getElementById('btn-share').classList.add('show');
-    document.getElementById('lb-slot-lbl').textContent=selectedSlot+' SCRAMBLE';
-    isRacing=true;
-    showPreRace();
-    startGPS();
+    }).catch(function(){showScreen('s-name');});
 }
 
 // ── USERNAME ──
@@ -639,55 +544,52 @@ function saveName(){
     if(v.length<2){e.textContent='Minimum 2 characters';return;}
     e.textContent='';
     fetch('/api/register-username',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({uid:myUID||'u_'+Date.now(),username:v})})
-    .then(function(r){return r.json();})
-    .then(function(d){if(d.error){e.textContent=d.error;return;}myUsername=d.username;show('s-location');})
-    .catch(function(){myUsername=v;goRegister();});
+    .then(function(r){return r.json();}).then(function(d){
+        if(d.error){e.textContent=d.error;return;}
+        myUsername=d.username;
+        showScreen('s-location');
+    }).catch(function(){myUsername=v;showScreen('s-location');});
 }
 
-// ── REGISTER SCREEN ──
-
-function requestLocation(){
-    show('s-reg');
-    goRegister();
+// ── SCREENS ──
+function showScreen(id){
+    document.getElementById('s-loading').style.display='none';
+    ['s-auth','s-name','s-location','s-reg'].forEach(function(s){
+        document.getElementById(s).classList.toggle('hidden',s!==id);
+    });
 }
 
 function goRegister(){
-    show('s-reg');
+    showScreen('s-reg');
     document.getElementById('reg-username').textContent='@'+myUsername;
     document.getElementById('pk-name').textContent='@'+myUsername;
-    listenSlotCounts();
-    startCountdown();
+    restoreAvatar();
     startGPS();
-    // auto-select slot from URL
-    var p=new URLSearchParams(window.location.search).get('slot');
-    if(p) pickSlot(document.querySelector('.slot-card'),p);
+    listenLeaderboard();
+    setLbDate();
 }
 
-function show(id){
-    // Hide loading screen
-    var loading = document.getElementById('s-loading');
-    if(loading) loading.style.display='none';
-    ['s-auth','s-name','s-location','s-reg'].forEach(function(s){document.getElementById(s).classList.toggle('hidden',s!==id);});
-}
-
-function pickSlot(el,time){
-    document.querySelectorAll('.slot-card').forEach(function(c){c.classList.remove('active');});
-    if(typeof el === 'string'){ time=el; el=null; document.querySelectorAll('.slot-card').forEach(function(c){if(c.querySelector('.slot-time')&&c.querySelector('.slot-time').textContent===time)el=c;}); }
-    if(el) el.classList.add('active');
-    selectedSlot=time;
-    localStorage.setItem('bsc_slot', time);
-    startCountdown();
+function restoreAvatar(){
+    var slug=localStorage.getItem('bsc_slug')||'scrambler';
+    var src=localStorage.getItem('bsc_avatar')||'/logo.png';
+    myAvatar=src; mySlug=slug;
+    document.querySelectorAll('.av-card').forEach(function(c){c.classList.remove('active');});
+    var cards=document.querySelectorAll('.av-card');
+    for(var i=0;i<cards.length;i++){
+        var onclick=cards[i].getAttribute('onclick')||'';
+        if(onclick.indexOf("'"+slug+"'")>-1){cards[i].classList.add('active');break;}
+    }
 }
 
 function pickAvatar(el,slug,src){
     document.querySelectorAll('.av-card').forEach(function(c){c.classList.remove('active');});
     el.classList.add('active');
     mySlug=slug; myAvatar=src;
-    localStorage.setItem('bsc_avatar', src);
-    localStorage.setItem('bsc_slug', slug);
+    localStorage.setItem('bsc_avatar',src);
+    localStorage.setItem('bsc_slug',slug);
 }
 
-// Drag scroll on desktop
+// Drag scroll avatar strip
 (function(){
     var s=document.getElementById('av-strip');
     if(!s) return;
@@ -698,429 +600,323 @@ function pickAvatar(el,slug,src){
     s.addEventListener('mousemove',function(e){if(!down)return;e.preventDefault();s.scrollLeft=sl-(e.pageX-s.offsetLeft-sx)*1.5;});
 })();
 
-// Slot counts from Firebase
-function listenSlotCounts(){
-    ['7:00','7:10','7:20','7:30','7:40','7:50'].forEach(function(slot){
-        db.ref('scrambles/'+slot+'/players').on('value',function(snap){
-            var n=snap.exists()?Object.keys(snap.val()).length:0;
-            var el=document.getElementById('sc'+slot.replace(':',''));
-            if(el) el.textContent=n+' racing';
-        });
-    });
+// ── LOCK IN ──
+function lockIn(){
+    if(!myLat){alert('Waiting for GPS...');return;}
+    var dist=haversine(myLat,myLng,FINISH[0],FINISH[1]);
+    isDQ = dist < BOUNDARY; // DQ if inside boundary at registration
+    localStorage.setItem('bsc_locked','1');
+    localStorage.setItem('bsc_avatar',myAvatar);
+    localStorage.setItem('bsc_slug',mySlug);
+    startRaceMode();
 }
 
-// Countdown
-var _cdInterval=null;
-function startCountdown(){
-    clearInterval(_cdInterval);
-    function tick(){
-        var el=document.getElementById('cd-time');
-        var sl=document.getElementById('cd-slot');
-        var blk=document.getElementById('cd-block');
-        if(!el) return;
-        if(sl) sl.textContent=selectedSlot;
-        var now=new Date();
-        var bne=new Date(now.toLocaleString('en-AU',{timeZone:'Australia/Brisbane'}));
-        var pts=selectedSlot.split(':');
-        var tgt=new Date(bne);
-        tgt.setHours(parseInt(pts[0]),parseInt(pts[1]),0,0);
-        if(tgt<=bne){el.textContent='RACE OPEN';el.style.color='var(--teal)';el.style.fontSize='2rem';if(blk)blk.style.borderColor='rgba(0,255,204,0.5)';return;}
-        var diff=Math.floor((tgt-bne)/1000);
-        var h=Math.floor(diff/3600),m=Math.floor((diff%3600)/60),s=diff%60;
-        el.textContent=(h>0?String(h).padStart(2,'0')+':':'')+ String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
-        el.style.fontSize='3rem';
-        if(diff<300){el.style.color='#FFAA00';if(blk)blk.style.borderColor='rgba(255,170,0,0.6)';}
-        else{el.style.color='var(--red)';if(blk)blk.style.borderColor='rgba(232,0,26,0.35)';}
+function rejoinRace(){
+    startRaceMode();
+}
+
+function startRaceMode(){
+    isRacing=true;
+    showScreen(null);
+    document.getElementById('hud').classList.add('show');
+    document.getElementById('race-banner').classList.add('show');
+    document.getElementById('drawer').classList.add('show','collapsed');
+    document.getElementById('ticker').classList.add('show');
+    document.getElementById('btn-re').classList.add('show');
+    document.getElementById('btn-share').classList.add('show');
+    // Register in Firebase
+    if(myUID){
+        var ref=db.ref('active/'+myUID);
+        ref.set({username:myUsername,avatar:myAvatar,lat:myLat||0,lng:myLng||0,dist:9999,racing:false,isDQ:isDQ,ts:firebase.database.ServerValue.TIMESTAMP});
+        ref.onDisconnect().remove();
     }
-    tick();
-    _cdInterval=setInterval(tick,1000);
+    listenActivePlayers();
+    listenLeaderboard();
+    setLbDate();
+    if(myLat) updateRaceState(myLat,myLng);
 }
 
 // ── GPS ──
 function startGPS(){
-    // Update marker icon if avatar was restored
-    if(myMarker) myMarker.setIcon(mkIcon(myAvatar,'@'+(myUsername||'You'),true,'',false));
-    if(!navigator.geolocation){setElig('no','&#10060; GPS not available on this device');return;}
+    if(!navigator.geolocation){
+        document.getElementById('elig-box').className='elig-box dq';
+        document.getElementById('elig-box').textContent='GPS not available on this device';
+        return;
+    }
     navigator.geolocation.watchPosition(
         function(p){onPos(p.coords.latitude,p.coords.longitude);},
-        function(){setElig('no','&#10060; Enable location services and reload');},
+        function(){
+            document.getElementById('elig-box').className='elig-box dq';
+            document.getElementById('elig-box').textContent='Enable location services and reload';
+        },
         {enableHighAccuracy:true,maximumAge:8000,timeout:20000}
     );
-}
-
-function setElig(type,msg){
-    var el=document.getElementById('elig-box');
-    if(!el) return;
-    el.className='elig-box '+type;
-    el.innerHTML=msg;
-    isEligible=(type==='ok');
-    var btn=document.getElementById('btn-lock');
-    // Always allow locking in — DQ'd players race with timer but no prize
-    if(btn && type !== 'checking') btn.disabled=false;
 }
 
 function onPos(lat,lng){
     myLat=lat; myLng=lng;
     var dist=haversine(lat,lng,FINISH[0],FINISH[1]);
-    var first=!myMarker;
 
+    // Update/create my marker
     if(!myMarker){
-        myMarker=L.marker([lat,lng],{icon:mkIcon(myAvatar,'@'+myUsername,true,fmt(dist)+' to finish',false),zIndexOffset:1000}).addTo(map);
+        myMarker=L.marker([lat,lng],{icon:mkIcon(myAvatar,'@'+(myUsername||'You'),true,fmt(dist),false,false),zIndexOffset:1000}).addTo(map);
     } else {
         myMarker.setLatLng([lat,lng]);
-        myMarker.setIcon(mkIcon(myAvatar,'@'+(myUsername||'You'),true,fmt(dist)+' to finish',false));
+        myMarker.setIcon(mkIcon(myAvatar,'@'+(myUsername||'You'),true,fmt(dist),false,false));
     }
+
+    // Update HUD
+    document.getElementById('hud-dist').textContent=fmt(dist);
 
     if(!isRacing){
-        if(dist<BOUNDARY) setElig('no','&#10060; INSIDE 4KM — '+fmt(dist)+' from finish.');
-        // DQ only triggers if crossing boundary BEFORE slot gun fires
-        if(!isRacing && !isDQ && dist < BOUNDARY){
-            isDQ = true;
-            var dqDiv=document.createElement('div');
-            dqDiv.style.cssText='position:fixed;top:80px;left:50%;transform:translateX(-50%);z-index:400;background:rgba(232,0,26,0.95);color:#fff;font-family:var(--head);font-size:1.1rem;font-weight:900;padding:12px 24px;border-radius:8px;letter-spacing:1px;white-space:nowrap;pointer-events:none';
-            dqDiv.textContent='\u26a0 DQ \u2014 crossed boundary before gun. Timer runs but no prize.';
-            document.body.appendChild(dqDiv);
-            setTimeout(function(){dqDiv.remove();},5000);
-            speak('Disqualified. You crossed the 4 kilometre boundary before your slot fired. Your timer will still run but you cannot win.');
+        // Show eligibility on register screen
+        var ebox=document.getElementById('elig-box');
+        if(ebox){
+            if(dist<BOUNDARY){
+                ebox.className='elig-box dq';
+                ebox.innerHTML='&#9888; INSIDE 4KM ('+fmt(dist)+' from GPO) &mdash; you can still race but won\'t appear on leaderboard';
+            } else {
+                ebox.className='elig-box ok';
+                ebox.innerHTML='&#10003; '+fmt(dist)+' from GPO &mdash; outside boundary. You\'re eligible for the leaderboard';
+            }
         }
-        else setElig('ok','&#10003; ELIGIBLE — '+fmt(dist)+' from finish. Outside boundary.');
+        // Fit map to show player + finish
+        if(!myMarker._mapFirstFit){
+            myMarker._mapFirstFit=true;
+            map.fitBounds(L.latLngBounds([[lat,lng],FINISH]).pad(0.3),{animate:true,duration:1.5});
+        }
+        return;
     }
 
-    if(first) map.fitBounds(L.latLngBounds([[lat,lng],FINISH]).pad(0.35),{animate:true,duration:1.5});
-    else if(mapFollowing&&isRacing){
+    // Race mode
+    updateRaceState(lat,lng);
+
+    // Throttled Firebase update
+    var now=Date.now();
+    if(now-_lastEmit>4000&&myUID){
+        db.ref('active/'+myUID).update({lat:lat,lng:lng,dist:dist,ts:firebase.database.ServerValue.TIMESTAMP});
+        _lastEmit=now;
+    }
+
+    // Auto-zoom
+    if(mapFollowing){
         var z=dist>4000?13:dist>2000?14:dist>800?15:dist>300?16:dist>100?17:18;
         map.setView([lat,lng],z,{animate:true,duration:1});
     }
 
-    if(isRacing){
-        document.getElementById('hud-dist').textContent=fmt(dist);
-        checkCPs(lat,lng);
-        var now=Date.now();
-        if(now-_lastEmit>4000&&myUID){
-            db.ref('scrambles/'+selectedSlot+'/players/'+myUID).update({lat:lat,lng:lng,dist:dist,ts:firebase.database.ServerValue.TIMESTAMP});
-            _lastEmit=now;
-            if(dist<=10){
-                showFinished();
-                if(!isDQ){
-                    db.ref('scrambles/'+selectedSlot+'/winner').once('value').then(function(s){
-                        if(!s.exists()) db.ref('scrambles/'+selectedSlot+'/winner').set({username:myUsername,uid:myUID,time:getElapsedTime(),ts:firebase.database.ServerValue.TIMESTAMP});
-                    });
-                }
+    // Checkpoints
+    if(timerStarted) checkCPs(lat,lng);
+
+    // Proximity alerts
+    if(timerStarted){
+        if(dist<1000&&dist>900) speak('Approaching the GPO. Final sprint.');
+        if(dist<500&&dist>400) speak('500 metres to finish.');
+    }
+}
+
+function updateRaceState(lat,lng){
+    var dist=haversine(lat,lng,FINISH[0],FINISH[1]);
+    var banner=document.getElementById('race-banner');
+    var bStatus=document.getElementById('banner-status');
+    var bMain=document.getElementById('banner-main');
+    var bSub=document.getElementById('banner-sub');
+
+    if(finished) return;
+
+    if(dist>=BOUNDARY){
+        // Waiting to cross boundary
+        bStatus.textContent='WAITING TO CROSS BOUNDARY';
+        bMain.className='banner-main waiting';
+        bMain.textContent=fmt(dist)+' FROM START LINE';
+        bSub.textContent='Timer starts when you cross the 4KM ring';
+        if(timerStarted){
+            // They went back outside — pause? No — timer keeps running per rules
+        }
+    } else {
+        // Inside boundary — timer should be running
+        if(!timerStarted){
+            timerStarted=true;
+            raceStartTime=Date.now();
+            startTimer();
+            if(isDQ){
+                speak('Timer started. You are in a time trial only — DQ from leaderboard.');
+            } else {
+                speak('Timer started. Race to the GPO.');
             }
-            // Audio proximity alerts
-            if(_lastMyDist!==null){
-                if(dist<1000&&_lastMyDist>=1000) speak('Approaching King George Square. Prepare to finish.');
-                if(dist<4100&&_lastMyDist>=4100) speak('You have crossed the boundary. Final stretch.');
-            }
-            _lastMyDist=dist;
+        }
+        bStatus.textContent=isDQ?'TIME TRIAL — DQ FROM LEADERBOARD':'RACING';
+        bMain.className='banner-main '+(isDQ?'dq':'racing');
+        bMain.textContent=fmt(dist)+' TO GPO';
+        bSub.textContent=isDQ?'Inside boundary at registration':'Get to the GPO first';
+
+        // Check finish
+        if(dist<=FINISH_RADIUS&&!finished){
+            finished=true;
+            showFinished();
         }
     }
 }
 
-
-// ── PRE-RACE OVERLAY ──
-var _prInterval = null;
-
-function showPreRace(){
-    document.getElementById('pre-race').classList.remove('hidden');
-    updatePreRace();
-    _prInterval = setInterval(updatePreRace, 1000);
+// ── TIMER ──
+function startTimer(){
+    clearInterval(timerInterval);
+    timerInterval=setInterval(function(){
+        if(!raceStartTime||finished) return;
+        var elapsed=Date.now()-raceStartTime;
+        var t=fmtTime(elapsed);
+        document.getElementById('hud-timer').textContent=t;
+        document.getElementById('pk-time').textContent=t;
+    },500);
 }
 
-function updatePreRace(){
-    var el = document.getElementById('pr-countdown');
-    if(!el) return;
-
-    var now = new Date();
-    var bne = new Date(now.toLocaleString('en-AU',{timeZone:'Australia/Brisbane'}));
-    var pts = selectedSlot.split(':');
-    var tgt = new Date(bne);
-    tgt.setHours(parseInt(pts[0]), parseInt(pts[1]), 0, 0);
-
-    document.getElementById('pr-slot-label').textContent = selectedSlot + ' SCRAMBLE';
-
-    if(tgt <= bne){
-        // Race has started — hide pre-race overlay
-        el.textContent = 'GO!';
-        el.style.color = 'var(--teal)';
-        el.style.textShadow = '0 0 40px rgba(0,255,204,0.7)';
-        clearInterval(_prInterval);
-        // Timer starts exactly at slot time
-        var pts = selectedSlot.split(':');
-        var now2 = new Date();
-        var bne2 = new Date(now2.toLocaleString('en-AU',{timeZone:'Australia/Brisbane'}));
-        var slotExact = new Date(bne2);
-        slotExact.setHours(parseInt(pts[0]),parseInt(pts[1]),0,0);
-        raceStartTime = slotExact.getTime();
-        startRaceTimer();
-        setTimeout(function(){
-            document.getElementById('pre-race').classList.add('hidden');
-            // Hide change slot option once gun fires
-            var chg = document.getElementById('hud-change-slot');
-            if(chg) chg.style.display='none';
-        }, 2000);
-        speak('Your slot is open. Go go go!');
-        return;
-    }
-
-    var diff = Math.floor((tgt - bne) / 1000);
-    var m = Math.floor(diff / 60), s = diff % 60;
-    el.textContent = String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
-
-    // Colour urgency
-    if(diff < 60){ el.style.color = '#FFAA00'; el.style.textShadow = '0 0 30px rgba(255,170,0,0.6)'; }
-    else if(diff < 300){ el.style.color = '#FF6600'; el.style.textShadow = '0 0 30px rgba(255,100,0,0.5)'; }
-    else{ el.style.color = 'var(--red)'; el.style.textShadow = '0 0 30px rgba(232,0,26,0.5)'; }
+function getElapsed(){
+    if(!raceStartTime) return 0;
+    return Math.floor((Date.now()-raceStartTime)/1000);
 }
 
-function updatePreRacers(players){
-    var countEl = document.getElementById('pr-count');
-    var listEl  = document.getElementById('pr-racers');
-    if(!countEl || !listEl) return;
-
-    var all = [];
-    // Add self
-    all.push({username: myUsername||'You', avatar: myAvatar, isMe: true});
-    // Add others in slot
-    Object.entries(players).forEach(function(e){
-        var uid=e[0], p=e[1];
-        if(uid === myUID) return;
-        all.push({username: p.username, avatar: p.avatar||'/logo.png', isMe: false});
-    });
-
-    countEl.textContent = all.length + ' RACER' + (all.length !== 1 ? 'S' : '') + ' REGISTERED';
-
-    listEl.innerHTML = all.map(function(r){
-        return '<div style="display:flex;align-items:center;gap:10px;padding:6px 10px;background:rgba(255,255,255,0.04);border-radius:6px;border:1px solid '+(r.isMe?'rgba(232,0,26,0.3)':'rgba(255,255,255,0.06)')+';">'
-            + '<img src="'+r.avatar+'" style="width:28px;height:28px;object-fit:contain;border-radius:4px" onerror="this.style.opacity=0">' 
-            + '<span style="font-family:var(--head);font-size:1.1rem;font-weight:700;color:'+(r.isMe?'var(--red)':'var(--white)')+'">@'+r.username+'</span>'
-            + (r.isMe ? '<span style="font-family:var(--mono);font-size:0.55rem;color:var(--red);margin-left:auto;letter-spacing:1px">YOU</span>' : '')
-            + '</div>';
-    }).join('');
-}
-
-
-
-// ── CHANGE SLOT ──
-function tryChangeSlot(){
-    // Can't change if already DQ'd or race has started
-    if(isDQ){
-        alert('You are DQ\'d and cannot change slot.');
-        return;
-    }
-    var now = new Date();
-    var bne = new Date(now.toLocaleString('en-AU',{timeZone:'Australia/Brisbane'}));
-    var pts = selectedSlot.split(':');
-    var slotTime = new Date(bne);
-    slotTime.setHours(parseInt(pts[0]),parseInt(pts[1]),0,0);
-    if(bne >= slotTime){
-        alert('Your slot has already fired. You cannot change race.');
-        return;
-    }
-    // Check not inside boundary
-    if(myLat && haversine(myLat,myLng,FINISH[0],FINISH[1]) < BOUNDARY){
-        alert('You are inside the 4KM boundary. You cannot change race.');
-        return;
-    }
-    // Show slot picker overlay
-    var slotOverlay = document.createElement('div');
-    slotOverlay.id = 'slot-change-overlay';
-    slotOverlay.style.cssText = 'position:fixed;inset:0;z-index:400;background:rgba(7,7,8,0.96);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:24px';
-    var slots = ['7:00','7:10','7:20','7:30','7:40','7:50'];
-    var btns = slots.map(function(s){
-        return '<button onclick="changeSlotTo(\''+s+'\')" style="width:100%;max-width:300px;background:'+(s===selectedSlot?'var(--teal)':'var(--panel)')+';color:'+(s===selectedSlot?'#000':'#fff')+';border:1px solid '+(s===selectedSlot?'var(--teal)':'var(--border)')+';padding:16px;font-family:var(--head);font-size:1.4rem;font-weight:900;border-radius:8px;cursor:pointer;letter-spacing:2px">'+s+(s===selectedSlot?' (CURRENT)':'')+'</button>';
-    }).join('');
-    slotOverlay.innerHTML = '<div style="font-family:var(--head);font-size:1.5rem;font-weight:900;letter-spacing:2px;margin-bottom:8px">CHANGE SLOT</div>'
-        +'<div style="font-family:var(--mono);font-size:0.65rem;color:rgba(255,255,255,0.35);letter-spacing:2px;margin-bottom:16px">SELECT NEW RACE WINDOW</div>'
-        + btns
-        +'<button onclick="document.getElementById(\'slot-change-overlay\').remove()" style="background:none;border:1px solid var(--border);color:rgba(255,255,255,0.4);padding:10px 24px;font-family:var(--mono);font-size:0.7rem;border-radius:6px;cursor:pointer;margin-top:8px">CANCEL</button>';
-    document.body.appendChild(slotOverlay);
-}
-
-function changeSlotTo(newSlot){
-    // Remove from old slot in Firebase
-    if(myUID) db.ref('scrambles/'+selectedSlot+'/players/'+myUID).remove();
-    selectedSlot = newSlot;
-    document.getElementById('hud-slot').textContent = newSlot;
-    document.getElementById('lb-slot-lbl').textContent = newSlot + ' SCRAMBLE';
-    // Register in new slot
-    if(myUID && myLat){
-        var ref = db.ref('scrambles/'+newSlot+'/players/'+myUID);
-        ref.set({username:myUsername,avatar:myAvatar,lat:myLat,lng:myLng,dist:haversine(myLat,myLng,FINISH[0],FINISH[1]),ts:firebase.database.ServerValue.TIMESTAMP});
-        ref.onDisconnect().remove();
-        listenToSlot(newSlot);
-    }
-    // Restart countdown
-    if(_prInterval) clearInterval(_prInterval);
-    document.getElementById('pre-race').classList.remove('hidden');
-    updatePreRace();
-    _prInterval = setInterval(updatePreRace, 1000);
-    document.getElementById('slot-change-overlay').remove();
-    speak('Slot changed to ' + newSlot);
-}
-
-// ── RACE TIMER ──
-function startRaceTimer(){
-    var timerEl = document.getElementById('hud-timer');
-    var timerVal = document.getElementById('hud-timer-val');
-    if(timerEl) timerEl.style.display='block';
-    raceTimerInterval = setInterval(function(){
-        if(!raceStartTime) return;
-        var elapsed = Math.floor((Date.now()-raceStartTime)/1000);
-        var m = Math.floor(elapsed/60), s = elapsed%60;
-        if(timerVal) timerVal.textContent = String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
-    }, 1000);
-}
-
-function getElapsedTime(){
-    if(!raceStartTime) return '—';
-    var elapsed = Math.floor((Date.now()-raceStartTime)/1000);
-    var m = Math.floor(elapsed/60), s = elapsed%60;
-    return String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
-}
-
+// ── FINISH ──
 function showFinished(){
-    clearInterval(raceTimerInterval);
-    var t = getElapsedTime();
-    var dqNote = isDQ ? '<br><br><span style="color:#FFAA00;font-size:0.85rem">&#9888; DQ — started inside boundary. Time recorded but no prize.</span>' : '';
-    var claimBtn = !isDQ ? '<br><br><a href="sms:'+claimPhone+'?body=BRISCRAMBLE%20WIN%20@'+myUsername+'%20'+selectedSlot+'" style="display:inline-block;margin-top:8px;padding:12px 24px;background:var(--teal);color:#000;font-family:var(--head);font-size:1.1rem;font-weight:900;border-radius:6px;text-decoration:none;letter-spacing:1px">&#128241; TEXT TO CLAIM</a>' : '';
-    
-    // Show finish overlay
-    var overlay = document.createElement('div');
-    overlay.style.cssText = 'position:fixed;inset:0;z-index:300;background:rgba(7,7,8,0.96);display:flex;align-items:center;justify-content:center';
-    overlay.innerHTML = '<div style="text-align:center;padding:40px 28px;max-width:340px">'
-        +'<div style="font-size:3rem;margin-bottom:8px">'+(isDQ?'&#9888;':'&#127942;')+'</div>'
-        +'<div style="font-family:var(--head);font-size:2.5rem;font-weight:900;letter-spacing:3px;color:'+(isDQ?'#FFAA00':'var(--teal)')+'">'+( isDQ?'FINISHED':'SLOT CHAMPION')+'</div>'
-        +'<div style="font-family:var(--mono);font-size:0.7rem;color:rgba(255,255,255,0.4);letter-spacing:2px;margin:8px 0">YOUR TIME</div>'
-        +'<div style="font-family:var(--head);font-size:4rem;font-weight:900;color:#fff;letter-spacing:4px">'+t+'</div>'
+    clearInterval(timerInterval);
+    var elapsed=getElapsed();
+    var t=fmtTimeStr(elapsed);
+    document.getElementById('hud-timer').textContent=t;
+    document.getElementById('hud-timer').style.color='var(--teal)';
+
+    // Save to Firebase leaderboard if not DQ
+    if(!isDQ&&myUID){
+        var dateKey=brisDateKey();
+        db.ref('leaderboard/'+dateKey+'/'+myUID).set({
+            username:myUsername,avatar:myAvatar,seconds:elapsed,timeStr:t,
+            ts:firebase.database.ServerValue.TIMESTAMP
+        });
+    }
+
+    // Full screen finish
+    var overlay=document.createElement('div');
+    overlay.style.cssText='position:fixed;inset:0;z-index:300;background:rgba(7,7,8,0.97);display:flex;align-items:center;justify-content:center';
+    var claimBtn=!isDQ?'<a href="sms:'+claimPhone+'?body=BRISCRAMBLE%20FINISH%20@'+myUsername+'%20'+t+'" style="display:inline-block;margin-top:16px;padding:14px 28px;background:var(--teal);color:#000;font-family:var(--head);font-size:1.1rem;font-weight:900;border-radius:8px;text-decoration:none;letter-spacing:1px">&#128241; TEXT TO CLAIM</a>':'';
+    var dqNote=isDQ?'<div style="color:#FFAA00;font-family:var(--mono);font-size:0.7rem;margin-top:12px;letter-spacing:1px">DQ &mdash; started inside boundary. Time not on leaderboard.</div>':'';
+    overlay.innerHTML='<div style="text-align:center;padding:40px 28px;max-width:360px">'
+        +'<div style="font-size:3rem;margin-bottom:8px">'+(isDQ?'&#9201;':'&#127942;')+'</div>'
+        +'<div style="font-family:var(--head);font-size:2.5rem;font-weight:900;letter-spacing:3px;color:'+(isDQ?'#FFAA00':'var(--teal)')+'margin-bottom:8px">'+(isDQ?'FINISHED':'YOU MADE IT')+'</div>'
+        +'<div style="font-family:var(--mono);font-size:0.65rem;color:rgba(255,255,255,0.35);letter-spacing:3px;margin:10px 0 6px">YOUR TIME</div>'
+        +'<div style="font-family:var(--head);font-size:5rem;font-weight:900;color:#fff;letter-spacing:4px;line-height:1">'+t+'</div>'
         +dqNote+claimBtn
+        +'<div style="margin-top:20px"><button onclick="this.parentElement.parentElement.parentElement.remove()" style="background:none;border:1px solid var(--border);color:rgba(255,255,255,0.4);padding:10px 20px;font-family:var(--mono);font-size:0.65rem;border-radius:6px;cursor:pointer">VIEW LEADERBOARD</button></div>'
         +'</div>';
     document.body.appendChild(overlay);
-    speak(isDQ ? 'Finished. Your time is '+t+'. Disqualified — you started inside the boundary.' : 'Slot champion! You reached the GPO in '+t+'.');
+    speak(isDQ?'Finished. Your time is '+t+'. Not on leaderboard.':'You made it! Your time is '+t+'.');
+
+    // Clean up Firebase active player
+    if(myUID) db.ref('active/'+myUID).remove();
+    localStorage.removeItem('bsc_locked');
 }
 
-// ── LOCK IN ──
-function lockIn(){
-    if(!isEligible) isDQ=true;
-    // Save player state to localStorage
-    localStorage.setItem('bsc_slot', selectedSlot);
-    localStorage.setItem('bsc_avatar', myAvatar);
-    localStorage.setItem('bsc_slug', mySlug);
-    localStorage.setItem('bsc_locked', '1');
-    // Remove disabled state so DQ players can still lock in
-    var ref=db.ref('scrambles/'+selectedSlot+'/players/'+myUID);
-    ref.set({username:myUsername,avatar:myAvatar,lat:myLat,lng:myLng,dist:haversine(myLat,myLng,FINISH[0],FINISH[1]),ts:firebase.database.ServerValue.TIMESTAMP});
-    ref.onDisconnect().remove();
-    listenToSlot(selectedSlot);
-    show(null);
-    showPreRace();
-    document.getElementById('hud').classList.add('show');
-    document.getElementById('hud-slot').textContent=selectedSlot;
-    document.getElementById('drawer').classList.add('show','collapsed');
-    document.getElementById('ticker').classList.add('show');
-    document.getElementById('btn-re').classList.add('show');
-    document.getElementById('btn-share').classList.add('show');
-    document.getElementById('lb-slot-lbl').textContent=selectedSlot+' SCRAMBLE';
-    isRacing=true;
-}
-
-// ── FIREBASE PLAYER SYNC ──
-function listenToSlot(slot){
-    db.ref('scrambles/'+slot+'/players').on('value',function(snap){
+// ── ACTIVE PLAYERS (live on map) ──
+function listenActivePlayers(){
+    db.ref('active').on('value',function(snap){
         var players=snap.val()||{};
-        // Update pre-race racer list
-        updatePreRacers(players);
-        // Remove stale
+        // Remove stale markers
         Object.keys(markers).forEach(function(k){
             if(!players[k]){map.removeLayer(markers[k]);delete markers[k];}
         });
-        // Update leaderboard
-        updateLB(players);
-        // Update/add rival markers
+        // Update markers
         Object.entries(players).forEach(function(e){
             var uid=e[0],p=e[1];
-            if(uid===myUID||!p.lat||!p.lng) return;
-            var d=haversine(p.lat,p.lng,FINISH[0],FINISH[1]);
-            var icon=mkIcon(p.avatar||'/logo.png','@'+p.username,false,fmt(d)+' to finish',false);
+            if(uid===myUID||!p.lat||!p.lng||p.lat===0) return;
+            var dist=haversine(p.lat,p.lng,FINISH[0],FINISH[1]);
+            var icon=mkIcon(p.avatar||'/logo.png','@'+p.username,false,fmt(dist),false,false);
             if(!markers[uid]){markers[uid]=L.marker([p.lat,p.lng],{icon:icon}).addTo(map);}
             else{markers[uid].setLatLng([p.lat,p.lng]);markers[uid].setIcon(icon);}
         });
-    });
-    db.ref('scrambles/'+slot+'/winner').on('value',function(snap){
-        if(!snap.exists()) return;
-        var w=snap.val();
-        if(w.username===myUsername){
-            alert('🏆 SLOT CHAMPION!\n\nYou crossed King George Square first in the '+slot+' scramble!\n\nText '+claimPhone+' with: BRISCRAMBLE WIN @'+myUsername+' '+slot);
-        }
+        updateLeaderboardPeek(players);
     });
 }
 
 // ── LEADERBOARD ──
-function updateLB(players){
-    var myDist=myLat?haversine(myLat,myLng,FINISH[0],FINISH[1]):99999;
-    var all=[{uid:'me',username:myUsername||'You',avatar:myAvatar,dist:myDist,isMe:true}];
-    Object.entries(players).forEach(function(e){
-        var uid=e[0],p=e[1];
-        if(uid===myUID||!p.lat||!p.lng) return;
-        all.push({uid:uid,username:p.username,avatar:p.avatar||'/logo.png',dist:haversine(p.lat,p.lng,FINISH[0],FINISH[1]),isMe:false});
+function setLbDate(){
+    var el=document.getElementById('lb-date');
+    if(el) el.textContent=new Date().toLocaleDateString('en-AU',{timeZone:'Australia/Brisbane',day:'numeric',month:'short'});
+}
+
+function listenLeaderboard(){
+    var dateKey=brisDateKey();
+    db.ref('leaderboard/'+dateKey).orderByChild('seconds').on('value',function(snap){
+        var entries=[];
+        snap.forEach(function(child){entries.push({uid:child.key,...child.val()});});
+        entries.sort(function(a,b){return a.seconds-b.seconds;});
+        renderLeaderboard(entries);
+        // Show ghost racers (top 3)
+        showGhosts(entries.slice(0,3));
     });
-    all.sort(function(a,b){return a.dist-b.dist;});
+}
 
-    var myRank=all.findIndex(function(r){return r.isMe;})+1;
-    var leader=all[0];
-    var gap=myDist-leader.dist;
-
-    // Peek strip
-    var posEl=document.getElementById('pk-pos');
-    if(posEl){posEl.textContent=myRank;posEl.className='peek-pos '+(myRank===1?'p1':myRank===2?'p2':myRank===3?'p3':'back');}
-    var gapEl=document.getElementById('pk-gap');
-    if(gapEl){
-        if(myRank===1){gapEl.textContent='LEADING';gapEl.className='peek-gap-val closing';}
-        else{gapEl.textContent='+'+fmt(gap);gapEl.className='peek-gap-val '+(gap<500?'closing':'losing');}
-    }
-    // Closing speed
-    var spdEl=document.getElementById('pk-spd');
-    if(spdEl&&!leader.isMe&&leader.uid){
-        var now=Date.now();
-        var prev=_prevGapData[leader.uid];
-        if(prev&&(now-prev.ts)>3000){
-            var spd=((prev.dist-leader.dist)/(now-prev.ts))*1000;
-            spdEl.textContent=Math.abs(spd).toFixed(1)+'m/s '+(spd>0?'&#9660;closing':'&#9650;extending');
-            spdEl.style.color=spd>0?'var(--teal)':'var(--red)';
-        }
-        _prevGapData[leader.uid]={dist:leader.dist,ts:now};
-    }
-
-    // Rows
-    var maxD=Math.max.apply(null,all.map(function(r){return r.dist;}));
+function renderLeaderboard(entries){
     var lbEl=document.getElementById('lb-rows');
     if(!lbEl) return;
-    lbEl.innerHTML=all.map(function(r,i){
+    if(entries.length===0){
+        lbEl.innerHTML='<div style="font-family:var(--mono);font-size:0.65rem;color:rgba(255,255,255,0.2);text-align:center;padding:20px;letter-spacing:2px">NO FINISHERS YET TODAY</div>';
+        return;
+    }
+    lbEl.innerHTML=entries.map(function(r,i){
         var rk=i+1,rc=rk===1?'r1':rk===2?'r2':rk===3?'r3':'';
-        var pct=maxD>0?Math.max(4,Math.round((1-r.dist/maxD)*100)):50;
-        var barColor=rk===1?'var(--teal)':'var(--red)';
-        return '<div class="lb-row '+(r.isMe?'me':'')+'"><div class="lb-rank '+rc+'">'+rk+'</div>'
+        var isMe=r.uid===myUID;
+        return '<div class="lb-row '+(isMe?'me':'')+'"><div class="lb-rank '+rc+'">'+rk+'</div>'
             +'<img class="lb-av" src="'+r.avatar+'" onerror="this.style.opacity=0">'
-            +'<div class="lb-info"><div class="lb-name '+(r.isMe?'me':'')+'">@'+r.username+'</div>'
-            +'<div class="lb-bar-wrap"><div class="lb-bar" style="width:'+pct+'%;background:'+barColor+'"></div></div></div>'
-            +'<div class="lb-dist '+(rk===1?'lead':'')+'">TO FINISH<strong>'+fmt(r.dist)+'</strong></div></div>';
+            +'<div class="lb-info"><div class="lb-name '+(isMe?'me':'')+'">@'+r.username+'</div></div>'
+            +'<div class="lb-time '+(rk===1?'best':'')+'">'+r.timeStr+'</div></div>';
     }).join('');
+    // Update peek
+    var myEntry=entries.find(function(r){return r.uid===myUID;});
+    if(myEntry){
+        var myRank=entries.indexOf(myEntry)+1;
+        var pkRank=document.getElementById('pk-rank');
+        if(pkRank){pkRank.textContent='#'+myRank;pkRank.className='peek-rank '+(myRank===1?'p1':myRank===2?'p2':myRank===3?'p3':'back');}
+        var pkTime=document.getElementById('pk-time');
+        if(pkTime) pkTime.textContent=myEntry.timeStr;
+    }
+}
 
-    // Audio: rival closing
-    Object.entries(players).forEach(function(e){
-        var uid=e[0],p=e[1];
-        if(uid===myUID||!p.lat||!p.lng) return;
-        var rd=haversine(p.lat,p.lng,FINISH[0],FINISH[1]);
-        var prev=_lastRivalDist[uid];
-        if(prev&&prev-rd>80&&rd<myDist+600&&rd>myDist-300) speak('Rival closing. '+p.username+' is gaining.');
-        _lastRivalDist[uid]=rd;
+function updateLeaderboardPeek(players){
+    var count=Object.keys(players).length;
+    var sub=document.getElementById('pk-sub');
+    if(sub) sub.textContent=count+' PLAYER'+(count!==1?'S':'')+' RACING NOW';
+}
+
+// ── GHOST RACERS ──
+var ghostData={};
+function showGhosts(topEntries){
+    // Clear old ghosts
+    Object.values(ghostMarkers).forEach(function(m){map.removeLayer(m);});
+    Object.keys(ghostMarkers).forEach(function(k){delete ghostMarkers[k];});
+    // For each top entry, we don't have historical path data yet
+    // Show a static ghost marker at GPO with their time
+    topEntries.forEach(function(r,i){
+        if(r.uid===myUID) return;
+        var icon=mkIcon(r.avatar||'/logo.png','&#128123; @'+r.username+' '+r.timeStr,false,'',false,true);
+        ghostMarkers[r.uid]=L.marker(FINISH,{icon:icon,zIndexOffset:500}).addTo(map);
+    });
+}
+
+// ── CHECKPOINTS ──
+function checkCPs(lat,lng){
+    CPS.forEach(function(cp){
+        if(earned[cp.id]) return;
+        if(haversine(lat,lng,cp.lat,cp.lng)<=cp.r){
+            earned[cp.id]=true;
+            var el=document.createElement('div');
+            el.className='badge-toast';
+            el.innerHTML=cp.badge+' UNLOCKED';
+            document.body.appendChild(el);
+            setTimeout(function(){el.remove();},3500);
+            speak('Checkpoint. '+cp.name+'.');
+        }
     });
 }
 
 // ── CONTROLS ──
 function recentre(){mapFollowing=true;document.getElementById('btn-re').classList.remove('show');if(myLat)map.setView([myLat,myLng],14,{animate:true});}
 
-var _drawerOpen=false;
 function toggleDrawer(){
     _drawerOpen=!_drawerOpen;
     document.getElementById('drawer').classList.toggle('collapsed',!_drawerOpen);
@@ -1136,9 +932,9 @@ function toggleDrawer(){
 })();
 
 function doShare(){
-    var txt='I\'m racing to King George Square in the '+selectedSlot+' BriScramble. Join me: https://briscramble.onrender.com?slot='+encodeURIComponent(selectedSlot);
-    if(navigator.share) navigator.share({title:'BriScramble',text:txt,url:'https://briscramble.onrender.com?slot='+encodeURIComponent(selectedSlot)});
-    else navigator.clipboard.writeText(txt).then(function(){alert('Link copied!');});
+    var txt='I\'m racing to the GPO on BriScramble — Brisbane\'s time trial commute race. Join me: https://briscramble.onrender.com';
+    if(navigator.share) navigator.share({title:'BriScramble',text:txt,url:'https://briscramble.onrender.com'});
+    else navigator.clipboard.writeText(txt).then(function(){alert('Copied!');});
 }
 </script>
 </body>
