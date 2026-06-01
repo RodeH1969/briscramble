@@ -226,13 +226,46 @@
         <button class="btn-red" id="btn-gps" onclick="requestGPS()" style="width:100%;max-width:320px;margin-bottom:16px">
             📍 TAP TO ENABLE GPS
         </button>
-        <div id="gps-denied" class="hidden" style="background:rgba(232,0,26,0.1);border:1px solid var(--red);border-radius:8px;padding:14px;font-family:var(--mono);font-size:0.65rem;color:rgba(255,255,255,0.6);letter-spacing:1px;line-height:1.8;text-align:left">
-            GPS was blocked. To fix:<br>
-            <strong style="color:#fff">iPhone Safari:</strong> Settings → Privacy → Location Services → Safari → While Using<br>
-            <strong style="color:#fff">Android Chrome:</strong> Settings → Apps → Chrome → Permissions → Location → Allow<br><br>
-            <strong style="color:#FFAA00">⚠ Private/Incognito mode blocks GPS — use normal browsing mode</strong>
+        <div id="gps-denied" class="hidden" style="background:#1a0a0a;border:2px solid var(--red);border-radius:12px;padding:20px;text-align:left">
+            <div style="font-family:var(--head);font-size:1.3rem;font-weight:900;color:var(--red);margin-bottom:12px;letter-spacing:1px">📍 LOCATION ACCESS NEEDED</div>
+
+            <div style="font-family:var(--mono);font-size:0.7rem;color:rgba(255,255,255,0.8);line-height:1.8;margin-bottom:14px">
+                To race on BriScramble, GPS must be enabled.<br>Follow these steps on your iPhone:
+            </div>
+
+            <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px">
+                <div style="display:flex;gap:10px;align-items:flex-start">
+                    <div style="width:22px;height:22px;border-radius:50%;background:var(--red);color:#fff;font-family:var(--head);font-size:0.8rem;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0">1</div>
+                    <div style="font-family:var(--mono);font-size:0.68rem;color:rgba(255,255,255,0.7);line-height:1.5">Open iPhone <strong style="color:#fff">Settings</strong></div>
+                </div>
+                <div style="display:flex;gap:10px;align-items:flex-start">
+                    <div style="width:22px;height:22px;border-radius:50%;background:var(--red);color:#fff;font-family:var(--head);font-size:0.8rem;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0">2</div>
+                    <div style="font-family:var(--mono);font-size:0.68rem;color:rgba(255,255,255,0.7);line-height:1.5">Tap <strong style="color:#fff">Privacy &amp; Security</strong> → <strong style="color:#fff">Location Services</strong></div>
+                </div>
+                <div style="display:flex;gap:10px;align-items:flex-start">
+                    <div style="width:22px;height:22px;border-radius:50%;background:var(--red);color:#fff;font-family:var(--head);font-size:0.8rem;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0">3</div>
+                    <div style="font-family:var(--mono);font-size:0.68rem;color:rgba(255,255,255,0.7);line-height:1.5">Make sure <strong style="color:#fff">Location Services</strong> is <strong style="color:var(--teal)">ON</strong></div>
+                </div>
+                <div style="display:flex;gap:10px;align-items:flex-start">
+                    <div style="width:22px;height:22px;border-radius:50%;background:var(--red);color:#fff;font-family:var(--head);font-size:0.8rem;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0">4</div>
+                    <div style="font-family:var(--mono);font-size:0.68rem;color:rgba(255,255,255,0.7);line-height:1.5">Scroll down to <strong style="color:#fff">Safari Websites</strong> → set to <strong style="color:var(--teal)">While Using</strong></div>
+                </div>
+                <div style="display:flex;gap:10px;align-items:flex-start">
+                    <div style="width:22px;height:22px;border-radius:50%;background:var(--red);color:#fff;font-family:var(--head);font-size:0.8rem;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0">5</div>
+                    <div style="font-family:var(--mono);font-size:0.68rem;color:rgba(255,255,255,0.7);line-height:1.5">Return to Safari and tap the button again</div>
+                </div>
+            </div>
+
+            <div style="background:rgba(255,170,0,0.1);border:1px solid rgba(255,170,0,0.4);border-radius:8px;padding:10px;font-family:var(--mono);font-size:0.65rem;color:#FFAA00;line-height:1.6">
+                ⚠ <strong>Private/Incognito mode blocks GPS entirely.</strong><br>
+                Make sure you are using a normal Safari tab.
+            </div>
+
+            <button onclick="requestGPS()" style="width:100%;margin-top:14px;background:var(--red);color:#fff;border:none;padding:14px;font-family:var(--head);font-size:1.2rem;font-weight:900;border-radius:8px;cursor:pointer;letter-spacing:1px">
+                TRY AGAIN
+            </button>
         </div>
-        <div style="font-family:var(--mono);font-size:0.6rem;color:rgba(255,170,0,0.5);margin-top:10px;letter-spacing:1px;text-align:center">
+        <div style="font-family:var(--mono);font-size:0.6rem;color:rgba(255,170,0,0.4);margin-top:10px;letter-spacing:1px;text-align:center">
             ⚠ Does not work in Private / Incognito mode
         </div>
     </div>
