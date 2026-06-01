@@ -586,12 +586,50 @@ function afterAuth(user){
     if(_authDone) return;
     _authDone = true;
     myUID=user.uid;
+
+    // Restore saved state
+    var savedSlot   = localStorage.getItem('bsc_slot');
+    var savedAvatar = localStorage.getItem('bsc_avatar');
+    var savedSlug   = localStorage.getItem('bsc_slug');
+    var wasLocked   = localStorage.getItem('bsc_locked');
+    if(savedSlot)   selectedSlot = savedSlot;
+    if(savedAvatar) myAvatar     = savedAvatar;
+    if(savedSlug)   mySlug       = savedSlug;
+
     fetch('/api/register-username',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({uid:myUID,username:'__check__'})})
     .then(function(r){return r.json();})
     .then(function(d){
-        if(d.username&&d.username!=='__check__'){myUsername=d.username;show('s-location');}
-        else{show('s-name');}
+        if(d.username&&d.username!=='__check__'){
+            myUsername=d.username;
+            // If they already locked in, go straight to race
+            if(wasLocked==='1'){
+                rejoinRace();
+            } else {
+                show('s-location');
+            }
+        } else {
+            show('s-name');
+        }
     }).catch(function(){show('s-name');});
+}
+
+function rejoinRace(){
+    // Re-register in Firebase with saved state
+    var ref = db.ref('scrambles/'+selectedSlot+'/players/'+myUID);
+    ref.set({username:myUsername,avatar:myAvatar,lat:myLat||0,lng:myLng||0,dist:9999,ts:firebase.database.ServerValue.TIMESTAMP});
+    ref.onDisconnect().remove();
+    listenToSlot(selectedSlot);
+    show(null);
+    document.getElementById('hud').classList.add('show');
+    document.getElementById('hud-slot').textContent=selectedSlot;
+    document.getElementById('drawer').classList.add('show','collapsed');
+    document.getElementById('ticker').classList.add('show');
+    document.getElementById('btn-re').classList.add('show');
+    document.getElementById('btn-share').classList.add('show');
+    document.getElementById('lb-slot-lbl').textContent=selectedSlot+' SCRAMBLE';
+    isRacing=true;
+    showPreRace();
+    startGPS();
 }
 
 // ── USERNAME ──
@@ -634,10 +672,10 @@ function show(id){
 
 function pickSlot(el,time){
     document.querySelectorAll('.slot-card').forEach(function(c){c.classList.remove('active');});
-    // find matching card if called with time only
     if(typeof el === 'string'){ time=el; el=null; document.querySelectorAll('.slot-card').forEach(function(c){if(c.querySelector('.slot-time')&&c.querySelector('.slot-time').textContent===time)el=c;}); }
     if(el) el.classList.add('active');
     selectedSlot=time;
+    localStorage.setItem('bsc_slot', time);
     startCountdown();
 }
 
@@ -645,6 +683,8 @@ function pickAvatar(el,slug,src){
     document.querySelectorAll('.av-card').forEach(function(c){c.classList.remove('active');});
     el.classList.add('active');
     mySlug=slug; myAvatar=src;
+    localStorage.setItem('bsc_avatar', src);
+    localStorage.setItem('bsc_slug', slug);
 }
 
 // Drag scroll on desktop
@@ -698,6 +738,8 @@ function startCountdown(){
 
 // ── GPS ──
 function startGPS(){
+    // Update marker icon if avatar was restored
+    if(myMarker) myMarker.setIcon(mkIcon(myAvatar,'@'+(myUsername||'You'),true,'',false));
     if(!navigator.geolocation){setElig('no','&#10060; GPS not available on this device');return;}
     navigator.geolocation.watchPosition(
         function(p){onPos(p.coords.latitude,p.coords.longitude);},
@@ -960,6 +1002,11 @@ function showFinished(){
 // ── LOCK IN ──
 function lockIn(){
     if(!isEligible) isDQ=true;
+    // Save player state to localStorage
+    localStorage.setItem('bsc_slot', selectedSlot);
+    localStorage.setItem('bsc_avatar', myAvatar);
+    localStorage.setItem('bsc_slug', mySlug);
+    localStorage.setItem('bsc_locked', '1');
     // Remove disabled state so DQ players can still lock in
     var ref=db.ref('scrambles/'+selectedSlot+'/players/'+myUID);
     ref.set({username:myUsername,avatar:myAvatar,lat:myLat,lng:myLng,dist:haversine(myLat,myLng,FINISH[0],FINISH[1]),ts:firebase.database.ServerValue.TIMESTAMP});
