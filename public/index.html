@@ -651,20 +651,34 @@ function afterAuth(user){
     if(_authDone) return;
     _authDone=true;
     myUID=user.uid;
-    // Restore saved state
-    var sv=localStorage.getItem('bsc_avatar'), ss=localStorage.getItem('bsc_slug'), sl=localStorage.getItem('bsc_locked');
-    if(sv) myAvatar=sv;
-    if(ss) mySlug=ss;
-    fetch('/api/register-username',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({uid:myUID,username:'__check__'})})
-    .then(function(r){return r.json();}).then(function(d){
-        if(d.username&&d.username!=='__check__'){
-            myUsername=d.username;
-            if(sl==='1') rejoinRace();
+    // Load profile from Firebase — works on any device
+    db.ref('users/'+myUID).once('value').then(function(snap){
+        if(snap.exists()){
+            var profile=snap.val();
+            myUsername=profile.username;
+            myAvatar=profile.avatar||'/logo.png';
+            mySlug=profile.slug||'scrambler';
+            // Sync to localStorage for offline/rejoin
+            localStorage.setItem('bsc_avatar',myAvatar);
+            localStorage.setItem('bsc_slug',mySlug);
+            var wasLocked=localStorage.getItem('bsc_locked');
+            if(wasLocked==='1') rejoinRace();
             else showScreen('s-location');
         } else {
+            // New user — show name setup
             showScreen('s-name');
         }
-    }).catch(function(){showScreen('s-name');});
+    }).catch(function(){
+        // Firebase failed — fall back to localStorage
+        var sv=localStorage.getItem('bsc_avatar'), ss=localStorage.getItem('bsc_slug');
+        if(sv) myAvatar=sv;
+        if(ss) mySlug=ss;
+        fetch('/api/register-username',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({uid:myUID,username:'__check__'})})
+        .then(function(r){return r.json();}).then(function(d){
+            if(d.username&&d.username!=='__check__'){myUsername=d.username;showScreen('s-location');}
+            else{showScreen('s-name');}
+        }).catch(function(){showScreen('s-name');});
+    });
 }
 
 // ── USERNAME ──
@@ -677,6 +691,15 @@ function saveName(){
     .then(function(r){return r.json();}).then(function(d){
         if(d.error){e.textContent=d.error;return;}
         myUsername=d.username;
+        // Save profile to Firebase so any device can load it
+        db.ref('users/'+myUID).set({
+            username:myUsername,
+            avatar:myAvatar,
+            slug:mySlug,
+            createdAt:firebase.database.ServerValue.TIMESTAMP
+        });
+        localStorage.setItem('bsc_avatar',myAvatar);
+        localStorage.setItem('bsc_slug',mySlug);
         showScreen('s-location');
     }).catch(function(){myUsername=v;showScreen('s-location');});
 }
@@ -741,6 +764,8 @@ function pickAvatar(el,slug,src){
     mySlug=slug; myAvatar=src;
     localStorage.setItem('bsc_avatar',src);
     localStorage.setItem('bsc_slug',slug);
+    // Update Firebase profile so other devices get new avatar
+    if(myUID) db.ref('users/'+myUID).update({avatar:src,slug:slug});
 }
 
 // Drag scroll avatar strip
