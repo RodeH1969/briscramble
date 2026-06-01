@@ -119,7 +119,7 @@
         .banner-sub{font-family:var(--mono);font-size:0.6rem;color:rgba(255,255,255,0.3);letter-spacing:1px;margin-top:2px}
 
         /* LEADERBOARD DRAWER */
-        #drawer{display:none;position:absolute;bottom:36px;left:0;right:0;z-index:30}
+        #drawer{display:none;position:absolute;bottom:102px;left:0;right:0;z-index:30}
         #drawer.show{display:block}
         #drawer.collapsed .drawer-body{display:none}
         .drawer-panel{background:#12131a;border-top:2px solid var(--border)}
@@ -151,18 +151,18 @@
         .lb-note{padding:8px 0 max(env(safe-area-inset-bottom,8px),8px);text-align:center;font-family:var(--mono);font-size:0.5rem;color:rgba(255,255,255,0.12);letter-spacing:2px}
 
         /* AD TICKER */
-        #ticker{display:none;position:absolute;bottom:0;left:0;right:0;z-index:25;background:rgba(7,7,8,0.92);border-top:1px solid var(--border);overflow:hidden;height:34px}
+        #ticker{display:none;position:absolute;bottom:0;left:0;right:0;z-index:25;background:#0a0a10;border-top:2px solid rgba(255,170,0,0.4);overflow:hidden;height:102px}
         #ticker.show{display:block}
-        .ticker-inner{display:flex;gap:60px;white-space:nowrap;animation:tick 35s linear infinite;padding:7px 0}
-        .ticker-inner span{font-family:var(--mono);font-size:0.6rem;color:rgba(255,255,255,0.4);letter-spacing:2px;text-transform:uppercase}
-        .ticker-inner span strong{color:#FFAA00}
-        @keyframes tick{0%{transform:translateX(100vw)}100%{transform:translateX(-100%)}}
+        .ticker-inner{display:flex;align-items:center;gap:40px;white-space:nowrap;animation:tick 60s linear infinite;padding:6px 0;height:100%}
+        .ticker-img{height:88px;width:auto;object-fit:contain;flex-shrink:0;border-radius:4px}
+        .ticker-sep{font-family:var(--head);font-size:1rem;font-weight:900;color:#FFAA00;letter-spacing:3px;text-transform:uppercase;flex-shrink:0;padding:0 20px;white-space:nowrap}
+        @keyframes tick{0%{transform:translateX(100vw)}100%{transform:translateX(-200%)}}
 
         /* RECENTER + SHARE */
         .map-btn{position:absolute;right:12px;z-index:35;width:40px;height:40px;background:rgba(14,14,18,0.9);border:1px solid var(--border);border-radius:50%;color:rgba(255,255,255,0.6);font-size:1rem;cursor:pointer;display:none;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(0,0,0,0.5)}
         .map-btn.show{display:flex}
-        #btn-re{bottom:130px}
-        #btn-share{bottom:180px;border-color:rgba(0,255,204,0.3);color:var(--teal)}
+        #btn-re{bottom:220px}
+        #btn-share{bottom:270px;border-color:rgba(0,255,204,0.3);color:var(--teal)}
 
         /* CHECKPOINTS */
         @keyframes cpPing{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.3);opacity:0.7}}
@@ -455,11 +455,26 @@
 <!-- AD TICKER -->
 <div id="ticker">
     <div class="ticker-inner">
-        <span>&#9749; <strong>SPONSORED</strong> &mdash; XXXX GOLD &mdash; CRACK ONE OPEN AT THE FINISH LINE</span>
-        <span>&#127828; <strong>HUNGRY JACK'S</strong> &mdash; WINNER EATS FREE &mdash; SHOW YOUR WIN SCREEN</span>
-        <span>&#9749; <strong>BOOST JUICE</strong> &mdash; FUEL YOUR SCRAMBLE &mdash; BRISBANE CBD</span>
-        <span>&#127942; <strong>TODAY'S PRIZE</strong> &mdash; FASTEST TO THE GPO WINS</span>
-        <span>&#9749; <strong>SPONSORED</strong> &mdash; XXXX GOLD &mdash; CRACK ONE OPEN AT THE FINISH LINE</span>
+        <img src="/stockticker/30may1.png" class="ticker-img">
+        <span class="ticker-sep">ALDI SPECIALS THIS WEEK</span>
+        <img src="/stockticker/30may2.png" class="ticker-img">
+        <span class="ticker-sep">ALDI SPECIALS THIS WEEK</span>
+        <img src="/stockticker/30may3.png" class="ticker-img">
+        <span class="ticker-sep">ALDI SPECIALS THIS WEEK</span>
+        <img src="/stockticker/30may4.png" class="ticker-img">
+        <span class="ticker-sep">ALDI SPECIALS THIS WEEK</span>
+        <img src="/stockticker/30may5.png" class="ticker-img">
+        <span class="ticker-sep">ALDI SPECIALS THIS WEEK</span>
+        <img src="/stockticker/30may6.png" class="ticker-img">
+        <span class="ticker-sep">ALDI SPECIALS THIS WEEK</span>
+        <img src="/stockticker/30may7.png" class="ticker-img">
+        <span class="ticker-sep">ALDI SPECIALS THIS WEEK</span>
+        <img src="/stockticker/30may8.png" class="ticker-img">
+        <span class="ticker-sep">ALDI SPECIALS THIS WEEK</span>
+        <img src="/stockticker/30may9.png" class="ticker-img">
+        <span class="ticker-sep">ALDI SPECIALS THIS WEEK</span>
+        <img src="/stockticker/30may10.png" class="ticker-img">
+        <span class="ticker-sep">ALDI SPECIALS THIS WEEK</span>
     </div>
 </div>
 
