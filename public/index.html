@@ -218,38 +218,17 @@
 
 <!-- LOCATION PERMISSION -->
 <div id="s-location" class="screen hidden">
-    <div style="text-align:center;max-width:320px">
-        <div style="font-size:3.5rem;margin-bottom:12px">&#128205;</div>
+    <div style="text-align:center;max-width:320px;width:100%">
+        <div style="font-size:3rem;margin-bottom:16px">📍</div>
         <div class="s-title" style="margin-bottom:8px">LOCATION NEEDED</div>
-        <div class="s-sub" style="margin-bottom:20px">BriScramble needs your GPS to track your race to the GPO.</div>
-
-        <!-- Visual instruction for what to tap -->
-        <div style="background:#1a1a2e;border:1px solid rgba(0,255,204,0.3);border-radius:12px;padding:16px;margin-bottom:20px;text-align:left">
-            <div style="font-family:var(--mono);font-size:0.6rem;color:rgba(255,255,255,0.35);letter-spacing:2px;margin-bottom:10px">WHEN YOUR PHONE ASKS:</div>
-            <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
-                <div style="width:28px;height:28px;border-radius:6px;background:var(--teal);display:flex;align-items:center;justify-content:center;flex-shrink:0">
-                    <span style="font-size:0.7rem;font-weight:900;color:#000">&#10003;</span>
-                </div>
-                <div style="font-family:var(--head);font-size:1.1rem;font-weight:700;color:var(--teal)">TAP "ALLOW"</div>
-            </div>
-            <div style="display:flex;align-items:center;gap:10px">
-                <div style="width:28px;height:28px;border-radius:6px;background:rgba(232,0,26,0.3);border:1px solid var(--red);display:flex;align-items:center;justify-content:center;flex-shrink:0">
-                    <span style="font-size:0.7rem;font-weight:900;color:var(--red)">&#10007;</span>
-                </div>
-                <div style="font-family:var(--mono);font-size:0.65rem;color:rgba(255,255,255,0.4)">Don't tap "Don't Allow"<br>or the game won't work</div>
-            </div>
-        </div>
-
-        <div style="background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:20px;font-family:var(--mono);font-size:0.6rem;color:rgba(255,255,255,0.35);letter-spacing:1px;line-height:1.6;text-align:left">
-            &#128274; Only shared with racers in your game<br>
-            &#128683; Never stored after your race ends
-        </div>
-
-        <button class="btn-red" onclick="requestGPS()" style="width:100%;max-width:320px">
-            &#128205; ENABLE LOCATION &amp; RACE
+        <div class="s-sub" style="margin-bottom:24px">BriScramble needs GPS to race you to the GPO.<br>Tap the button below — then tap <strong style="color:var(--teal)">Allow</strong> when your phone asks.</div>
+        <button class="btn-red" id="btn-gps" onclick="requestGPS()" style="width:100%;max-width:320px;margin-bottom:16px">
+            📍 TAP TO ENABLE GPS
         </button>
-        <div style="font-family:var(--mono);font-size:0.55rem;color:rgba(255,255,255,0.15);margin-top:12px;letter-spacing:1px;line-height:1.5">
-            Already denied? Go to<br>Settings &#8594; Safari &#8594; Location &#8594; Allow
+        <div id="gps-denied" class="hidden" style="background:rgba(232,0,26,0.1);border:1px solid var(--red);border-radius:8px;padding:14px;font-family:var(--mono);font-size:0.65rem;color:rgba(255,255,255,0.6);letter-spacing:1px;line-height:1.8;text-align:left">
+            GPS was blocked. To fix:<br>
+            <strong style="color:#fff">iPhone:</strong> Settings → Privacy → Location Services → Safari → While Using<br>
+            <strong style="color:#fff">Android:</strong> Settings → Apps → Chrome → Permissions → Location → Allow
         </div>
     </div>
 </div>
@@ -597,7 +576,7 @@ function requestGPS(){
         },
         function(err){
             if(err.code===1){ // PERMISSION_DENIED
-                document.querySelector('#s-location .btn-red').textContent='&#10060; Location Denied — Check Settings';
+                document.querySelector('#s-location .btn-red').textContent='❌ Location Denied — Go to Settings';
                 document.querySelector('#s-location .btn-red').style.background='#555';
             } else {
                 goRegister(); // Other errors — try anyway
