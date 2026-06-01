@@ -396,6 +396,9 @@
     <div class="reg-footer">
         <button class="btn-lock" id="btn-lock" onclick="lockIn()">&#9889; ENTER THE RACE</button>
         <div class="lock-note">Outside 4KM = race for the leaderboard &bull; Inside = time trial only</div>
+        <button onclick="doInvite()" style="width:100%;background:transparent;color:var(--teal);border:1px solid var(--teal);padding:14px;font-family:var(--head);font-size:1.1rem;font-weight:900;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:8px;margin-top:8px;display:flex;align-items:center;justify-content:center;gap:8px">
+            <span>👋</span> INVITE A FRIEND TO RACE TODAY
+        </button>
     </div>
 </div>
 
@@ -411,6 +414,13 @@
         <div class="hud-val" id="hud-timer" style="color:var(--teal)">&#8212;</div>
         <div class="live-pill"><span class="live-dot"></span>LIVE</div>
     </div>
+</div>
+
+<!-- INVITE BUTTON -->
+<div id="invite-btn" style="display:none;position:absolute;top:75px;left:50%;transform:translateX(-50%);z-index:35;white-space:nowrap">
+    <button onclick="doInvite()" style="background:linear-gradient(135deg,var(--teal),#00CCAA);color:#000;border:none;padding:12px 28px;font-family:var(--head);font-size:1.3rem;font-weight:900;letter-spacing:2px;text-transform:uppercase;border-radius:50px;box-shadow:0 4px 20px rgba(0,255,204,0.4);cursor:pointer;display:flex;align-items:center;gap:10px">
+        <span style="font-size:1.4rem">👋</span> INVITE A FRIEND TO RACE TODAY
+    </button>
 </div>
 
 <!-- RACE STATUS BANNER -->
@@ -1033,6 +1043,15 @@ function toggleDrawer(){
     z.addEventListener('touchstart',function(e){sy=e.touches[0].clientY;},{passive:true});
     z.addEventListener('touchend',function(e){var dy=sy-e.changedTouches[0].clientY;if(dy>40&&!_drawerOpen)toggleDrawer();if(dy<-40&&_drawerOpen)toggleDrawer();},{passive:true});
 })();
+
+function doInvite(){
+    var txt = "I'm racing to the GPO right now on BriScramble 🏁 Join me — register outside the 4KM boundary and your timer starts automatically when you cross it. Fastest time to the GPO wins today's leaderboard! briscramble.onrender.com";
+    if(navigator.share){
+        navigator.share({title:'Race me on BriScramble!', text:txt, url:'https://briscramble.onrender.com'});
+    } else {
+        navigator.clipboard.writeText(txt).then(function(){ alert('Invite copied!'); });
+    }
+}
 
 function doShare(){
     var txt='I\'m racing to the GPO on BriScramble — Brisbane\'s time trial commute race. Join me: https://briscramble.onrender.com';
