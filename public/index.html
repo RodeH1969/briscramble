@@ -81,12 +81,12 @@
         .avatar-strip{display:flex;gap:8px;overflow-x:scroll;padding-bottom:6px;cursor:grab;-webkit-overflow-scrolling:touch}
         .avatar-strip::-webkit-scrollbar{height:3px}
         .avatar-strip::-webkit-scrollbar-thumb{background:var(--red);border-radius:3px}
-        .av-card{min-width:76px;height:86px;background:linear-gradient(135deg,#161620,#0e0e12);border:1px solid rgba(255,255,255,0.08);border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;flex-shrink:0;transition:all 0.15s;position:relative}
+        .av-card{min-width:152px;height:172px;background:linear-gradient(135deg,#161620,#0e0e12);border:1px solid rgba(255,255,255,0.08);border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;cursor:pointer;flex-shrink:0;transition:all 0.15s;position:relative}
         .av-card.active{border-color:var(--red);background:rgba(232,0,26,0.1)}
-        .av-card img{width:44px;height:44px;object-fit:contain;border-radius:4px}
-        .av-card span{font-family:var(--mono);font-size:0.5rem;color:rgba(255,255,255,0.45);text-align:center;padding:0 3px}
+        .av-card img{width:88px;height:88px;object-fit:contain;border-radius:6px}
+        .av-card span{font-family:var(--mono);font-size:0.75rem;color:rgba(255,255,255,0.6);text-align:center;padding:0 6px}
         .av-default-badge{position:absolute;top:3px;right:3px;font-family:var(--mono);font-size:0.4rem;font-weight:bold;background:#FFAA00;color:#000;padding:1px 3px;border-radius:2px}
-        .av-logo{width:44px;height:44px;border-radius:50%;overflow:hidden;border:1px solid var(--red)}
+        .av-logo{width:88px;height:88px;border-radius:50%;overflow:hidden;border:2px solid var(--red)}
         .av-logo img{width:100%;height:100%;object-fit:cover}
 
         /* LOCK BUTTON */
@@ -413,6 +413,10 @@
         <div class="hud-label">TO FINISH</div>
         <div class="hud-val" id="hud-dist">&#8212;</div>
     </div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:1px">
+        <div class="hud-label">STREAK</div>
+        <div class="hud-val" id="hud-streak" style="color:#FFAA00">&#8212;</div>
+    </div>
     <div class="hud-right">
         <div class="hud-label">YOUR TIME</div>
         <div class="hud-val" id="hud-timer" style="color:var(--teal)">&#8212;</div>
@@ -517,7 +521,7 @@ var myMarker=null;
 
 // ── MAP ──
 const map = L.map('map',{zoomControl:false,attributionControl:false}).setView(FINISH,13);
-L.tileLayer('https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}',{maxZoom:20}).addTo(map);
+L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{maxZoom:20,subdomains:'abcd'}).addTo(map);
 
 // Boundary rings
 L.circle(FINISH,{radius:BOUNDARY,color:'#E8001A',weight:10,fill:true,fillColor:'#E8001A',fillOpacity:0.06,opacity:0.9}).addTo(map);
@@ -766,7 +770,7 @@ function startGPS(){
             document.getElementById('elig-box').className='elig-box dq';
             document.getElementById('elig-box').textContent='Enable location services and reload';
         },
-        {enableHighAccuracy:true,maximumAge:8000,timeout:20000}
+        {enableHighAccuracy:true,maximumAge:1000,timeout:5000}
     );
 }
 
@@ -859,6 +863,7 @@ function updateRaceState(lat,lng){
                 speak('Timer started. You are in a time trial only — DQ from leaderboard.');
             } else {
                 speak('Timer started. Race to the GPO.');
+            if(navigator.vibrate) navigator.vibrate([100,50,100]); // double buzz = race start
             }
         }
         bStatus.textContent=isDQ?'TIME TRIAL — DQ FROM LEADERBOARD':'RACING';
@@ -891,6 +896,154 @@ function getElapsed(){
     return Math.floor((Date.now()-raceStartTime)/1000);
 }
 
+
+// ── SHARE CARD ──
+function generateShareCard(username, timeStr, rank, isDQ){
+    var canvas = document.createElement('canvas');
+    canvas.width = 1080; canvas.height = 1080;
+    var ctx = canvas.getContext('2d');
+
+    // Background
+    var grad = ctx.createLinearGradient(0,0,1080,1080);
+    grad.addColorStop(0,'#0e0e1f');
+    grad.addColorStop(1,'#111216');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0,0,1080,1080);
+
+    // Red boundary ring decoration
+    ctx.beginPath();
+    ctx.arc(540,540,420,0,Math.PI*2);
+    ctx.strokeStyle='rgba(232,0,26,0.15)';
+    ctx.lineWidth=60;
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(540,540,420,0,Math.PI*2);
+    ctx.strokeStyle='rgba(232,0,26,0.4)';
+    ctx.lineWidth=4;
+    ctx.setLineDash([20,15]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Finish dot
+    ctx.beginPath();
+    ctx.arc(540,540,18,0,Math.PI*2);
+    ctx.fillStyle='#E8001A';
+    ctx.fill();
+    ctx.strokeStyle='#fff';
+    ctx.lineWidth=4;
+    ctx.stroke();
+
+    // Title
+    ctx.font='900 90px Barlow Condensed,Arial';
+    ctx.fillStyle='#fff';
+    ctx.textAlign='center';
+    ctx.fillText('BRIS',380,160);
+    ctx.fillStyle='#E8001A';
+    ctx.fillText('CRAMBLE',700,160);
+
+    // Subtitle
+    ctx.font='500 36px Share Tech Mono,monospace';
+    ctx.fillStyle='rgba(255,255,255,0.5)';
+    ctx.textAlign='center';
+    ctx.fillText('BRISBANE GPO TIME TRIAL', 540, 210);
+
+    // Username
+    ctx.font='900 72px Barlow Condensed,Arial';
+    ctx.fillStyle=isDQ?'#FFAA00':'#00FFCC';
+    ctx.textAlign='center';
+    ctx.fillText('@'+username, 540, 440);
+
+    // Time
+    ctx.font='900 160px Barlow Condensed,Arial';
+    ctx.fillStyle='#ffffff';
+    ctx.textAlign='center';
+    ctx.fillText(timeStr, 540, 640);
+
+    // Time label
+    ctx.font='500 40px Share Tech Mono,monospace';
+    ctx.fillStyle='rgba(255,255,255,0.4)';
+    ctx.fillText('FINISH TIME', 540, 690);
+
+    // Rank
+    if(!isDQ && rank){
+        ctx.font='900 56px Barlow Condensed,Arial';
+        ctx.fillStyle='#FFD700';
+        ctx.fillText('#'+rank+' TODAY', 540, 790);
+    } else if(isDQ){
+        ctx.font='500 40px Share Tech Mono,monospace';
+        ctx.fillStyle='#FFAA00';
+        ctx.fillText('TIME TRIAL — NOT ON LEADERBOARD', 540, 790);
+    }
+
+    // URL
+    ctx.font='500 32px Share Tech Mono,monospace';
+    ctx.fillStyle='rgba(255,255,255,0.3)';
+    ctx.fillText('briscramble.onrender.com', 540, 980);
+
+    return canvas;
+}
+
+function shareFinishCard(username, timeStr, rank, isDQ){
+    var canvas = generateShareCard(username, timeStr, rank, isDQ);
+    canvas.toBlob(function(blob){
+        var file = new File([blob], 'briscramble.png', {type:'image/png'});
+        if(navigator.share && navigator.canShare && navigator.canShare({files:[file]})){
+            navigator.share({
+                title:'BriScramble — GPO Time Trial',
+                text:'I just raced to the GPO in '+timeStr+'! Can you beat me? briscramble.onrender.com',
+                files:[file]
+            }).catch(function(){
+                // Fallback — download
+                var a=document.createElement('a');
+                a.href=canvas.toDataURL('image/png');
+                a.download='briscramble-'+timeStr.replace(':','-')+'.png';
+                a.click();
+            });
+        } else {
+            // Desktop fallback — download
+            var a=document.createElement('a');
+            a.href=canvas.toDataURL('image/png');
+            a.download='briscramble-'+timeStr.replace(':','-')+'.png';
+            a.click();
+        }
+    },'image/png');
+}
+
+// ── STREAK ──
+function loadStreak(){
+    var today = brisDateKey();
+    var lastRace = localStorage.getItem('bsc_last_race');
+    var streak = parseInt(localStorage.getItem('bsc_streak')||'0');
+    // Check if raced yesterday
+    var yesterday = new Date();
+    yesterday.setDate(yesterday.getDate()-1);
+    var yKey = yesterday.toLocaleDateString('en-AU',{timeZone:'Australia/Brisbane'}).replace(/\//g,'-');
+    if(lastRace===yKey||lastRace===today){
+        // streak intact
+    } else {
+        streak=0;
+    }
+    var el=document.getElementById('hud-streak');
+    if(el) el.textContent = streak>0 ? '\uD83D\uDD25'+streak : '—';
+    return streak;
+}
+
+function saveStreak(){
+    var today=brisDateKey();
+    var lastRace=localStorage.getItem('bsc_last_race');
+    var streak=parseInt(localStorage.getItem('bsc_streak')||'0');
+    var yesterday=new Date();
+    yesterday.setDate(yesterday.getDate()-1);
+    var yKey=yesterday.toLocaleDateString('en-AU',{timeZone:'Australia/Brisbane'}).replace(/\//g,'-');
+    if(lastRace===yKey) streak++;
+    else if(lastRace!==today) streak=1;
+    localStorage.setItem('bsc_streak',streak);
+    localStorage.setItem('bsc_last_race',today);
+    var el=document.getElementById('hud-streak');
+    if(el) el.textContent='\uD83D\uDD25'+streak;
+    return streak;
+}
+
 // ── FINISH ──
 function showFinished(){
     clearInterval(timerInterval);
@@ -899,6 +1052,8 @@ function showFinished(){
     document.getElementById('hud-timer').textContent=t;
     document.getElementById('hud-timer').style.color='var(--teal)';
 
+    // Save streak
+    saveStreak();
     // Save to Firebase leaderboard if not DQ
     if(!isDQ&&myUID){
         var dateKey=brisDateKey();
@@ -911,6 +1066,7 @@ function showFinished(){
     // Full screen finish
     var overlay=document.createElement('div');
     overlay.style.cssText='position:fixed;inset:0;z-index:300;background:rgba(7,7,8,0.97);display:flex;align-items:center;justify-content:center';
+    var myRank=null;
     var claimBtn=!isDQ?'<a href="sms:'+claimPhone+'?body=BRISCRAMBLE%20FINISH%20@'+myUsername+'%20'+t+'" style="display:inline-block;margin-top:16px;padding:14px 28px;background:var(--teal);color:#000;font-family:var(--head);font-size:1.1rem;font-weight:900;border-radius:8px;text-decoration:none;letter-spacing:1px">&#128241; TEXT TO CLAIM</a>':'';
     var dqNote=isDQ?'<div style="color:#FFAA00;font-family:var(--mono);font-size:0.7rem;margin-top:12px;letter-spacing:1px">DQ &mdash; started inside boundary. Time not on leaderboard.</div>':'';
     overlay.innerHTML='<div style="text-align:center;padding:40px 28px;max-width:360px">'
@@ -919,10 +1075,14 @@ function showFinished(){
         +'<div style="font-family:var(--mono);font-size:0.65rem;color:rgba(255,255,255,0.35);letter-spacing:3px;margin:10px 0 6px">YOUR TIME</div>'
         +'<div style="font-family:var(--head);font-size:5rem;font-weight:900;color:#fff;letter-spacing:4px;line-height:1">'+t+'</div>'
         +dqNote+claimBtn
-        +'<div style="margin-top:20px"><button onclick="this.parentElement.parentElement.parentElement.remove()" style="background:none;border:1px solid var(--border);color:rgba(255,255,255,0.4);padding:10px 20px;font-family:var(--mono);font-size:0.65rem;border-radius:6px;cursor:pointer">VIEW LEADERBOARD</button></div>'
+        +'<div style="margin-top:16px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap">'
+        +'<button onclick="shareFinishCard(\''+myUsername+'\',\''+t+'\',null,'+isDQ+')" style="background:linear-gradient(135deg,#E8001A,#ff4444);color:#fff;border:none;padding:12px 20px;font-family:var(--head);font-size:1rem;font-weight:900;border-radius:8px;cursor:pointer;letter-spacing:1px">&#128247; SHARE RESULT</button>'
+        +'<button onclick="this.parentElement.parentElement.parentElement.remove()" style="background:none;border:1px solid var(--border);color:rgba(255,255,255,0.4);padding:12px 20px;font-family:var(--mono);font-size:0.65rem;border-radius:6px;cursor:pointer">VIEW LEADERBOARD</button>'
+        +'</div>'
         +'</div>';
     document.body.appendChild(overlay);
     speak(isDQ?'Finished. Your time is '+t+'. Not on leaderboard.':'You made it! Your time is '+t+'.');
+    if(navigator.vibrate) navigator.vibrate(isDQ?[200,100,200]:[200,100,200,100,400,100,400]);
 
     // Clean up Firebase active player
     if(myUID) db.ref('active/'+myUID).remove();
@@ -1027,6 +1187,7 @@ function checkCPs(lat,lng){
             document.body.appendChild(el);
             setTimeout(function(){el.remove();},3500);
             speak('Checkpoint. '+cp.name+'.');
+            if(navigator.vibrate) navigator.vibrate([50,30,50,30,50]);
         }
     });
 }
