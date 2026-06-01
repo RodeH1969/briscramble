@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="/lib/leaflet.css"/>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;700;900&family=Share+Tech+Mono&display=swap');
-        :root{--red:#E8001A;--white:#F5F5F0;--black:#070708;--dark:#0e0e12;--panel:#121217;--border:rgba(255,255,255,0.08);--teal:#00FFCC;--teal-dim:rgba(0,255,204,0.15);--mono:'Share Tech Mono',monospace;--head:'Barlow Condensed',sans-serif}
+        :root{--red:#E8001A;--white:#F5F5F0;--black:#111216;--dark:#16171e;--panel:#1e202a;--border:rgba(255,255,255,0.15);--teal:#00FFCC;--teal-dim:rgba(0,255,204,0.15);--mono:'Share Tech Mono',monospace;--head:'Barlow Condensed',sans-serif}
         *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
         html,body{height:100%;background:radial-gradient(ellipse at center,#0e0e1f 0%,#070708 100%);overflow:hidden;font-family:var(--head);color:var(--white);-webkit-tap-highlight-color:transparent}
         #map{position:absolute;inset:0;z-index:1}
@@ -38,7 +38,7 @@
         /* USERNAME */
         #s-name{gap:14px}
         .s-title{font-size:2rem;font-weight:900;letter-spacing:2px;text-align:center}
-        .s-sub{font-family:var(--mono);font-size:0.65rem;color:rgba(255,255,255,0.35);letter-spacing:2px;text-align:center;line-height:1.7}
+        .s-sub{font-family:var(--mono);font-size:0.85rem;color:rgba(255,255,255,0.75);letter-spacing:1px;text-align:center;line-height:1.5}
         .input-wrap{position:relative;width:100%;max-width:320px}
         .input-at{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--red);font-family:var(--mono);font-size:1.2rem;font-weight:bold}
         .input-wrap input{width:100%;background:var(--panel);border:1px solid var(--border);color:var(--white);font-family:var(--mono);font-size:1.2rem;padding:15px 15px 15px 42px;border-radius:8px;outline:none;transition:border-color 0.2s}
@@ -61,14 +61,14 @@
         .reg-top-title span{color:var(--red)}
         .reg-top-user{font-family:var(--mono);font-size:0.65rem;color:var(--teal);letter-spacing:1px;margin-left:auto}
         .reg-body{padding:16px 20px;display:flex;flex-direction:column;gap:18px;max-width:520px;width:100%;margin:0 auto}
-        .sec-label{font-family:var(--mono);font-size:0.6rem;color:rgba(255,255,255,0.3);letter-spacing:3px;text-transform:uppercase;margin-bottom:8px}
+        .sec-label{font-family:var(--mono);font-size:0.8rem;color:rgba(255,255,255,0.5);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px}
 
         /* HOW IT WORKS BOX */
         .how-box{background:linear-gradient(135deg,rgba(0,255,204,0.06),rgba(0,255,204,0.02));border:1px solid rgba(0,255,204,0.25);border-radius:10px;padding:16px}
         .how-step{display:flex;align-items:flex-start;gap:12px;margin-bottom:12px}
         .how-step:last-child{margin-bottom:0}
         .how-num{width:28px;height:28px;border-radius:50%;background:var(--red);color:#fff;font-family:var(--head);font-size:1rem;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-        .how-text{font-family:var(--mono);font-size:0.65rem;color:rgba(255,255,255,0.6);letter-spacing:1px;line-height:1.6;padding-top:4px}
+        .how-text{font-family:var(--mono);font-size:0.8rem;color:rgba(255,255,255,0.8);letter-spacing:0.5px;line-height:1.5;padding-top:4px}
         .how-text strong{color:var(--white)}
 
         /* BOUNDARY STATUS */
@@ -95,13 +95,13 @@
         .lock-note{font-family:var(--mono);font-size:0.55rem;color:rgba(255,255,255,0.2);text-align:center;margin-top:8px;letter-spacing:1px}
 
         /* HUD */
-        #hud{display:none;position:absolute;top:0;left:0;right:0;z-index:30;padding:10px 14px;padding-top:max(env(safe-area-inset-top,10px),10px);background:linear-gradient(to bottom,rgba(7,7,8,0.95) 0%,transparent 100%);align-items:center;justify-content:space-between;gap:10px}
+        #hud{display:none;position:absolute;top:0;left:0;right:0;z-index:30;padding:10px 14px;padding-top:max(env(safe-area-inset-top,10px),10px);background:#0e0f14;border-bottom:1px solid var(--border);align-items:center;justify-content:space-between;gap:10px}
         #hud.show{display:flex}
         .hud-logo{width:38px;height:38px;border-radius:50%;overflow:hidden;border:1.5px solid var(--red);flex-shrink:0}
         .hud-logo img{width:100%;height:100%;object-fit:cover}
         .hud-mid{display:flex;flex-direction:column;align-items:center;gap:1px}
-        .hud-label{font-family:var(--mono);font-size:0.5rem;color:rgba(255,255,255,0.35);letter-spacing:2px;text-transform:uppercase}
-        .hud-val{font-family:var(--head);font-size:1.2rem;font-weight:900;color:#fff;line-height:1}
+        .hud-label{font-family:var(--mono);font-size:0.65rem;color:rgba(255,255,255,0.6);letter-spacing:2px;text-transform:uppercase}
+        .hud-val{font-family:var(--head);font-size:1.4rem;font-weight:900;color:#fff;line-height:1;text-shadow:0 1px 4px rgba(0,0,0,0.8)}
         .hud-right{display:flex;flex-direction:column;align-items:flex-end;gap:3px}
         .live-pill{display:flex;align-items:center;gap:3px;font-family:var(--mono);font-size:0.55rem;color:var(--red)}
         .live-dot{width:5px;height:5px;border-radius:50%;background:var(--red);animation:blink 1s ease-in-out infinite}
@@ -110,9 +110,9 @@
         /* RACE STATUS BANNER */
         #race-banner{display:none;position:absolute;top:70px;left:50%;transform:translateX(-50%);z-index:35;white-space:nowrap}
         #race-banner.show{display:block}
-        .banner-inner{background:rgba(7,7,8,0.92);border:1px solid var(--border);border-radius:8px;padding:10px 20px;text-align:center;backdrop-filter:blur(8px)}
-        .banner-status{font-family:var(--mono);font-size:0.6rem;color:rgba(255,255,255,0.4);letter-spacing:3px;text-transform:uppercase}
-        .banner-main{font-family:var(--head);font-size:2rem;font-weight:900;line-height:1}
+        .banner-inner{background:#12131a;border:2px solid rgba(255,255,255,0.15);border-radius:8px;padding:10px 20px;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,0.6)}
+        .banner-status{font-family:var(--mono);font-size:0.7rem;color:rgba(255,255,255,0.6);letter-spacing:3px;text-transform:uppercase}
+        .banner-main{font-family:var(--head);font-size:2.2rem;font-weight:900;line-height:1;text-shadow:0 2px 8px rgba(0,0,0,0.8)}
         .banner-main.waiting{color:rgba(255,255,255,0.5)}
         .banner-main.racing{color:var(--teal)}
         .banner-main.dq{color:#FFAA00}
@@ -122,7 +122,7 @@
         #drawer{display:none;position:absolute;bottom:36px;left:0;right:0;z-index:30}
         #drawer.show{display:block}
         #drawer.collapsed .drawer-body{display:none}
-        .drawer-panel{background:rgba(10,10,16,0.97);border-top:1px solid var(--border);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+        .drawer-panel{background:#12131a;border-top:2px solid var(--border)}
         .drawer-pull{display:flex;justify-content:center;padding:8px 0;cursor:pointer}
         .drawer-handle{width:32px;height:3px;background:rgba(255,255,255,0.2);border-radius:2px}
         .drawer-peek{padding:8px 16px 10px;display:flex;align-items:center;justify-content:space-between;gap:10px;cursor:pointer}
@@ -144,9 +144,9 @@
         .lb-rank.r1{color:var(--teal)}.lb-rank.r2{color:#FFD700}.lb-rank.r3{color:#CD7F32}
         .lb-av{width:26px;height:26px;object-fit:contain;border-radius:4px;flex-shrink:0}
         .lb-info{flex:1;min-width:0}
-        .lb-name{font-family:var(--head);font-size:0.95rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+        .lb-name{font-family:var(--head);font-size:1.1rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
         .lb-name.me{color:var(--red)}
-        .lb-time{font-family:var(--mono);font-size:0.8rem;color:var(--white);text-align:right;flex-shrink:0;font-weight:bold}
+        .lb-time{font-family:var(--mono);font-size:0.9rem;color:var(--white);text-align:right;flex-shrink:0;font-weight:bold}
         .lb-time.best{color:var(--teal)}
         .lb-note{padding:8px 0 max(env(safe-area-inset-bottom,8px),8px);text-align:center;font-family:var(--mono);font-size:0.5rem;color:rgba(255,255,255,0.12);letter-spacing:2px}
 
@@ -566,9 +566,9 @@ function mkIcon(src,label,isMe,dist,pulse,ghost){
     var a=ghost?'animation:ghostPulse 1.5s ease-in-out infinite;':pulse?'animation:rivalPulse 1.2s ease-in-out infinite;':'';
     return L.divIcon({
         html:'<div style="text-align:center;'+a+'filter:drop-shadow(0 2px 6px rgba(0,0,0,0.8))">'
-            +'<img src="'+src+'" style="width:26px;height:26px;object-fit:contain;border-radius:4px" onerror="this.style.opacity=0">'
-            +'<br><span style="font-size:8px;background:rgba(7,7,8,0.92);color:'+c+';'+b+';padding:1px 5px;font-family:monospace;border-radius:3px;white-space:nowrap;display:inline-block">'+label+'</span>'
-            +(dist?'<div style="font-size:7px;color:'+(isMe?'#fff':ghost?'rgba(180,130,255,0.8)':'rgba(255,255,255,0.5)')+';background:rgba(0,0,0,0.8);padding:1px 4px;border-radius:2px;margin-top:1px;white-space:nowrap">'+dist+'</div>':'')
+            +'<img src="'+src+'" style="width:32px;height:32px;object-fit:contain;border-radius:4px" onerror="this.style.opacity=0">'
+            +'<br><span style="font-size:11px;font-weight:bold;background:#111;color:'+c+';'+b+';padding:2px 6px;font-family:sans-serif;border-radius:3px;white-space:nowrap;display:inline-block">'+label+'</span>'
+            +(dist?'<div style="font-size:10px;font-weight:bold;color:'+(isMe?'#fff':ghost?'rgba(180,130,255,0.9)':'rgba(255,255,255,0.7)')+';background:#000;padding:2px 4px;border-radius:2px;margin-top:1px;white-space:nowrap">'+dist+'</div>':'')
             +'</div>',
         className:'',iconAnchor:[20,30]
     });
