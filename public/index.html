@@ -153,10 +153,11 @@
         /* AD TICKER */
         #ticker{display:none;position:absolute;bottom:0;left:0;right:0;z-index:25;background:#0a0a10;border-top:2px solid rgba(255,170,0,0.4);overflow:hidden;height:102px}
         #ticker.show{display:block}
-        .ticker-inner{display:flex;align-items:center;gap:40px;white-space:nowrap;animation:tick 12s linear infinite;padding:6px 0;height:100%}
+        .ticker-track{display:flex;height:100%}
+        .ticker-inner{display:flex;align-items:center;gap:40px;white-space:nowrap;animation:tick 12s linear infinite;padding:6px 0;height:100%;flex-shrink:0;min-width:100%}
         .ticker-img{height:88px;width:auto;object-fit:contain;flex-shrink:0;border-radius:4px}
         .ticker-sep{font-family:var(--head);font-size:1rem;font-weight:900;color:#FFAA00;letter-spacing:3px;text-transform:uppercase;flex-shrink:0;padding:0 20px;white-space:nowrap}
-        @keyframes tick{0%{transform:translateX(100vw)}100%{transform:translateX(-200%)}}
+        @keyframes tick{0%{transform:translateX(0)}100%{transform:translateX(-100%)}}
 
         /* RECENTER + SHARE */
         .map-btn{position:absolute;right:12px;z-index:35;width:40px;height:40px;background:rgba(14,14,18,0.9);border:1px solid var(--border);border-radius:50%;color:rgba(255,255,255,0.6);font-size:1rem;cursor:pointer;display:none;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(0,0,0,0.5)}
@@ -454,27 +455,9 @@
 
 <!-- AD TICKER -->
 <div id="ticker">
-    <div class="ticker-inner">
-        <img src="/stockticker/30may1.png" class="ticker-img">
-        <span class="ticker-sep">ALDI SPECIALS THIS WEEK</span>
-        <img src="/stockticker/30may2.png" class="ticker-img">
-        <span class="ticker-sep">ALDI SPECIALS THIS WEEK</span>
-        <img src="/stockticker/30may3.png" class="ticker-img">
-        <span class="ticker-sep">ALDI SPECIALS THIS WEEK</span>
-        <img src="/stockticker/30may4.png" class="ticker-img">
-        <span class="ticker-sep">ALDI SPECIALS THIS WEEK</span>
-        <img src="/stockticker/30may5.png" class="ticker-img">
-        <span class="ticker-sep">ALDI SPECIALS THIS WEEK</span>
-        <img src="/stockticker/30may6.png" class="ticker-img">
-        <span class="ticker-sep">ALDI SPECIALS THIS WEEK</span>
-        <img src="/stockticker/30may7.png" class="ticker-img">
-        <span class="ticker-sep">ALDI SPECIALS THIS WEEK</span>
-        <img src="/stockticker/30may8.png" class="ticker-img">
-        <span class="ticker-sep">ALDI SPECIALS THIS WEEK</span>
-        <img src="/stockticker/30may9.png" class="ticker-img">
-        <span class="ticker-sep">ALDI SPECIALS THIS WEEK</span>
-        <img src="/stockticker/30may10.png" class="ticker-img">
-        <span class="ticker-sep">ALDI SPECIALS THIS WEEK</span>
+    <div class="ticker-track">
+        <div class="ticker-inner"><img src="/stockticker/30may1.png" class="ticker-img"><span class="ticker-sep">ALDI SPECIALS THIS WEEK</span><img src="/stockticker/30may2.png" class="ticker-img"><span class="ticker-sep">ALDI SPECIALS THIS WEEK</span><img src="/stockticker/30may3.png" class="ticker-img"><span class="ticker-sep">ALDI SPECIALS THIS WEEK</span><img src="/stockticker/30may4.png" class="ticker-img"><span class="ticker-sep">ALDI SPECIALS THIS WEEK</span><img src="/stockticker/30may5.png" class="ticker-img"><span class="ticker-sep">ALDI SPECIALS THIS WEEK</span><img src="/stockticker/30may6.png" class="ticker-img"><span class="ticker-sep">ALDI SPECIALS THIS WEEK</span><img src="/stockticker/30may7.png" class="ticker-img"><span class="ticker-sep">ALDI SPECIALS THIS WEEK</span><img src="/stockticker/30may8.png" class="ticker-img"><span class="ticker-sep">ALDI SPECIALS THIS WEEK</span><img src="/stockticker/30may9.png" class="ticker-img"><span class="ticker-sep">ALDI SPECIALS THIS WEEK</span><img src="/stockticker/30may10.png" class="ticker-img"><span class="ticker-sep">ALDI SPECIALS THIS WEEK</span></div>
+        <div class="ticker-inner" aria-hidden="true"><img src="/stockticker/30may1.png" class="ticker-img"><span class="ticker-sep">ALDI SPECIALS THIS WEEK</span><img src="/stockticker/30may2.png" class="ticker-img"><span class="ticker-sep">ALDI SPECIALS THIS WEEK</span><img src="/stockticker/30may3.png" class="ticker-img"><span class="ticker-sep">ALDI SPECIALS THIS WEEK</span><img src="/stockticker/30may4.png" class="ticker-img"><span class="ticker-sep">ALDI SPECIALS THIS WEEK</span><img src="/stockticker/30may5.png" class="ticker-img"><span class="ticker-sep">ALDI SPECIALS THIS WEEK</span><img src="/stockticker/30may6.png" class="ticker-img"><span class="ticker-sep">ALDI SPECIALS THIS WEEK</span><img src="/stockticker/30may7.png" class="ticker-img"><span class="ticker-sep">ALDI SPECIALS THIS WEEK</span><img src="/stockticker/30may8.png" class="ticker-img"><span class="ticker-sep">ALDI SPECIALS THIS WEEK</span><img src="/stockticker/30may9.png" class="ticker-img"><span class="ticker-sep">ALDI SPECIALS THIS WEEK</span><img src="/stockticker/30may10.png" class="ticker-img"><span class="ticker-sep">ALDI SPECIALS THIS WEEK</span></div>
     </div>
 </div>
 
