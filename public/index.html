@@ -276,7 +276,8 @@
     <div class="reg-top">
         <div class="reg-top-logo"><img src="/logo.png" alt=""></div>
         <div class="reg-top-title">BRIS<span>CRAMBLE</span></div>
-        <div class="reg-top-user" id="reg-username"></div>
+        <div class="reg-top-user" id="reg-username" onclick="forceSaveProfile()" style="cursor:pointer" title="Tap to save profile">
+        </div>
     </div>
     <div class="reg-body">
 
@@ -739,6 +740,14 @@ function requestGPS(){
 function goRegister(){
     showScreen('s-reg');
     document.getElementById('reg-username').textContent='@'+myUsername;
+    // Always ensure profile is saved to Firebase
+    if(myUID&&myUsername){
+        db.ref('users/'+myUID).once('value').then(function(s){
+            if(!s.exists()||s.val().username!==myUsername){
+                db.ref('users/'+myUID).set({username:myUsername,avatar:myAvatar,slug:mySlug,savedAt:firebase.database.ServerValue.TIMESTAMP});
+            }
+        });
+    }
     document.getElementById('pk-name').textContent='@'+myUsername;
     restoreAvatar();
     startGPS();
@@ -1266,6 +1275,21 @@ function toggleDrawer(){
     z.addEventListener('touchstart',function(e){sy=e.touches[0].clientY;},{passive:true});
     z.addEventListener('touchend',function(e){var dy=sy-e.changedTouches[0].clientY;if(dy>40&&!_drawerOpen)toggleDrawer();if(dy<-40&&_drawerOpen)toggleDrawer();},{passive:true});
 })();
+
+
+function forceSaveProfile(){
+    if(!myUID||!myUsername) return;
+    db.ref('users/'+myUID).set({
+        username:myUsername,
+        avatar:myAvatar,
+        slug:mySlug,
+        savedAt:firebase.database.ServerValue.TIMESTAMP
+    }).then(function(){
+        alert('Profile saved! @'+myUsername+' is now linked to your Google account on all devices.');
+    }).catch(function(e){
+        alert('Save failed: '+e.message);
+    });
+}
 
 function doInvite(){
     var txt = "I'm racing to the GPO right now on BriScramble 🏁 Join me — register outside the 4KM boundary and your timer starts automatically when you cross it. Fastest time to the GPO wins today's leaderboard! briscramble.onrender.com";
