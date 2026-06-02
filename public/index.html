@@ -768,6 +768,7 @@ function goRegister(){
     startGPS();
     listenLeaderboard();
     setLbDate();
+    showRulesIfNeeded();
 }
 
 function restoreAvatar(){
@@ -820,6 +821,8 @@ function lockIn(){
     if(!myLat){alert('Waiting for GPS...');return;}
     var dist=haversine(myLat,myLng,FINISH[0],FINISH[1]);
     isDQ = dist < BOUNDARY; // DQ if inside boundary at registration
+    // Also DQ if outside race window (before 7am or after 8am)
+    if(isOutsideWindowDQ()) isDQ = true;
     localStorage.setItem('bsc_locked','1');
     localStorage.setItem('bsc_avatar',myAvatar);
     localStorage.setItem('bsc_slug',mySlug);
@@ -896,8 +899,11 @@ function onPos(lat,lng){
                 ebox.className='elig-box dq';
                 ebox.innerHTML='&#9888; INSIDE 4KM ('+fmt(dist)+' from GPO) &mdash; you can still race but won\'t appear on leaderboard';
             } else {
+                var t=getBrisTime();
+                var inWindow=isInRaceWindow();
+                var windowNote=inWindow?' &mdash; <strong style="color:var(--teal)">Race window OPEN</strong>':t.total<7*60?' &mdash; <strong style="color:#FFAA00">Window opens at 7:00am</strong>':' &mdash; <strong style="color:#FFAA00">Window closed (after 8am)</strong>';
                 ebox.className='elig-box ok';
-                ebox.innerHTML='&#10003; '+fmt(dist)+' from GPO &mdash; outside boundary. You\'re eligible for the leaderboard';
+                ebox.innerHTML='&#10003; '+fmt(dist)+' from finish'+windowNote;
             }
         }
         // Fit map to show player + finish
@@ -1189,6 +1195,35 @@ function keepAudioWarm(){
     } catch(e){}
 }
 
+
+// ── TIME WINDOW CHECK ──
+function getBrisTime(){
+    var now = new Date();
+    var bne = new Date(now.toLocaleString('en-AU',{timeZone:'Australia/Brisbane'}));
+    return {h:bne.getHours(), m:bne.getMinutes(), total:bne.getHours()*60+bne.getMinutes()};
+}
+
+function isInRaceWindow(){
+    var t = getBrisTime();
+    return t.total >= 7*60 && t.total < 8*60; // 7:00am to 8:00am
+}
+
+function isOutsideWindowDQ(){
+    var t = getBrisTime();
+    return t.total < 7*60 || t.total >= 8*60;
+}
+
+function showRulesIfNeeded(){
+    if(!localStorage.getItem('bsc_rules_accepted')){
+        document.getElementById('rules-popup').classList.remove('hidden');
+    }
+}
+
+function acceptRules(){
+    localStorage.setItem('bsc_rules_accepted','1');
+    document.getElementById('rules-popup').classList.add('hidden');
+}
+
 // ── FINISH ──
 function showFinished(){
     clearInterval(timerInterval);
@@ -1403,5 +1438,43 @@ function doShare(){
     else navigator.clipboard.writeText(txt).then(function(){alert('Copied!');});
 }
 </script>
+
+<!-- RULES POPUP (first time only) -->
+<div id="rules-popup" class="hidden" style="position:fixed;inset:0;z-index:250;background:rgba(7,7,8,0.97);display:flex;align-items:center;justify-content:center;padding:20px">
+    <div style="width:100%;max-width:380px;background:#16171e;border:1px solid rgba(232,0,26,0.4);border-radius:16px;padding:28px;text-align:center">
+        <div style="font-size:2.5rem;margin-bottom:12px">🏁</div>
+        <div style="font-family:var(--head);font-size:2rem;font-weight:900;letter-spacing:2px;margin-bottom:4px">BRIS<span style="color:var(--red)">CRAMBLE</span></div>
+        <div style="font-family:var(--mono);font-size:0.7rem;color:rgba(255,255,255,0.4);letter-spacing:3px;margin-bottom:24px">THE RULES</div>
+
+        <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:24px;text-align:left">
+            <div style="display:flex;gap:12px;align-items:flex-start">
+                <div style="width:28px;height:28px;border-radius:50%;background:var(--red);color:#fff;font-family:var(--head);font-size:1rem;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0">1</div>
+                <div style="font-family:var(--mono);font-size:0.72rem;color:rgba(255,255,255,0.75);line-height:1.6">Register from <strong style="color:#fff">outside the 4KM boundary</strong> any time before 8am</div>
+            </div>
+            <div style="display:flex;gap:12px;align-items:flex-start">
+                <div style="width:28px;height:28px;border-radius:50%;background:var(--red);color:#fff;font-family:var(--head);font-size:1rem;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0">2</div>
+                <div style="font-family:var(--mono);font-size:0.72rem;color:rgba(255,255,255,0.75);line-height:1.6"><strong style="color:#fff">Race window: 7:00am – 8:00am</strong> Brisbane time. Timer starts when you cross the boundary ring</div>
+            </div>
+            <div style="display:flex;gap:12px;align-items:flex-start">
+                <div style="width:28px;height:28px;border-radius:50%;background:var(--red);color:#fff;font-family:var(--head);font-size:1rem;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0">3</div>
+                <div style="font-family:var(--mono);font-size:0.72rem;color:rgba(255,255,255,0.75);line-height:1.6">Race to the <strong style="color:#fff">red dot</strong> in the CBD. Fastest time wins today's leaderboard</div>
+            </div>
+            <div style="display:flex;gap:12px;align-items:flex-start">
+                <div style="width:28px;height:28px;border-radius:50%;background:var(--red);color:#fff;font-family:var(--head);font-size:1rem;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0">4</div>
+                <div style="font-family:var(--mono);font-size:0.72rem;color:rgba(255,255,255,0.75);line-height:1.6">Cross boundary <strong style="color:#FFAA00">before 7am or after 8am</strong> = time recorded but <strong style="color:#FFAA00">not on leaderboard</strong></div>
+            </div>
+        </div>
+
+        <div style="background:rgba(0,255,204,0.06);border:1px solid rgba(0,255,204,0.2);border-radius:8px;padding:12px;margin-bottom:20px;font-family:var(--mono);font-size:0.65rem;color:rgba(255,255,255,0.5);line-height:1.6">
+            Leaderboard resets daily at midnight Brisbane time.<br>
+            One entry per Google/Apple account per day.
+        </div>
+
+        <button onclick="acceptRules()" style="width:100%;background:var(--red);color:#fff;border:none;padding:16px;font-family:var(--head);font-size:1.4rem;font-weight:900;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:8px;box-shadow:0 6px 20px rgba(232,0,26,0.4)">
+            I UNDERSTAND — LET'S RACE
+        </button>
+    </div>
+</div>
+
 </body>
 </html>
