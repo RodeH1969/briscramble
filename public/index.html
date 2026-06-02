@@ -663,6 +663,7 @@
         document.getElementById('btn-re').classList.add('show');
         document.getElementById('pk-name').textContent='@'+(myUsername||'You');
         document.getElementById('btn-share').classList.add('show');
+	document.getElementById('side-lb').style.display = 'block';
         
         if(myUID){
             var ref=db.ref('active/'+myUID);
