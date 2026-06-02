@@ -1252,6 +1252,10 @@ function listenActivePlayers(){
         Object.entries(players).forEach(function(e){
             var uid=e[0],p=e[1];
             if(uid===myUID||!p.lat||!p.lng||p.lat===0) return;
+            if(p.ts && Date.now()-p.ts>60000){
+                if(markers[uid]){map.removeLayer(markers[uid]);delete markers[uid];}
+                return;
+            }
             var dist=haversine(p.lat,p.lng,FINISH[0],FINISH[1]);
             var icon=mkIcon(p.avatar||'/logo.png','@'+p.username,false,fmt(dist),false,false);
             if(!markers[uid]){
@@ -1273,7 +1277,7 @@ function setLbDate(){
 
 function listenLeaderboard(){
     var dateKey=brisDateKey();
-    db.ref('leaderboard/'+dateKey).orderByChild('seconds').on('value',function(snap){
+    db.ref('leaderboard/'+dateKey).orderByChild('seconds').limitToFirst(50).on('value',function(snap){
         var entries=[];
         snap.forEach(function(child){entries.push({uid:child.key,...child.val()});});
         entries.sort(function(a,b){return a.seconds-b.seconds;});
