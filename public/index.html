@@ -393,7 +393,20 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
 <script src="/lib/leaflet.js"></script>
-
+<script src="/api/config.js"></script>
+<script>
+    firebase.initializeApp({
+        apiKey:"AIzaSyBAsWw3Z56cLrXLIsjNQdN15_OeN1ad134",
+        authDomain:"briscramble.firebaseapp.com",
+        databaseURL:"https://briscramble-default-rtdb.asia-southeast1.firebasedatabase.app",
+        projectId:"briscramble",
+        storageBucket:"briscramble.firebasestorage.app",
+        messagingSenderId:"1055901704932",
+        appId:"1:1055901704932:web:ccb078dc722a7b580782f1"
+    });
+    const auth = firebase.auth();
+    const db   = firebase.database();
+</script>
 <script>
     // ── CONSTANTS ──
     const FINISH = [-27.4691, 153.0273]; // GPO, 261 Queen St
@@ -444,7 +457,6 @@
     })}).addTo(map);
 
     // ── FIREBASE AUTH ──
-    const db = firebase.database();
     firebase.auth().onAuthStateChanged(function(user) {
         if (user) {
             afterAuth(user);
