@@ -13,7 +13,8 @@
         html,body{height:100%;background:radial-gradient(ellipse at center,#0e0e1f 0%,#070708 100%);overflow:hidden;font-family:var(--head);color:var(--white);-webkit-tap-highlight-color:transparent}
         #map{position:absolute;inset:0;z-index:1}
         .leaflet-control-attribution{display:none!important}
-        .leaflet-marker-icon{transition:transform 1.2s linear!important}
+        .leaflet-marker-icon{transition:none!important}
+        .rival-marker .leaflet-marker-icon{transition:transform 1.2s linear!important}
         .hidden{display:none!important}
 
         /* LOADING */
@@ -467,7 +468,7 @@
 <div id="race-banner">
     <div class="banner-inner">
         <div class="banner-status" id="banner-status">WAITING TO CROSS BOUNDARY</div>
-        <div class="banner-main waiting" id="banner-main" id="banner-dist">&#8212;</div>
+        <div class="banner-main waiting" id="banner-main">&#8212;</div>
         <div class="banner-sub" id="banner-sub">Cross the 4KM line and your timer starts</div>
     </div>
 </div>
@@ -558,6 +559,7 @@ var _authDone=false, _lastEmit=0;
 var _drawerOpen=false;
 const markers={}, ghostMarkers={};
 var myMarker=null;
+var routePath=[], routeLine=null;
 
 // ── MAP ──
 const map = L.map('map',{zoomControl:false,attributionControl:false}).setView(FINISH,13);
@@ -867,6 +869,11 @@ function startGPS(){
 }
 
 function onPos(lat,lng){
+    // Only process if moved at least 5 metres (saves battery, reduces redraws)
+    if(myLat!==null && myLng!==null){
+        var moved = haversine(myLat,myLng,lat,lng);
+        if(moved < 5) return;
+    }
     myLat=lat; myLng=lng;
     var dist=haversine(lat,lng,FINISH[0],FINISH[1]);
 
@@ -1165,6 +1172,24 @@ function saveStreak(){
     return streak;
 }
 
+
+// ── KEEP AUDIO WARM (prevents iOS sleep from killing proximity alerts) ──
+var _audioCtx = null;
+function keepAudioWarm(){
+    try {
+        _audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+        // Silent tick every 25 seconds keeps audio context alive
+        setInterval(function(){
+            if(!_audioCtx||finished) return;
+            var buf = _audioCtx.createBuffer(1,1,22050);
+            var src = _audioCtx.createBufferSource();
+            src.buffer=buf;
+            src.connect(_audioCtx.destination);
+            src.start(0);
+        }, 25000);
+    } catch(e){}
+}
+
 // ── FINISH ──
 function showFinished(){
     clearInterval(timerInterval);
@@ -1229,8 +1254,12 @@ function listenActivePlayers(){
             if(uid===myUID||!p.lat||!p.lng||p.lat===0) return;
             var dist=haversine(p.lat,p.lng,FINISH[0],FINISH[1]);
             var icon=mkIcon(p.avatar||'/logo.png','@'+p.username,false,fmt(dist),false,false);
-            if(!markers[uid]){markers[uid]=L.marker([p.lat,p.lng],{icon:icon}).addTo(map);}
-            else{markers[uid].setLatLng([p.lat,p.lng]);markers[uid].setIcon(icon);}
+            if(!markers[uid]){
+                markers[uid]=L.marker([p.lat,p.lng],{icon:icon,className:'rival-marker'}).addTo(map);
+            } else {
+                markers[uid].setLatLng([p.lat,p.lng]);
+                markers[uid].setIcon(icon);
+            }
         });
         updateLeaderboardPeek(players);
     });
