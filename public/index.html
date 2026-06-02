@@ -940,7 +940,6 @@ function onPos(lat,lng){
     }
 
     // Checkpoints
-    if(timerStarted) checkCPs(lat,lng);
 
     // Proximity alerts
     if(timerStarted){
@@ -1354,19 +1353,6 @@ function showGhosts(topEntries){
 }
 
 // ── CHECKPOINTS ──
-function checkCPs(lat,lng){
-    CPS.forEach(function(cp){
-        if(earned[cp.id]) return;
-        if(haversine(lat,lng,cp.lat,cp.lng)<=cp.r){
-            earned[cp.id]=true;
-            var el=document.createElement('div');
-            el.className='badge-toast';
-            el.innerHTML=cp.badge+' UNLOCKED';
-            document.body.appendChild(el);
-            setTimeout(function(){el.remove();},3500);
-            speak('Checkpoint. '+cp.name+'.');
-            if(navigator.vibrate) navigator.vibrate([50,30,50,30,50]);
-        }
     });
 }
 
