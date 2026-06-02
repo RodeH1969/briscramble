@@ -166,9 +166,7 @@
         #btn-share{bottom:270px;border-color:rgba(0,255,204,0.3);color:var(--teal)}
 
         /* CHECKPOINTS */
-        @keyframes cpPing{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.3);opacity:0.7}}
-        .cp-pin{width:14px;height:14px;border-radius:50%;background:#FFAA00;border:2px solid #fff;box-shadow:0 0 8px #FFAA00;animation:cpPing 2s ease-in-out infinite}
-        .cp-lbl{font-family:var(--mono);font-size:8px;color:#FFAA00;background:rgba(0,0,0,0.85);padding:2px 5px;border-radius:3px;white-space:nowrap;border:1px solid rgba(255,170,0,0.3)}
+
         .badge-toast{position:fixed;top:80px;left:50%;transform:translateX(-50%);z-index:500;background:rgba(255,170,0,0.95);color:#000;font-family:var(--head);font-size:1rem;font-weight:900;letter-spacing:1px;padding:10px 20px;border-radius:8px;white-space:nowrap;pointer-events:none;animation:toastIn 0.3s ease}
         @keyframes toastIn{0%{opacity:0;top:60px}100%{opacity:1;top:80px}}
 
@@ -478,6 +476,14 @@
 <button class="map-btn" id="btn-re" onclick="recentre()">&#8982;</button>
 <button class="map-btn" id="btn-share" onclick="doShare()" title="Share">&#128279;</button>
 
+<!-- LEFT SIDE LEADERBOARD (visible outside boundary) -->
+<div id="side-lb" style="display:none;position:absolute;left:0;top:70px;bottom:140px;width:160px;z-index:28;overflow:hidden">
+    <div style="background:rgba(14,14,18,0.92);border-right:1px solid var(--border);height:100%;padding:10px 8px;overflow-y:auto;backdrop-filter:blur(8px)">
+        <div style="font-family:var(--mono);font-size:0.55rem;color:var(--teal);letter-spacing:2px;margin-bottom:8px;text-transform:uppercase">TODAY'S FASTEST</div>
+        <div id="side-lb-rows"></div>
+    </div>
+</div>
+
 <!-- LEADERBOARD DRAWER -->
 <div id="drawer">
     <div class="drawer-panel">
@@ -555,37 +561,34 @@ var myMarker=null;
 
 // ── MAP ──
 const map = L.map('map',{zoomControl:false,attributionControl:false}).setView(FINISH,13);
-L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{maxZoom:20,subdomains:'abcd'}).addTo(map);
+L.tileLayer('https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}',{maxZoom:20}).addTo(map);
 
-// Boundary rings
-L.circle(FINISH,{radius:BOUNDARY,color:'#E8001A',weight:10,fill:true,fillColor:'#E8001A',fillOpacity:0.06,opacity:0.9}).addTo(map);
-L.circle(FINISH,{radius:BOUNDARY,color:'#ff4444',weight:4,fill:false,opacity:0.5,dashArray:'12,8'}).addTo(map);
-L.circle(FINISH,{radius:BOUNDARY+60,color:'#E8001A',weight:2,fill:false,opacity:0.2}).addTo(map);
-L.marker([-27.433,153.0251],{icon:L.divIcon({html:"<div style='font-family:monospace;font-size:10px;font-weight:bold;color:rgba(232,0,26,0.9);background:rgba(0,0,0,0.75);padding:2px 8px;border-radius:3px;white-space:nowrap;border:1px solid rgba(232,0,26,0.4)'>&#8212; 4KM BOUNDARY &#8212;</div>",className:'',iconAnchor:[70,0]})}).addTo(map);
+// Boundary rings — pulsing start line
+var boundaryRing = L.circle(FINISH,{radius:BOUNDARY,color:'#E8001A',weight:8,fill:true,fillColor:'#E8001A',fillOpacity:0.05,opacity:0.9}).addTo(map);
+var boundaryDash = L.circle(FINISH,{radius:BOUNDARY,color:'#ff4444',weight:3,fill:false,opacity:0.6,dashArray:'12,8'}).addTo(map);
+// Pulse the ring opacity
+var _ringPulse=true;
+setInterval(function(){
+    _ringPulse=!_ringPulse;
+    boundaryRing.setStyle({opacity:_ringPulse?0.9:0.3,fillOpacity:_ringPulse?0.05:0.02});
+    boundaryDash.setStyle({opacity:_ringPulse?0.8:0.2});
+},800);
+L.marker([-27.433,153.0251],{icon:L.divIcon({
+    html:"<div style='font-family:monospace;font-size:11px;font-weight:bold;color:#E8001A;background:rgba(0,0,0,0.85);padding:4px 10px;border-radius:4px;white-space:nowrap;border:1px solid #E8001A;animation:finishPing 2s infinite;letter-spacing:2px'>&#9654; START LINE &#9664;</div>",
+    className:'',iconAnchor:[75,0]
+})}).addTo(map);
 
 // Finish marker — GPO
+// Mystery finish — just a pulsing red dot, no label revealed until you get close
 L.marker(FINISH,{icon:L.divIcon({
-    html:"<div style='text-align:center'>"
-        +"<div style='width:28px;height:28px;border-radius:50%;background:#E8001A;border:3px solid #fff;box-shadow:0 0 20px #E8001A;animation:finishPing 2s infinite;margin:0 auto'></div>"
-        +"<div style='font-family:monospace;font-size:9px;font-weight:bold;color:#fff;background:#E8001A;padding:3px 7px;border-radius:3px;margin-top:3px;letter-spacing:2px;animation:finishPing 2s infinite;white-space:nowrap'>GPO FINISH</div>"
-        +"</div>",
-    className:'',iconAnchor:[14,0]
+    html:"<div style='width:28px;height:28px;border-radius:50%;background:#E8001A;border:3px solid #fff;box-shadow:0 0 24px #E8001A,0 0 48px rgba(232,0,26,0.4);animation:finishPing 1.5s infinite'></div>",
+    className:'',iconAnchor:[14,14]
 })}).addTo(map);
 
 map.on('dragstart',function(){mapFollowing=false;document.getElementById('btn-re').classList.add('show');});
 
 // ── CHECKPOINTS ──
-var CPS=[
-    {id:'regatta',  name:'Regatta Ferry',  lat:-27.4988,lng:152.9994,r:80, badge:'&#9972; Regatta Rider'},
-    {id:'story',    name:'Story Bridge',   lat:-27.4694,lng:153.0348,r:100,badge:'&#127311; Bridge Crosser'},
-    {id:'roma',     name:'Roma Street',    lat:-27.4648,lng:153.0163,r:100,badge:'&#128649; Roma Rusher'},
-    {id:'southbank',name:'South Bank',     lat:-27.4820,lng:153.0220,r:100,badge:'&#127796; South Bank Sprinter'},
-];
-var earned={};
-CPS.forEach(function(cp){
-    L.marker([cp.lat,cp.lng],{icon:L.divIcon({html:"<div class='cp-pin'></div>",className:'',iconAnchor:[7,7]})}).addTo(map);
-    L.marker([cp.lat,cp.lng],{icon:L.divIcon({html:"<div class='cp-lbl'>&#9733; "+cp.name+"</div>",className:'',iconAnchor:[-4,16]})}).addTo(map);
-});
+var CPS=[]; var earned={}; // Landmarks removed
 
 // ── UTILS ──
 function haversine(a,b,c,d){var R=6371000,dL=(c-a)*Math.PI/180,dl=(d-b)*Math.PI/180;var x=Math.sin(dL/2)*Math.sin(dL/2)+Math.cos(a*Math.PI/180)*Math.cos(c*Math.PI/180)*Math.sin(dl/2)*Math.sin(dl/2);return R*2*Math.atan2(Math.sqrt(x),Math.sqrt(1-x));}
@@ -659,15 +662,25 @@ function afterAuth(user){
             myUsername=profile.username;
             myAvatar=profile.avatar||'/logo.png';
             mySlug=profile.slug||'scrambler';
-            // Sync to localStorage for offline/rejoin
             localStorage.setItem('bsc_avatar',myAvatar);
             localStorage.setItem('bsc_slug',mySlug);
+            localStorage.setItem('bsc_username',myUsername);
             var wasLocked=localStorage.getItem('bsc_locked');
             if(wasLocked==='1') rejoinRace();
             else showScreen('s-location');
         } else {
-            // New user — show name setup
-            showScreen('s-name');
+            // Check localStorage as fallback
+            var lsUser=localStorage.getItem('bsc_username');
+            var lsAv=localStorage.getItem('bsc_avatar');
+            if(lsUser){
+                myUsername=lsUser;
+                myAvatar=lsAv||'/logo.png';
+                // Save to Firebase now
+                db.ref('users/'+myUID).set({username:myUsername,avatar:myAvatar,slug:mySlug||'scrambler',savedAt:firebase.database.ServerValue.TIMESTAMP});
+                showScreen('s-location');
+            } else {
+                showScreen('s-name');
+            }
         }
     }).catch(function(){
         // Firebase failed — fall back to localStorage
@@ -790,6 +803,18 @@ function pickAvatar(el,slug,src){
 
 // ── LOCK IN ──
 function lockIn(){
+    // Always save profile to Firebase before racing
+    if(myUID&&myUsername){
+        db.ref('users/'+myUID).set({
+            username:myUsername,
+            avatar:myAvatar,
+            slug:mySlug,
+            savedAt:firebase.database.ServerValue.TIMESTAMP
+        });
+        localStorage.setItem('bsc_avatar',myAvatar);
+        localStorage.setItem('bsc_slug',mySlug);
+        localStorage.setItem('bsc_username',myUsername);
+    }
     if(!myLat){alert('Waiting for GPS...');return;}
     var dist=haversine(myLat,myLng,FINISH[0],FINISH[1]);
     isDQ = dist < BOUNDARY; // DQ if inside boundary at registration
@@ -879,6 +904,19 @@ function onPos(lat,lng){
     // Race mode
     updateRaceState(lat,lng);
 
+    // Draw route path when racing
+    if(timerStarted && !finished){
+        routePath.push([lat,lng]);
+        if(!routeLine){
+            routeLine = L.polyline(routePath, {
+                color:'#00FFCC', weight:4, opacity:0.8,
+                lineJoin:'round', lineCap:'round'
+            }).addTo(map);
+        } else {
+            routeLine.setLatLngs(routePath);
+        }
+    }
+
     // Throttled Firebase update
     var now=Date.now();
     if(now-_lastEmit>4000&&myUID){
@@ -888,7 +926,9 @@ function onPos(lat,lng){
 
     // Auto-zoom
     if(mapFollowing){
-        var z=dist>4000?13:dist>2000?14:dist>800?15:dist>300?16:dist>100?17:18;
+        var z;
+        if(!timerStarted) z=dist>6000?12:dist>4000?13:14; // before start — show boundary
+        else z=dist>2000?14:dist>800?15:dist>300?16:dist>100?17:18; // after start — zoom to finish
         map.setView([lat,lng],z,{animate:true,duration:1});
     }
 
@@ -897,12 +937,15 @@ function onPos(lat,lng){
 
     // Proximity alerts
     if(timerStarted){
-        if(dist<1000&&dist>900) speak('Approaching the GPO. Final sprint.');
-        if(dist<500&&dist>400) speak('500 metres to finish.');
+        if(dist<1000&&dist>900) speak('You are close. Keep going.');
+        if(dist<500&&dist>400) speak('500 metres. Push hard.');
     }
 }
 
 function updateRaceState(lat,lng){
+    // Show side leaderboard only when outside boundary waiting
+    var sideLb = document.getElementById('side-lb');
+    if(sideLb) sideLb.style.display = (!timerStarted&&isRacing) ? 'block' : 'none';
     var dist=haversine(lat,lng,FINISH[0],FINISH[1]);
     var banner=document.getElementById('race-banner');
     var bStatus=document.getElementById('banner-status');
@@ -912,11 +955,12 @@ function updateRaceState(lat,lng){
     if(finished) return;
 
     if(dist>=BOUNDARY){
-        // Waiting to cross boundary
-        bStatus.textContent='WAITING TO CROSS BOUNDARY';
+        // Show distance to the boundary ring, not to finish
+        var distToBoundary = dist - BOUNDARY;
+        bStatus.textContent='WAITING TO CROSS START LINE';
         bMain.className='banner-main waiting';
-        bMain.textContent=fmt(dist)+' FROM START LINE';
-        bSub.textContent='Timer starts when you cross the 4KM ring';
+        bMain.textContent = distToBoundary < 50 ? 'AT THE START LINE!' : fmt(distToBoundary)+' TO START LINE';
+        bSub.textContent='Cross the red ring — timer starts automatically';
         if(timerStarted){
             // They went back outside — pause? No — timer keeps running per rules
         }
@@ -926,17 +970,13 @@ function updateRaceState(lat,lng){
             timerStarted=true;
             raceStartTime=Date.now();
             startTimer();
-            if(isDQ){
-                speak('Timer started. You are in a time trial only — DQ from leaderboard.');
-            } else {
-                speak('Timer started. Race to the GPO.');
-            if(navigator.vibrate) navigator.vibrate([100,50,100]); // double buzz = race start
-            }
+            if(navigator.vibrate) navigator.vibrate([50,50,50,50,300]);
+            speak(isDQ ? 'Timer started. Time trial only.' : 'Off and racing. Good luck!');
         }
         bStatus.textContent=isDQ?'TIME TRIAL — DQ FROM LEADERBOARD':'RACING';
         bMain.className='banner-main '+(isDQ?'dq':'racing');
-        bMain.textContent=fmt(dist)+' TO GPO';
-        bSub.textContent=isDQ?'Inside boundary at registration':'Get to the GPO first';
+        bMain.textContent=fmt(dist)+' TO FINISH';
+        bSub.textContent=isDQ?'Time trial — not on leaderboard':'Find the red dot. First to reach it wins.';
 
         // Check finish
         if(dist<=FINISH_RADIUS&&!finished){
@@ -1012,7 +1052,7 @@ function generateShareCard(username, timeStr, rank, isDQ){
     ctx.font='500 36px Share Tech Mono,monospace';
     ctx.fillStyle='rgba(255,255,255,0.5)';
     ctx.textAlign='center';
-    ctx.fillText('BRISBANE GPO TIME TRIAL', 540, 210);
+    ctx.fillText(getRouteName().toUpperCase(), 540, 210);
 
     // Username
     ctx.font='900 72px Barlow Condensed,Arial';
@@ -1048,6 +1088,20 @@ function generateShareCard(username, timeStr, rank, isDQ){
     ctx.fillText('briscramble.onrender.com', 540, 980);
 
     return canvas;
+}
+
+function getRouteName(){
+    // Derive route name from start position
+    if(!routePath||routePath.length<2) return 'Brisbane CBD';
+    var start=routePath[0];
+    var lat=start[0], lng=start[1];
+    // Rough Brisbane suburb detection from start coords
+    if(lat<-27.52) return 'Southside to CBD';
+    if(lng<152.98) return 'Western Suburbs to CBD';
+    if(lat<-27.47&&lng<153.01) return 'Inner West to CBD';
+    if(lat>-27.44) return 'Northside to CBD';
+    if(lng>153.04) return 'Eastside to CBD';
+    return 'Brisbane to CBD';
 }
 
 function shareFinishCard(username, timeStr, rank, isDQ){
@@ -1119,6 +1173,9 @@ function showFinished(){
     document.getElementById('hud-timer').textContent=t;
     document.getElementById('hud-timer').style.color='var(--teal)';
 
+    // Freeze route line on finish
+    if(routeLine) routeLine.setStyle({color:'#00FFCC',weight:5,opacity:1});
+
     // Save streak
     saveStreak();
     // Save to Firebase leaderboard if not DQ
@@ -1151,6 +1208,8 @@ function showFinished(){
     speak(isDQ?'Finished. Your time is '+t+'. Not on leaderboard.':'You made it! Your time is '+t+'.');
     if(navigator.vibrate) navigator.vibrate(isDQ?[200,100,200]:[200,100,200,100,400,100,400]);
 
+    // Clear beep interval
+    if(window._beepInterval){clearInterval(window._beepInterval);window._beepInterval=null;}
     // Clean up Firebase active player
     if(myUID) db.ref('active/'+myUID).remove();
     localStorage.removeItem('bsc_locked');
@@ -1196,6 +1255,25 @@ function listenLeaderboard(){
 }
 
 function renderLeaderboard(entries){
+    // Update side leaderboard
+    var sideEl = document.getElementById('side-lb-rows');
+    if(sideEl){
+        if(entries.length===0){
+            sideEl.innerHTML='<div style="font-family:var(--mono);font-size:0.55rem;color:rgba(255,255,255,0.2);letter-spacing:1px">No finishers yet</div>';
+        } else {
+            sideEl.innerHTML = entries.slice(0,10).map(function(r,i){
+                var isMe=r.uid===myUID;
+                var rk=i+1;
+                var col=rk===1?'var(--teal)':rk===2?'#FFD700':rk===3?'#CD7F32':'rgba(255,255,255,0.6)';
+                return '<div style="display:flex;align-items:center;gap:5px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.04)">'
+                    +'<span style="font-family:var(--head);font-size:0.9rem;font-weight:900;color:'+col+';width:16px;flex-shrink:0">'+rk+'</span>'
+                    +'<div style="flex:1;min-width:0">'
+                    +'<div style="font-family:var(--head);font-size:0.75rem;font-weight:700;color:'+(isMe?'var(--red)':'#fff')+';white-space:nowrap;overflow:hidden;text-overflow:ellipsis">@'+r.username+'</div>'
+                    +'<div style="font-family:var(--mono);font-size:0.6rem;color:'+col+'">'+r.timeStr+'</div>'
+                    +'</div></div>';
+            }).join('');
+        }
+    }
     var lbEl=document.getElementById('lb-rows');
     if(!lbEl) return;
     if(entries.length===0){
