@@ -43,8 +43,19 @@ let raceSlots = {
     "7:50": { winnerDeclared: false, winnerUsername: null }
 };
 
-// username => { uid, username, lockedAt }
-const registeredUsers = {};
+// Firebase Admin SDK for username persistence
+const admin = require('firebase-admin');
+if(!admin.apps.length){
+    admin.initializeApp({
+        credential: admin.credential.cert({
+            projectId: 'briscramble',
+            clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+            privateKey: process.env.FIREBASE_PRIVATE_KEY ? process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n') : undefined
+        }),
+        databaseURL: 'https://briscramble-default-rtdb.asia-southeast1.firebasedatabase.app'
+    });
+}
+const adminDb = admin.database();
 
 let players = {};
 
@@ -66,30 +77,41 @@ function logWinner(username, slot) {
     console.log(`WINNER: ${username} slot ${slot}`);
 }
 
-// Username registration endpoint
-app.post('/api/register-username', (req, res) => {
+// Username registration — stored in Firebase, survives server restarts
+app.post('/api/register-username', async (req, res) => {
     const { uid, username } = req.body;
     if (!uid || !username) return res.status(400).json({ error: 'Missing uid or username' });
 
-    const clean = username.replace(/[^a-zA-Z0-9_]/g, '').slice(0, 18);
-    if (clean.length < 2) return res.status(400).json({ error: 'Username too short' });
-
-    // Check if this uid already has a locked username
-    const existing = Object.values(registeredUsers).find(u => u.uid === uid);
-    if (existing) {
-        const hoursOld = (Date.now() - existing.lockedAt) / 3600000;
-        if (hoursOld > 24) {
-            return res.json({ username: existing.username, locked: true });
+    try {
+        // Check if this uid already has a username
+        const uidSnap = await adminDb.ref('users/' + uid + '/username').once('value');
+        if (uidSnap.exists()) {
+            return res.json({ username: uidSnap.val(), locked: true });
         }
-    }
 
-    // Check if username taken
-    if (registeredUsers[clean.toLowerCase()] && registeredUsers[clean.toLowerCase()].uid !== uid) {
-        return res.status(409).json({ error: 'Username taken' });
-    }
+        // Check request is just checking (not registering)
+        if (username === '__check__') {
+            return res.json({ username: null });
+        }
 
-    registeredUsers[clean.toLowerCase()] = { uid, username: clean, lockedAt: Date.now() };
-    res.json({ username: clean, locked: false });
+        const clean = username.replace(/[^a-zA-Z0-9_]/g, '').slice(0, 18);
+        if (clean.length < 2) return res.status(400).json({ error: 'Username too short' });
+
+        // Check if username taken by another uid
+        const takenSnap = await adminDb.ref('usernames/' + clean.toLowerCase()).once('value');
+        if (takenSnap.exists() && takenSnap.val() !== uid) {
+            return res.status(409).json({ error: 'Username taken' });
+        }
+
+        // Save username
+        await adminDb.ref('users/' + uid).set({ username: clean, lockedAt: Date.now() });
+        await adminDb.ref('usernames/' + clean.toLowerCase()).set(uid);
+
+        res.json({ username: clean, locked: false });
+    } catch(e) {
+        console.error('register-username error:', e);
+        res.status(500).json({ error: 'Server error' });
+    }
 });
 
 io.on('connection', (socket) => {

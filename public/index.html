@@ -388,10 +388,9 @@
     <div class="ticker-track" id="ticker-track"></div>
 </div>
 
-<script src="/__/firebase/10.7.1/firebase-app-compat.js"></script>
-<script src="/__/firebase/10.7.1/firebase-auth-compat.js"></script>
-<script src="/__/firebase/10.7.1/firebase-database-compat.js"></script>
-<script src="/__/firebase/init.js?useEmulator=true"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
 <script src="/lib/leaflet.js"></script>
 
@@ -663,7 +662,6 @@
         document.getElementById('btn-re').classList.add('show');
         document.getElementById('pk-name').textContent='@'+(myUsername||'You');
         document.getElementById('btn-share').classList.add('show');
-	document.getElementById('side-lb').style.display = 'block';
         
         if(myUID){
             var ref=db.ref('active/'+myUID);
@@ -809,8 +807,8 @@
         canvas.height = 1080;
         var ctx = canvas.getContext('2d');
         var grad = ctx.createLinearGradient(0,0,1080,1080);
-        grad.addColorStop(0,#0e0e1f);
-        grad.addColorStop(1,#111216);
+        grad.addColorStop(0,'#0e0e1f');
+        grad.addColorStop(1,'#111216');
         ctx.fillStyle = grad;
         ctx.fillRect(0,0,1080,1080);
         ctx.beginPath();
@@ -1021,7 +1019,8 @@
             
             var html1='', html2='';
             items.forEach(function(item){
-                var segment='<div class="ticker-inner">';
+                var segment='<div class="ticker-track"><div class="ticker-inner"><img src="/stockticker/30may1.png" class="ticker-img"><span class="ticker-sep">ALDI SPECIALS THIS WEEK</span><img src="/stockticker/30may2.png" class="ticker-img"><span class="ticker-sep">ALDI SPECIALS THIS WEEK</span><img src="/stockticker/30may3.png" class="ticker-img"><span class="ticker-sep">ALDI SPECIALS THIS WEEK</span><img src="/stockticker/30may4.png" class="ticker-img"><span class="ticker-sep">ALDI SPECIALS THIS WEEK</span><img src="/stockticker/30may5.png" class="ticker-img"><span class="ticker-sep">ALDI SPECIALS THIS WEEK</span><img src="/stockticker/30may6.png" class="ticker-img"><span class="ticker-sep">ALDI SPECIALS THIS WEEK</span><img src="/stockticker/30may7.png" class="ticker-img"><span class="ticker-sep">ALDI SPECIALS THIS WEEK</span><img src="/stockticker/30may8.png" class="ticker-img"><span class="ticker-sep">ALDI SPECIALS THIS WEEK</span><img src="/stockticker/30may9.png" class="ticker-img"><span class="ticker-sep">ALDI SPECIALS THIS WEEK</span><img src="/stockticker/30may10.png" class="ticker-img"><span class="ticker-sep">ALDI SPECIALS THIS WEEK</span></div><div class="ticker-inner" aria-hidden="true"><img src="/stockticker/30may1.png" class="ticker-img"><span class="ticker-sep">ALDI SPECIALS THIS WEEK</span><img src="/stockticker/30may2.png" class="ticker-img"><span class="ticker-sep">ALDI SPECIALS THIS WEEK</span><img src="/stockticker/30may3.png" class="ticker-img"><span class="ticker-sep">ALDI SPECIALS THIS WEEK</span><img src="/stockticker/30may4.png" class="ticker-img"><span class="ticker-sep">ALDI SPECIALS THIS WEEK</span><img src="/stockticker/30may5.png" class="ticker-img"><span class="ticker-sep">ALDI SPECIALS THIS WEEK</span><img src="/stockticker/30may6.png" class="ticker-img"><span class="ticker-sep">ALDI SPECIALS THIS WEEK</span><img src="/stockticker/30may7.png" class="ticker-img"><span class="ticker-sep">ALDI SPECIALS THIS WEEK</span><img src="/stockticker/30may8.png" class="ticker-img"><span class="ticker-sep">ALDI SPECIALS THIS WEEK</span><img src="/stockticker/30may9.png" class="ticker-img"><span class="ticker-sep">ALDI SPECIALS THIS WEEK</span><img src="/stockticker/30may10.png" class="ticker-img"><span class="ticker-sep">ALDI SPECIALS THIS WEEK</span></div></div>
+    <div class="ticker-inner" style="display:none">';
                 if(item.image) segment+='<img class="ticker-img" src="'+item.image+'">';
                 if(item.text) segment+='<span class="ticker-sep">'+item.text+'</span>';
                 segment+='</div>';
@@ -1138,6 +1137,11 @@
         localStorage.setItem('bsc_rules_seen','1');
         document.getElementById('rules-popup').classList.add('hidden');
     }
+
+    function getBrisTime(){var now=new Date();var bne=new Date(now.toLocaleString('en-AU',{timeZone:'Australia/Brisbane'}));return{total:bne.getHours()*60+bne.getMinutes()};}
+    function isOutsideWindowDQ(){var t=getBrisTime();return t.total<7*60||t.total>=8*60;}
+    function isInRaceWindow(){var t=getBrisTime();return t.total>=7*60&&t.total<8*60;}
+
 </script>
 
 </body>
