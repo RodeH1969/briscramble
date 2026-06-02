@@ -66,11 +66,11 @@
 
         /* HOW IT WORKS BOX */
         .how-box{background:linear-gradient(135deg,rgba(0,255,204,0.06),rgba(0,255,204,0.02));border:1px solid rgba(0,255,204,0.25);border-radius:10px;padding:16px}
-        .how-step{display:flex;align-items:flex-start;gap:12px;margin-bottom:12px}
-        .how-step:last-child{margin-bottom:0}
-        .how-num{width:28px;height:28px;border-radius:50%;background:var(--red);color:#fff;font-family:var(--head);font-size:1rem;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-        .how-text{font-family:var(--mono);font-size:0.8rem;color:rgba(255,255,255,0.8);letter-spacing:0.5px;line-height:1.5;padding-top:4px}
-        .how-text strong{color:var(--white)}
+        .how-box .how-step{display:flex;align-items:flex-start;gap:12px;margin-bottom:12px}
+        .how-box .how-step:last-child{margin-bottom:0}
+        .how-box .how-num{width:28px;height:28px;border-radius:50%;background:var(--red);color:#fff;font-family:var(--head);font-size:1rem;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+        .how-box .how-text{font-family:var(--mono);font-size:0.8rem;color:rgba(255,255,255,0.8);letter-spacing:0.5px;line-height:1.5;padding-top:4px}
+        .how-box .how-text strong{color:var(--white)}
 
         /* BOUNDARY STATUS */
         .elig-box{padding:12px 16px;border-radius:8px;font-family:var(--mono);font-size:0.75rem;letter-spacing:1px;line-height:1.4}
@@ -167,7 +167,6 @@
         #btn-share{bottom:270px;border-color:rgba(0,255,204,0.3);color:var(--teal)}
 
         /* CHECKPOINTS */
-
         .badge-toast{position:fixed;top:80px;left:50%;transform:translateX(-50%);z-index:500;background:rgba(255,170,0,0.95);color:#000;font-family:var(--head);font-size:1rem;font-weight:900;letter-spacing:1px;padding:10px 20px;border-radius:8px;white-space:nowrap;pointer-events:none;animation:toastIn 0.3s ease}
         @keyframes toastIn{0%{opacity:0;top:60px}100%{opacity:1;top:80px}}
 
@@ -181,14 +180,12 @@
 
 <div id="map"></div>
 
-<!-- LOADING -->
 <div id="s-loading">
     <div class="logo"><img src="/logo.png" alt=""></div>
     <div style="font-family:var(--head);font-size:2rem;font-weight:900;letter-spacing:3px">BRIS<span style="color:var(--red)">CRAMBLE</span></div>
     <div style="font-family:var(--mono);font-size:0.6rem;color:rgba(255,255,255,0.3);letter-spacing:3px">LOADING...</div>
 </div>
 
-<!-- AUTH -->
 <div id="s-auth" class="screen hidden">
     <div class="logo"><img src="/logo.png" alt="BriScramble"></div>
     <div class="game-title">BRIS<span>CRAMBLE</span></div>
@@ -203,7 +200,6 @@
     </button>
 </div>
 
-<!-- USERNAME -->
 <div id="s-name" class="screen hidden">
     <div class="s-title">WHAT DO YOU RACE AS?</div>
     <div class="s-sub">Your race identity — set once, yours forever.</div>
@@ -216,7 +212,6 @@
     <button class="btn-red" onclick="saveName()">LOCK IT IN</button>
 </div>
 
-<!-- LOCATION PERMISSION -->
 <div id="s-location" class="screen hidden">
     <div style="text-align:center;max-width:320px;width:100%">
         <div style="font-size:3rem;margin-bottom:16px">📍</div>
@@ -227,11 +222,9 @@
         </button>
         <div id="gps-denied" class="hidden" style="background:#1a0a0a;border:2px solid var(--red);border-radius:12px;padding:20px;text-align:left">
             <div style="font-family:var(--head);font-size:1.3rem;font-weight:900;color:var(--red);margin-bottom:12px;letter-spacing:1px">📍 LOCATION ACCESS NEEDED</div>
-
             <div style="font-family:var(--mono);font-size:0.7rem;color:rgba(255,255,255,0.8);line-height:1.8;margin-bottom:14px">
                 To race on BriScramble, GPS must be enabled.<br>Follow these steps on your iPhone:
             </div>
-
             <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px">
                 <div style="display:flex;gap:10px;align-items:flex-start">
                     <div style="width:22px;height:22px;border-radius:50%;background:var(--red);color:#fff;font-family:var(--head);font-size:0.8rem;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0">1</div>
@@ -254,12 +247,10 @@
                     <div style="font-family:var(--mono);font-size:0.68rem;color:rgba(255,255,255,0.7);line-height:1.5">Return to Safari and tap the button again</div>
                 </div>
             </div>
-
             <div style="background:rgba(255,170,0,0.1);border:1px solid rgba(255,170,0,0.4);border-radius:8px;padding:10px;font-family:var(--mono);font-size:0.65rem;color:#FFAA00;line-height:1.6">
                 ⚠ <strong>Private/Incognito mode blocks GPS entirely.</strong><br>
                 Make sure you are using a normal Safari tab.
             </div>
-
             <button onclick="requestGPS()" style="width:100%;margin-top:14px;background:var(--red);color:#fff;border:none;padding:14px;font-family:var(--head);font-size:1.2rem;font-weight:900;border-radius:8px;cursor:pointer;letter-spacing:1px">
                 TRY AGAIN
             </button>
@@ -270,17 +261,13 @@
     </div>
 </div>
 
-<!-- REGISTER -->
 <div id="s-reg" class="screen hidden">
     <div class="reg-top">
         <div class="reg-top-logo"><img src="/logo.png" alt=""></div>
         <div class="reg-top-title">BRIS<span>CRAMBLE</span></div>
-        <div class="reg-top-user" id="reg-username" onclick="forceSaveProfile()" style="cursor:pointer" title="Tap to save profile">
-        </div>
+        <div class="reg-top-user" id="reg-username" onclick="forceSaveProfile()" style="cursor:pointer" title="Tap to save profile"></div>
     </div>
     <div class="reg-body">
-
-        <!-- HOW IT WORKS -->
         <div class="how-box">
             <div class="how-step">
                 <div class="how-num">1</div>
@@ -296,13 +283,11 @@
             </div>
         </div>
 
-        <!-- BOUNDARY STATUS -->
         <div>
             <div class="sec-label">YOUR POSITION</div>
             <div id="elig-box" class="elig-box checking">&#128225; Getting GPS location...</div>
         </div>
 
-        <!-- AVATAR -->
         <div>
             <div class="sec-label">PICK YOUR AVATAR — DRAG TO SCROLL</div>
             <div class="avatar-strip" id="av-strip">
@@ -322,131 +307,24 @@
                 <div class="av-card" onclick="pickAvatar(this,'bergdeliselections150g','/avatars/products/bergdeliselections150g.png')"><img src="/avatars/products/bergdeliselections150g.png"><span>Bergdeliselections</span></div>
                 <div class="av-card" onclick="pickAvatar(this,'birdseyegoldencrunchChips900g','/avatars/products/birdseyegoldencrunchChips900g.png')"><img src="/avatars/products/birdseyegoldencrunchChips900g.png"><span>Birdseyegoldencrunch Chips</span></div>
                 <div class="av-card" onclick="pickAvatar(this,'blackstoneseasaltchips175g','/avatars/products/blackstoneseasaltchips175g.png')"><img src="/avatars/products/blackstoneseasaltchips175g.png"><span>Blackstoneseasaltchips</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'bonappetitbriocheburgebuns200g','/avatars/products/bonappetitbriocheburgebuns200g.png')"><img src="/avatars/products/bonappetitbriocheburgebuns200g.png"><span>Bonappetitbriocheburgebuns</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'broadoakfarmswholechicken','/avatars/products/broadoakfarmswholechicken.png')"><img src="/avatars/products/broadoakfarmswholechicken.png"><span>Broadoakfarmswholechicken</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'cadburydairymilk315g','/avatars/products/cadburydairymilk315g.png')"><img src="/avatars/products/cadburydairymilk315g.png"><span>Cadburydairymilk</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'cadburyoldgoldfruitandnut170g','/avatars/products/cadburyoldgoldfruitandnut170g.png')"><img src="/avatars/products/cadburyoldgoldfruitandnut170g.png"><span>Cadburyoldgoldfruitandnut</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'campbellsrealstockchicken1l','/avatars/products/campbellsrealstockchicken1l.png')"><img src="/avatars/products/campbellsrealstockchicken1l.png"><span>Campbellsrealstockchicken</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'colesfinestbeefragufettucine400g','/avatars/products/colesfinestbeefragufettucine400g.png')"><img src="/avatars/products/colesfinestbeefragufettucine400g.png"><span>Colesfinestbeefragufettucine</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'colesfreerangeeggs12pk','/avatars/products/colesfreerangeeggs12pk.png')"><img src="/avatars/products/colesfreerangeeggs12pk.png"><span>Colesfreerangeeggs</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'colestastyshreddedcheddar700g','/avatars/products/colestastyshreddedcheddar700g.png')"><img src="/avatars/products/colestastyshreddedcheddar700g.png"><span>Colestastyshreddedcheddar</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'coleswater12x600ml','/avatars/products/coleswater12x600ml.png')"><img src="/avatars/products/coleswater12x600ml.png"><span>Coleswater</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'colwayworcestshiresauce250ml','/avatars/products/colwayworcestshiresauce250ml.png')"><img src="/avatars/products/colwayworcestshiresauce250ml.png"><span>Colwayworcestshiresauce</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'confidenceantibacterialwipes15pack','/avatars/products/confidenceantibacterialwipes15pack.png')"><img src="/avatars/products/confidenceantibacterialwipes15pack.png"><span>Confidenceantibacterialwipes</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'delioriginalsbabypeppers130g','/avatars/products/delioriginalsbabypeppers130g.png')"><img src="/avatars/products/delioriginalsbabypeppers130g.png"><span>Delioriginalsbabypeppers</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'delioriginalscornrelishdip200g','/avatars/products/delioriginalscornrelishdip200g.png')"><img src="/avatars/products/delioriginalscornrelishdip200g.png"><span>Delioriginalscornrelishdip</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'delioriginalshommus1kg','/avatars/products/delioriginalshommus1kg.png')"><img src="/avatars/products/delioriginalshommus1kg.png"><span>Delioriginalshommus</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'delioriginalspersianfetadip150g','/avatars/products/delioriginalspersianfetadip150g.png')"><img src="/avatars/products/delioriginalspersianfetadip150g.png"><span>Delioriginalspersianfetadip</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'delioriginalsstuffedgreenolives450g','/avatars/products/delioriginalsstuffedgreenolives450g.png')"><img src="/avatars/products/delioriginalsstuffedgreenolives450g.png"><span>Delioriginalsstuffedgreenolives</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'disanprooxylaundrysoaker1kg','/avatars/products/disanprooxylaundrysoaker1kg.png')"><img src="/avatars/products/disanprooxylaundrysoaker1kg.png"><span>Disanprooxylaundrysoaker</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'dolmiocarbonara490g','/avatars/products/dolmiocarbonara490g.png')"><img src="/avatars/products/dolmiocarbonara490g.png"><span>Dolmiocarbonara</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'dolmiotomatobasil500g','/avatars/products/dolmiotomatobasil500g.png')"><img src="/avatars/products/dolmiotomatobasil500g.png"><span>Dolmiotomatobasil</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'doritoscheesesupremepartysize500g','/avatars/products/doritoscheesesupremepartysize500g.png')"><img src="/avatars/products/doritoscheesesupremepartysize500g.png"><span>Doritoscheesesupremepartysize</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'edgemens5bladekitplus2pack','/avatars/products/edgemens5bladekitplus2pack.png')"><img src="/avatars/products/edgemens5bladekitplus2pack.png"><span>Edgemens5Bladekitplus</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'elmsburypartysausagerolls900g','/avatars/products/elmsburypartysausagerolls900g.png')"><img src="/avatars/products/elmsburypartysausagerolls900g.png"><span>Elmsburypartysausagerolls</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'eltorafajitakit','/avatars/products/eltorafajitakit.png')"><img src="/avatars/products/eltorafajitakit.png"><span>Eltorafajitakit</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'eltorafajitaseasoning40g','/avatars/products/eltorafajitaseasoning40g.png')"><img src="/avatars/products/eltorafajitaseasoning40g.png"><span>Eltorafajitaseasoning</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'eltorahotandsweetjalapenos440g','/avatars/products/eltorahotandsweetjalapenos440g.png')"><img src="/avatars/products/eltorahotandsweetjalapenos440g.png"><span>Eltorahotandsweetjalapenos</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'emporiumgoatscheese350g','/avatars/products/emporiumgoatscheese350g.png')"><img src="/avatars/products/emporiumgoatscheese350g.png"><span>Emporiumgoatscheese</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'emporiumgranapadanocheese250g','/avatars/products/emporiumgranapadanocheese250g.png')"><img src="/avatars/products/emporiumgranapadanocheese250g.png"><span>Emporiumgranapadanocheese</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'emporiumhalloumi225g','/avatars/products/emporiumhalloumi225g.png')"><img src="/avatars/products/emporiumhalloumi225g.png"><span>Emporiumhalloumi</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'emporiumselectionbluecheese200g','/avatars/products/emporiumselectionbluecheese200g.png')"><img src="/avatars/products/emporiumselectionbluecheese200g.png"><span>Emporiumselectionbluecheese</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'farmdalefullcreammilk2l','/avatars/products/farmdalefullcreammilk2l.png')"><img src="/avatars/products/farmdalefullcreammilk2l.png"><span>Farmdalefullcreammilk</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'farmwoodbuffalostylechickenwings1kg','/avatars/products/farmwoodbuffalostylechickenwings1kg.png')"><img src="/avatars/products/farmwoodbuffalostylechickenwings1kg.png"><span>Farmwoodbuffalostylechickenwings</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'farmwoodchickenkyiv350g','/avatars/products/farmwoodchickenkyiv350g.png')"><img src="/avatars/products/farmwoodchickenkyiv350g.png"><span>Farmwoodchickenkyiv</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'farmwoodchickenschnitzel400g','/avatars/products/farmwoodchickenschnitzel400g.png')"><img src="/avatars/products/farmwoodchickenschnitzel400g.png"><span>Farmwoodchickenschnitzel</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'goldenvalehoneypecangranola300g','/avatars/products/goldenvalehoneypecangranola300g.png')"><img src="/avatars/products/goldenvalehoneypecangranola300g.png"><span>Goldenvalehoneypecangranola</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'greenactionmultipurposecleaner600ml','/avatars/products/greenactionmultipurposecleaner600ml.png')"><img src="/avatars/products/greenactionmultipurposecleaner600ml.png"><span>Greenactionmultipurposecleaner</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'haribotwinsnakes280g','/avatars/products/haribotwinsnakes280g.png')"><img src="/avatars/products/haribotwinsnakes280g.png"><span>Haribotwinsnakes</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'hillcrestbranandsultanas580g','/avatars/products/hillcrestbranandsultanas580g.png')"><img src="/avatars/products/hillcrestbranandsultanas580g.png"><span>Hillcrestbranandsultanas</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'hillcrestbreakfastbubbles450g','/avatars/products/hillcrestbreakfastbubbles450g.png')"><img src="/avatars/products/hillcrestbreakfastbubbles450g.png"><span>Hillcrestbreakfastbubbles</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'hillcrestchocorice650g','/avatars/products/hillcrestchocorice650g.png')"><img src="/avatars/products/hillcrestchocorice650g.png"><span>Hillcrestchocorice</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'hillcrestchocpeanutbars210g','/avatars/products/hillcrestchocpeanutbars210g.png')"><img src="/avatars/products/hillcrestchocpeanutbars210g.png"><span>Hillcrestchocpeanutbars</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'hillcresthoneynutcornflakes670g','/avatars/products/hillcresthoneynutcornflakes670g.png')"><img src="/avatars/products/hillcresthoneynutcornflakes670g.png"><span>Hillcresthoneynutcornflakes</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'hillcrestmuesli500g','/avatars/products/hillcrestmuesli500g.png')"><img src="/avatars/products/hillcrestmuesli500g.png"><span>Hillcrestmuesli</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'imperialgrainlonggrainwhiterice250g','/avatars/products/imperialgrainlonggrainwhiterice250g.png')"><img src="/avatars/products/imperialgrainlonggrainwhiterice250g.png"><span>Imperialgrainlonggrainwhiterice</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'internationalcuisinepizzasnacks400g','/avatars/products/internationalcuisinepizzasnacks400g.png')"><img src="/avatars/products/internationalcuisinepizzasnacks400g.png"><span>Internationalcuisinepizzasnacks</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'ironbarkporkmince500g','/avatars/products/ironbarkporkmince500g.png')"><img src="/avatars/products/ironbarkporkmince500g.png"><span>Ironbarkporkmince</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'jindurrastation5starbeefmince500g','/avatars/products/jindurrastation5starbeefmince500g.png')"><img src="/avatars/products/jindurrastation5starbeefmince500g.png"><span>Jindurrastation5Starbeefmince</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'juliushomestyledogfood700g','/avatars/products/juliushomestyledogfood700g.png')"><img src="/avatars/products/juliushomestyledogfood700g.png"><span>Juliushomestyledogfood</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'kelloggsnutrigrain290g','/avatars/products/kelloggsnutrigrain290g.png')"><img src="/avatars/products/kelloggsnutrigrain290g.png"><span>Kelloggsnutrigrain</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'kelloggsspecialk300g','/avatars/products/kelloggsspecialk300g.png')"><img src="/avatars/products/kelloggsspecialk300g.png"><span>Kelloggsspecialk</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'knoppersmilkwafers200g','/avatars/products/knoppersmilkwafers200g.png')"><img src="/avatars/products/knoppersmilkwafers200g.png"><span>Knoppersmilkwafers</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'leggospesto190g','/avatars/products/leggospesto190g.png')"><img src="/avatars/products/leggospesto190g.png"><span>Leggospesto</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'logixdishwashertablets45pack','/avatars/products/logixdishwashertablets45pack.png')"><img src="/avatars/products/logixdishwashertablets45pack.png"><span>Logixdishwashertablets</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'logixplatinumdishwashercapsules46pack','/avatars/products/logixplatinumdishwashercapsules46pack.png')"><img src="/avatars/products/logixplatinumdishwashercapsules46pack.png"><span>Logixplatinumdishwashercapsules</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'maltesers140g','/avatars/products/maltesers140g.png')"><img src="/avatars/products/maltesers140g.png"><span>Maltesers</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'marsfrozendessertbars5pack','/avatars/products/marsfrozendessertbars5pack.png')"><img src="/avatars/products/marsfrozendessertbars5pack.png"><span>Marsfrozendessertbars</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'mccainsuperfries900g','/avatars/products/mccainsuperfries900g.png')"><img src="/avatars/products/mccainsuperfries900g.png"><span>Mccainsuperfries</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'mutticherrytomatoes400g','/avatars/products/mutticherrytomatoes400g.png')"><img src="/avatars/products/mutticherrytomatoes400g.png"><span>Mutticherrytomatoes</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'nannasfrozenapplesnackpies4pack','/avatars/products/nannasfrozenapplesnackpies4pack.png')"><img src="/avatars/products/nannasfrozenapplesnackpies4pack.png"><span>Nannasfrozenapplesnackpies</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'nestlemilosnackbars10pack','/avatars/products/nestlemilosnackbars10pack.png')"><img src="/avatars/products/nestlemilosnackbars10pack.png"><span>Nestlemilosnackbars</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'niveamenblackandwhitedeoderant200ml','/avatars/products/niveamenblackandwhitedeoderant200ml.png')"><img src="/avatars/products/niveamenblackandwhitedeoderant200ml.png"><span>Niveamenblackandwhitedeoderant</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'nongshinramyun480g','/avatars/products/nongshinramyun480g.png')"><img src="/avatars/products/nongshinramyun480g.png"><span>Nongshinramyun</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'oceanroyalerawprawncutlets500g','/avatars/products/oceanroyalerawprawncutlets500g.png')"><img src="/avatars/products/oceanroyalerawprawncutlets500g.png"><span>Oceanroyalerawprawncutlets</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'oceanroyalewhiting1kg','/avatars/products/oceanroyalewhiting1kg.png')"><img src="/avatars/products/oceanroyalewhiting1kg.png"><span>Oceanroyalewhiting</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'oceanspraycranberrylight1.5l','/avatars/products/oceanspraycranberrylight1.5l.png')"><img src="/avatars/products/oceanspraycranberrylight1.5l.png"><span>Oceanspraycranberrylight</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'portviewtuna95g','/avatars/products/portviewtuna95g.png')"><img src="/avatars/products/portviewtuna95g.png"><span>Portviewtuna</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'portviewtunatreatswithcrackers112g','/avatars/products/portviewtunatreatswithcrackers112g.png')"><img src="/avatars/products/portviewtunatreatswithcrackers112g.png"><span>Portviewtunatreatswithcrackers</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'powerforcealuminiumfoil30m','/avatars/products/powerforcealuminiumfoil30m.png')"><img src="/avatars/products/powerforcealuminiumfoil30m.png"><span>Powerforcealuminiumfoil</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'powerforcebathandshowercleaner750ml','/avatars/products/powerforcebathandshowercleaner750ml.png')"><img src="/avatars/products/powerforcebathandshowercleaner750ml.png"><span>Powerforcebathandshowercleaner</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'powerforcebathroomcleaningwipes50pack','/avatars/products/powerforcebathroomcleaningwipes50pack.png')"><img src="/avatars/products/powerforcebathroomcleaningwipes50pack.png"><span>Powerforcebathroomcleaningwipes</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'powerforcecremecleanserlemon500ml','/avatars/products/powerforcecremecleanserlemon500ml.png')"><img src="/avatars/products/powerforcecremecleanserlemon500ml.png"><span>Powerforcecremecleanserlemon</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'powerforcedishwasherpowder1kg','/avatars/products/powerforcedishwasherpowder1kg.png')"><img src="/avatars/products/powerforcedishwasherpowder1kg.png"><span>Powerforcedishwasherpowder</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'powerforcegarbagebag20pack','/avatars/products/powerforcegarbagebag20pack.png')"><img src="/avatars/products/powerforcegarbagebag20pack.png"><span>Powerforcegarbagebag</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'powerforceheavydutyspongescourer3pack','/avatars/products/powerforceheavydutyspongescourer3pack.png')"><img src="/avatars/products/powerforceheavydutyspongescourer3pack.png"><span>Powerforceheavydutyspongescourer</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'powerforcemeshspongescourer5pack','/avatars/products/powerforcemeshspongescourer5pack.png')"><img src="/avatars/products/powerforcemeshspongescourer5pack.png"><span>Powerforcemeshspongescourer</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'powerforcetoiletrimblocks2x50g','/avatars/products/powerforcetoiletrimblocks2x50g.png')"><img src="/avatars/products/powerforcetoiletrimblocks2x50g.png"><span>Powerforcetoiletrimblocks2X</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'quilton3plytoiletpaper18rolls','/avatars/products/quilton3plytoiletpaper18rolls.png')"><img src="/avatars/products/quilton3plytoiletpaper18rolls.png"><span>Quilton3Plytoiletpaper</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'readysetcookchickenkebabsteriyaki375g','/avatars/products/readysetcookchickenkebabsteriyaki375g.png')"><img src="/avatars/products/readysetcookchickenkebabsteriyaki375g.png"><span>Readysetcookchickenkebabsteriyaki</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'readysetcookthinsausages1.8kg','/avatars/products/readysetcookthinsausages1.8kg.png')"><img src="/avatars/products/readysetcookthinsausages1.8kg.png"><span>Readysetcookthinsausages</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'remanofreerangeeggpappardelle375g','/avatars/products/remanofreerangeeggpappardelle375g.png')"><img src="/avatars/products/remanofreerangeeggpappardelle375g.png"><span>Remanofreerangeeggpappardelle</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'remanomacaroni500g','/avatars/products/remanomacaroni500g.png')"><img src="/avatars/products/remanomacaroni500g.png"><span>Remanomacaroni</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'remanopotatognocchi500g','/avatars/products/remanopotatognocchi500g.png')"><img src="/avatars/products/remanopotatognocchi500g.png"><span>Remanopotatognocchi</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'remedykombucha750ml','/avatars/products/remedykombucha750ml.png')"><img src="/avatars/products/remedykombucha750ml.png"><span>Remedykombucha</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'sagourmetcreamychickensoup430g','/avatars/products/sagourmetcreamychickensoup430g.png')"><img src="/avatars/products/sagourmetcreamychickensoup430g.png"><span>Sagourmetcreamychickensoup</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'sanitariumweetbixbites500g','/avatars/products/sanitariumweetbixbites500g.png')"><img src="/avatars/products/sanitariumweetbixbites500g.png"><span>Sanitariumweetbixbites</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'seethavenappleandblackberrypies500g','/avatars/products/seethavenappleandblackberrypies500g.png')"><img src="/avatars/products/seethavenappleandblackberrypies500g.png"><span>Seethavenappleandblackberrypies</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'shapesoriginalsbarbecue250g','/avatars/products/shapesoriginalsbarbecue250g.png')"><img src="/avatars/products/shapesoriginalsbarbecue250g.png"><span>Shapesoriginalsbarbecue</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'speciallyselectedquincepaste100g','/avatars/products/speciallyselectedquincepaste100g.png')"><img src="/avatars/products/speciallyselectedquincepaste100g.png"><span>Speciallyselectedquincepaste</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'sprinterspopcorn120g','/avatars/products/sprinterspopcorn120g.png')"><img src="/avatars/products/sprinterspopcorn120g.png"><span>Sprinterspopcorn</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'storckwerthersoriginalcreamcandies42g','/avatars/products/storckwerthersoriginalcreamcandies42g.png')"><img src="/avatars/products/storckwerthersoriginalcreamcandies42g.png"><span>Storckwerthersoriginalcreamcandies</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'streetsblueribbon2l','/avatars/products/streetsblueribbon2l.png')"><img src="/avatars/products/streetsblueribbon2l.png"><span>Streetsblueribbon</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'sweethavenstrudel600g','/avatars/products/sweethavenstrudel600g.png')"><img src="/avatars/products/sweethavenstrudel600g.png"><span>Sweethavenstrudel</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'sweetsensationsnougatbliss45g','/avatars/products/sweetsensationsnougatbliss45g.png')"><img src="/avatars/products/sweetsensationsnougatbliss45g.png"><span>Sweetsensationsnougatbliss</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'sweetvinebluberries13g','/avatars/products/sweetvinebluberries13g.png')"><img src="/avatars/products/sweetvinebluberries13g.png"><span>Sweetvinebluberries</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'sweetvinedriedappleslices200g','/avatars/products/sweetvinedriedappleslices200g.png')"><img src="/avatars/products/sweetvinedriedappleslices200g.png"><span>Sweetvinedriedappleslices</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'sweetvinesultanas240g','/avatars/products/sweetvinesultanas240g.png')"><img src="/avatars/products/sweetvinesultanas240g.png"><span>Sweetvinesultanas</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'tandildishwashingliquid950ml','/avatars/products/tandildishwashingliquid950ml.png')"><img src="/avatars/products/tandildishwashingliquid950ml.png"><span>Tandildishwashingliquid</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'tricareantibacterialsoap250ml','/avatars/products/tricareantibacterialsoap250ml.png')"><img src="/avatars/products/tricareantibacterialsoap250ml.png"><span>Tricareantibacterialsoap</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'tridentsriracha480ml','/avatars/products/tridentsriracha480ml.png')"><img src="/avatars/products/tridentsriracha480ml.png"><span>Tridentsriracha</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'trimatadvancedlaundrypowder2kg','/avatars/products/trimatadvancedlaundrypowder2kg.png')"><img src="/avatars/products/trimatadvancedlaundrypowder2kg.png"><span>Trimatadvancedlaundrypowder</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'twiningsenglishbreakfasttea100pack','/avatars/products/twiningsenglishbreakfasttea100pack.png')"><img src="/avatars/products/twiningsenglishbreakfasttea100pack.png"><span>Twiningsenglishbreakfasttea</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'westacrecottagecheese500g','/avatars/products/westacrecottagecheese500g.png')"><img src="/avatars/products/westacrecottagecheese500g.png"><span>Westacrecottagecheese</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'westacretastycheese1kg','/avatars/products/westacretastycheese1kg.png')"><img src="/avatars/products/westacretastycheese1kg.png"><span>Westacretastycheese</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'whittakerschocolatepods125g','/avatars/products/whittakerschocolatepods125g.png')"><img src="/avatars/products/whittakerschocolatepods125g.png"><span>Whittakerschocolatepods</span></div>
-                <div class="av-card" onclick="pickAvatar(this,'wisdomtoothbrush2pack','/avatars/products/wisdomtoothbrush2pack.png')"><img src="/avatars/products/wisdomtoothbrush2pack.png"><span>Wisdomtoothbrush</span></div>
             </div>
         </div>
 
+        <div style="background:rgba(0,255,204,0.06);border:1px solid rgba(0,255,204,0.2);border-radius:8px;padding:12px;margin-bottom:20px;font-family:var(--mono);font-size:0.65rem;color:rgba(255,255,255,0.5);line-height:1.6">
+            Leaderboard resets daily at midnight Brisbane time.<br>
+            One entry per Google/Apple account per day.
+        </div>
     </div>
+
     <div class="reg-footer">
-        <button class="btn-lock" id="btn-lock" onclick="lockIn()">&#9889; ENTER THE RACE</button>
-        <div class="lock-note">Outside 4KM = race for the leaderboard &bull; Inside = time trial only</div>
-        <button onclick="doInvite()" style="width:100%;background:transparent;color:var(--teal);border:1px solid var(--teal);padding:14px;font-family:var(--head);font-size:1.1rem;font-weight:900;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:8px;margin-top:8px;display:flex;align-items:center;justify-content:center;gap:8px">
-            <span>👋</span> INVITE A FRIEND TO RACE TODAY
-        </button>
+        <button class="btn-lock" onclick="lockRegistration()">🔒 LOCK PROFILE &amp; ENTER</button>
+        <div class="lock-note">Profile locks for today once you enter the map view</div>
     </div>
 </div>
 
-<!-- RACE HUD -->
 <div id="hud">
-    <div class="hud-logo"><img src="/logo.png" alt=""></div>
+    <div class="hud-logo" id="hud-av-wrap"><img id="hud-av" src="/logo.png" alt=""></div>
     <div class="hud-mid">
-        <div class="hud-label">TO FINISH</div>
-        <div class="hud-val" id="hud-dist">&#8212;</div>
-    </div>
-    <div style="display:flex;flex-direction:column;align-items:center;gap:1px">
         <div class="hud-label">STREAK</div>
         <div class="hud-val" id="hud-streak" style="color:#FFAA00">&#8212;</div>
     </div>
@@ -457,14 +335,12 @@
     </div>
 </div>
 
-<!-- INVITE BUTTON -->
 <div id="invite-btn" style="display:none;position:absolute;top:75px;left:50%;transform:translateX(-50%);z-index:35;white-space:nowrap">
     <button onclick="doInvite()" style="background:linear-gradient(135deg,var(--teal),#00CCAA);color:#000;border:none;padding:12px 28px;font-family:var(--head);font-size:1.3rem;font-weight:900;letter-spacing:2px;text-transform:uppercase;border-radius:50px;box-shadow:0 4px 20px rgba(0,255,204,0.4);cursor:pointer;display:flex;align-items:center;gap:10px">
         <span style="font-size:1.4rem">👋</span> INVITE A FRIEND TO RACE TODAY
     </button>
 </div>
 
-<!-- RACE STATUS BANNER -->
 <div id="race-banner">
     <div class="banner-inner">
         <div class="banner-status" id="banner-status">WAITING TO CROSS BOUNDARY</div>
@@ -473,11 +349,9 @@
     </div>
 </div>
 
-<!-- RECENTER + SHARE -->
 <button class="map-btn" id="btn-re" onclick="recentre()">&#8982;</button>
 <button class="map-btn" id="btn-share" onclick="doShare()" title="Share">&#128279;</button>
 
-<!-- LEFT SIDE LEADERBOARD (visible outside boundary) -->
 <div id="side-lb" style="display:none;position:absolute;left:0;top:70px;bottom:140px;width:160px;z-index:28;overflow:hidden">
     <div style="background:rgba(14,14,18,0.92);border-right:1px solid var(--border);height:100%;padding:10px 8px;overflow-y:auto;backdrop-filter:blur(8px)">
         <div style="font-family:var(--mono);font-size:0.55rem;color:var(--teal);letter-spacing:2px;margin-bottom:8px;text-transform:uppercase">TODAY'S FASTEST</div>
@@ -485,1011 +359,785 @@
     </div>
 </div>
 
-<!-- LEADERBOARD DRAWER -->
 <div id="drawer">
     <div class="drawer-panel">
         <div class="drawer-pull" onclick="toggleDrawer()"><div class="drawer-handle"></div></div>
         <div class="drawer-peek" onclick="toggleDrawer()">
-            <div class="peek-rank back" id="pk-rank">#&#8212;</div>
+            <div class="peek-rank back" id="pk-rank">&#8212;</div>
             <div class="peek-info">
                 <div class="peek-name" id="pk-name">@You</div>
-                <div class="peek-sub" id="pk-sub">TODAY'S LEADERBOARD</div>
+                <div class="peek-sub" id="pk-sub">No time recorded today</div>
             </div>
             <div class="peek-time-block">
                 <div class="peek-time" id="pk-time">&#8212;</div>
-                <div class="peek-sub">YOUR TIME</div>
+                <div class="peek-expand">TAP TO VIEW ALL</div>
             </div>
-            <div class="peek-expand" id="pk-expand">&#8593; BOARD</div>
         </div>
-        <div class="drawer-body" id="drawer-body">
+        <div class="drawer-body">
             <div class="lb-head">
-                <span>TODAY'S FASTEST — GPO TIME TRIAL</span>
-                <span class="lb-date" id="lb-date"></span>
+                <div>LEADERBOARD (<span id="lb-date">--</span>)</div>
+                <div class="lb-date">LIVE BRISBANE TIME</div>
             </div>
-            <div id="lb-rows"></div>
-            <div class="lb-note">DAILY RESET AT MIDNIGHT BRISBANE TIME</div>
+            <div id="lb-rows" style="max-height:260px;overflow-y:auto"></div>
+            <div class="lb-note">Daily reset at midnight Brisbane time</div>
         </div>
     </div>
 </div>
 
-<!-- AD TICKER -->
 <div id="ticker">
-    <div class="ticker-track">
-        <div class="ticker-inner"><img src="/stockticker/30may1.png" class="ticker-img"><span class="ticker-sep">ALDI SPECIALS THIS WEEK</span><img src="/stockticker/30may2.png" class="ticker-img"><span class="ticker-sep">ALDI SPECIALS THIS WEEK</span><img src="/stockticker/30may3.png" class="ticker-img"><span class="ticker-sep">ALDI SPECIALS THIS WEEK</span><img src="/stockticker/30may4.png" class="ticker-img"><span class="ticker-sep">ALDI SPECIALS THIS WEEK</span><img src="/stockticker/30may5.png" class="ticker-img"><span class="ticker-sep">ALDI SPECIALS THIS WEEK</span><img src="/stockticker/30may6.png" class="ticker-img"><span class="ticker-sep">ALDI SPECIALS THIS WEEK</span><img src="/stockticker/30may7.png" class="ticker-img"><span class="ticker-sep">ALDI SPECIALS THIS WEEK</span><img src="/stockticker/30may8.png" class="ticker-img"><span class="ticker-sep">ALDI SPECIALS THIS WEEK</span><img src="/stockticker/30may9.png" class="ticker-img"><span class="ticker-sep">ALDI SPECIALS THIS WEEK</span><img src="/stockticker/30may10.png" class="ticker-img"><span class="ticker-sep">ALDI SPECIALS THIS WEEK</span></div>
-        <div class="ticker-inner" aria-hidden="true"><img src="/stockticker/30may1.png" class="ticker-img"><span class="ticker-sep">ALDI SPECIALS THIS WEEK</span><img src="/stockticker/30may2.png" class="ticker-img"><span class="ticker-sep">ALDI SPECIALS THIS WEEK</span><img src="/stockticker/30may3.png" class="ticker-img"><span class="ticker-sep">ALDI SPECIALS THIS WEEK</span><img src="/stockticker/30may4.png" class="ticker-img"><span class="ticker-sep">ALDI SPECIALS THIS WEEK</span><img src="/stockticker/30may5.png" class="ticker-img"><span class="ticker-sep">ALDI SPECIALS THIS WEEK</span><img src="/stockticker/30may6.png" class="ticker-img"><span class="ticker-sep">ALDI SPECIALS THIS WEEK</span><img src="/stockticker/30may7.png" class="ticker-img"><span class="ticker-sep">ALDI SPECIALS THIS WEEK</span><img src="/stockticker/30may8.png" class="ticker-img"><span class="ticker-sep">ALDI SPECIALS THIS WEEK</span><img src="/stockticker/30may9.png" class="ticker-img"><span class="ticker-sep">ALDI SPECIALS THIS WEEK</span><img src="/stockticker/30may10.png" class="ticker-img"><span class="ticker-sep">ALDI SPECIALS THIS WEEK</span></div>
-    </div>
+    <div class="ticker-track" id="ticker-track"></div>
 </div>
 
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
-<script src="/api/config.js"></script>
+<script src="/__/firebase/10.7.1/firebase-app-compat.js"></script>
+<script src="/__/firebase/10.7.1/firebase-auth-compat.js"></script>
+<script src="/__/firebase/10.7.1/firebase-database-compat.js"></script>
+<script src="/__/firebase/init.js?useEmulator=true"></script>
+
 <script src="/lib/leaflet.js"></script>
+
 <script>
-// ── FIREBASE ──
-firebase.initializeApp({
-    apiKey:"AIzaSyBAsWw3Z56cLrXLIsjNQdN15_OeN1ad134",
-    authDomain:"briscramble.firebaseapp.com",
-    databaseURL:"https://briscramble-default-rtdb.asia-southeast1.firebasedatabase.app",
-    projectId:"briscramble",
-    storageBucket:"briscramble.firebasestorage.app",
-    messagingSenderId:"1055901704932",
-    appId:"1:1055901704932:web:ccb078dc722a7b580782f1"
-});
-const auth = firebase.auth();
-const db   = firebase.database();
-const claimPhone = window.claimPhone || '+61400000000';
+    // ── CONSTANTS ──
+    const FINISH = [-27.4691, 153.0273]; // GPO, 261 Queen St
+    const BOUNDARY = 4000; // 4km
+    const FINISH_RADIUS = 20; // 10 metres to finish
 
-// ── CONSTANTS ──
-const FINISH   = [-27.4698, 153.0251]; // GPO, 261 Queen St
-const BOUNDARY = 4000;  // 4km
-const FINISH_RADIUS = 20; // 10 metres to finish
+    // Brisbane date key for daily leaderboard
+    function brisDateKey(){
+        return new Date().toLocaleDateString('en-AU',{timeZone:'Australia/Brisbane'}).replace(/\//g,'-');
+    }
 
-// Brisbane date key for daily leaderboard
-function brisDateKey(){
-    return new Date().toLocaleDateString('en-AU',{timeZone:'Australia/Brisbane'}).replace(/\//g,'-');
-}
+    // ── STATE ──
+    var myUID=null, myUsername=null, myAvatar='/logo.png', mySlug='scrambler';
+    var isRacing=false, isDQ=false, timerStarted=false, finished=false;
+    var raceStartTime=null, timerInterval=null;
+    var myLat=null, myLng=null, mapFollowing=true;
+    var _authDone=false, _lastEmit=0;
+    var _drawerOpen=false;
+    const markers={}, ghostMarkers={};
+    var myMarker=null;
+    var routePath=[], routeLine=null;
 
-// ── STATE ──
-var myUID=null, myUsername=null, myAvatar='/logo.png', mySlug='scrambler';
-var isRacing=false, isDQ=false, timerStarted=false, finished=false;
-var raceStartTime=null, timerInterval=null;
-var myLat=null, myLng=null, mapFollowing=true;
-var _authDone=false, _lastEmit=0;
-var _drawerOpen=false;
-const markers={}, ghostMarkers={};
-var myMarker=null;
-var routePath=[], routeLine=null;
+    // ── MAP ──
+    const map = L.map('map',{zoomControl:false,attributionControl:false}).setView(FINISH,13);
+    L.tileLayer('https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}',{maxZoom:20}).addTo(map);
 
-// ── MAP ──
-const map = L.map('map',{zoomControl:false,attributionControl:false}).setView(FINISH,13);
-L.tileLayer('https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}',{maxZoom:20}).addTo(map);
+    // Boundary rings — pulsing start line
+    var boundaryRing = L.circle(FINISH,{radius:BOUNDARY,color:'#E8001A',weight:8,fill:true,fillColor:'#E8001A',fillOpacity:0.05,opacity:0.9}).addTo(map);
+    var boundaryDash = L.circle(FINISH,{radius:BOUNDARY,color:'#ff4444',weight:3,fill:false,opacity:0.6,dashArray:'12,8'}).addTo(map);
 
-// Boundary rings — pulsing start line
-var boundaryRing = L.circle(FINISH,{radius:BOUNDARY,color:'#E8001A',weight:8,fill:true,fillColor:'#E8001A',fillOpacity:0.05,opacity:0.9}).addTo(map);
-var boundaryDash = L.circle(FINISH,{radius:BOUNDARY,color:'#ff4444',weight:3,fill:false,opacity:0.6,dashArray:'12,8'}).addTo(map);
-// Pulse the ring opacity
-var _ringPulse=true;
-setInterval(function(){
-    _ringPulse=!_ringPulse;
-    boundaryRing.setStyle({opacity:_ringPulse?0.9:0.3,fillOpacity:_ringPulse?0.05:0.02});
-    boundaryDash.setStyle({opacity:_ringPulse?0.8:0.2});
-},800);
-L.marker([-27.433,153.0251],{icon:L.divIcon({
-    html:"<div style='font-family:monospace;font-size:11px;font-weight:bold;color:#E8001A;background:rgba(0,0,0,0.85);padding:4px 10px;border-radius:4px;white-space:nowrap;border:1px solid #E8001A;animation:finishPing 2s infinite;letter-spacing:2px'>&#9654; START LINE &#9664;</div>",
-    className:'',iconAnchor:[75,0]
-})}).addTo(map);
+    // Pulse the ring opacity
+    var _ringPulse=true;
+    setInterval(function(){
+        _ringPulse=!_ringPulse;
+        boundaryRing.setStyle({opacity:_ringPulse?0.9:0.3,fillOpacity:_ringPulse?0.05:0.02});
+        boundaryDash.setStyle({opacity:_ringPulse?0.8:0.2});
+    },800);
 
-// Finish marker — GPO
-// Mystery finish — just a pulsing red dot, no label revealed until you get close
-L.marker(FINISH,{icon:L.divIcon({
-    html:"<div style='width:28px;height:28px;border-radius:50%;background:#E8001A;border:3px solid #fff;box-shadow:0 0 24px #E8001A,0 0 48px rgba(232,0,26,0.4);animation:finishPing 1.5s infinite'></div>",
-    className:'',iconAnchor:[14,14]
-})}).addTo(map);
+    L.marker([-27.433,153.0251],{icon:L.divIcon({
+        html:"<div style='font-family:monospace;font-size:11px;font-weight:bold;color:#E8001A;background:rgba(0,0,0,0.85);padding:4px 10px;border-radius:4px;white-space:nowrap;border:1px solid #E8001A;animation:finishPing 2s infinite;letter-spacing:2px'>&#9654; START LINE &#9664;</div>",
+        className:'',iconAnchor:[75,0]
+    })}).addTo(map);
 
-map.on('dragstart',function(){mapFollowing=false;document.getElementById('btn-re').classList.add('show');});
+    // Finish marker — GPO
+    L.marker(FINISH,{icon:L.divIcon({
+        html:"<div style='width:28px;height:28px;border-radius:50%;background:#E8001A;border:4px solid #fff;box-shadow:0 0 16px #E8001A;animation:finishPing 1.5s infinite'></div>",
+        className:'',iconAnchor:[14,14]
+    })}).addTo(map);
 
-// ── CHECKPOINTS ──
-var CPS=[]; var earned={}; // Landmarks removed
-
-// ── UTILS ──
-function haversine(a,b,c,d){var R=6371000,dL=(c-a)*Math.PI/180,dl=(d-b)*Math.PI/180;var x=Math.sin(dL/2)*Math.sin(dL/2)+Math.cos(a*Math.PI/180)*Math.cos(c*Math.PI/180)*Math.sin(dl/2)*Math.sin(dl/2);return R*2*Math.atan2(Math.sqrt(x),Math.sqrt(1-x));}
-function fmt(m){return m>=1000?(m/1000).toFixed(1)+'km':Math.round(m)+'m';}
-function fmtTime(ms){var s=Math.floor(ms/1000),m=Math.floor(s/60),sec=s%60;return String(m).padStart(2,'0')+':'+String(sec).padStart(2,'0');}
-function fmtTimeStr(s){var m=Math.floor(s/60),sec=s%60;return String(m).padStart(2,'0')+':'+String(sec).padStart(2,'0');}
-
-// ── SPEECH ──
-var _lastSpeak=0;
-function speak(msg){
-    if(!window.speechSynthesis) return;
-    if(Date.now()-_lastSpeak<10000) return;
-    _lastSpeak=Date.now();
-    window.speechSynthesis.cancel();
-    var u=new SpeechSynthesisUtterance(msg);
-    u.rate=1.05;u.pitch=0.9;u.volume=0.9;
-    var v=window.speechSynthesis.getVoices();
-    var pref=v.find(function(x){return x.lang==='en-AU';})||v.find(function(x){return x.lang.startsWith('en');});
-    if(pref) u.voice=pref;
-    window.speechSynthesis.speak(u);
-}
-if(window.speechSynthesis) window.speechSynthesis.onvoiceschanged=function(){window.speechSynthesis.getVoices();};
-
-// ── MARKER ICONS ──
-function mkIcon(src,label,isMe,dist,pulse,ghost){
-    var c=isMe?'#E8001A':ghost?'rgba(180,130,255,0.9)':pulse?'#00FFCC':'rgba(255,255,255,0.8)';
-    var b=isMe?'border:1.5px solid #E8001A':ghost?'border:1px solid rgba(180,130,255,0.6)':pulse?'border:1.5px solid #00FFCC':'border:1px solid rgba(255,255,255,0.3)';
-    var a=ghost?'animation:ghostPulse 1.5s ease-in-out infinite;':pulse?'animation:rivalPulse 1.2s ease-in-out infinite;':'';
-    return L.divIcon({
-        html:'<div style="text-align:center;'+a+'filter:drop-shadow(0 2px 6px rgba(0,0,0,0.8))">'
-            +'<img src="'+src+'" style="width:32px;height:32px;object-fit:contain;border-radius:4px" onerror="this.style.opacity=0">'
-            +'<br><span style="font-size:11px;font-weight:bold;background:#111;color:'+c+';'+b+';padding:2px 6px;font-family:sans-serif;border-radius:3px;white-space:nowrap;display:inline-block">'+label+'</span>'
-            +(dist?'<div style="font-size:10px;font-weight:bold;color:'+(isMe?'#fff':ghost?'rgba(180,130,255,0.9)':'rgba(255,255,255,0.7)')+';background:#000;padding:2px 4px;border-radius:2px;margin-top:1px;white-space:nowrap">'+dist+'</div>':'')
-            +'</div>',
-        className:'',iconAnchor:[20,30]
-    });
-}
-
-// ── AUTH ──
-auth.getRedirectResult().then(function(r){if(r&&r.user)afterAuth(r.user);}).catch(function(){});
-auth.onAuthStateChanged(function(u){
-    if(u){ afterAuth(u); }
-    else { showScreen('s-auth'); }
-});
-
-function signInGoogle(){
-    if(typeof firebase==='undefined'||!firebase.auth){setTimeout(signInGoogle,500);return;}
-    var p=new firebase.auth.GoogleAuthProvider();
-    auth.signInWithPopup(p).then(function(r){afterAuth(r.user);}).catch(function(e){
-        if(e.code==='auth/popup-blocked'||e.code==='auth/popup-closed-by-user') auth.signInWithRedirect(p);
-        else console.error(e);
-    });
-}
-function signInApple(){
-    if(typeof firebase==='undefined'||!firebase.auth){setTimeout(signInApple,500);return;}
-    var p=new firebase.auth.OAuthProvider('apple.com');
-    auth.signInWithPopup(p).then(function(r){afterAuth(r.user);}).catch(function(e){
-        if(e.code==='auth/popup-blocked'||e.code==='auth/popup-closed-by-user') auth.signInWithRedirect(p);
-        else console.error(e);
-    });
-}
-
-function afterAuth(user){
-    if(_authDone) return;
-    _authDone=true;
-    myUID=user.uid;
-
-    // STEP 1: Instantly apply localStorage (zero delay — no @You flash)
-    var lsUser=localStorage.getItem('bsc_username');
-    var lsAv=localStorage.getItem('bsc_avatar');
-    var lsSlug=localStorage.getItem('bsc_slug');
-    var wasLocked=localStorage.getItem('bsc_locked');
-    if(lsUser){ myUsername=lsUser; myAvatar=lsAv||'/logo.png'; mySlug=lsSlug||'scrambler'; }
-
-    // STEP 2: Load from Firebase in background (updates if different device)
-    db.ref('users/'+myUID).once('value').then(function(snap){
-        if(snap.exists()){
-            var p=snap.val();
-            myUsername=p.username;
-            myAvatar=p.avatar||'/logo.png';
-            mySlug=p.slug||'scrambler';
+    // ── FIREBASE AUTH ──
+    const db = firebase.database();
+    firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+            afterAuth(user);
+        } else {
+            showScreen('s-auth');
         }
-        // STEP 3: Always save back to both stores
-        if(myUsername){
+    });
+
+    function signInGoogle() {
+        var provider = new firebase.auth.GoogleAuthProvider();
+        firebase.auth().signInWithRedirect(provider);
+    }
+    function signInApple() {
+        var provider = new firebase.auth.OAuthProvider('apple.com');
+        firebase.auth().signInWithRedirect(provider);
+    }
+
+    function afterAuth(user) {
+        if(_authDone) return;
+        _authDone=true;
+        myUID=user.uid;
+
+        // Step 1: Read local storage cache immediately so registration sticks instantaneously
+        var cachedUser = localStorage.getItem('bsc_username');
+        var cachedAv = localStorage.getItem('bsc_avatar');
+        var cachedSlug = localStorage.getItem('bsc_slug');
+        var wasLocked = localStorage.getItem('bsc_locked');
+
+        if (cachedUser && cachedUser !== 'null' && cachedUser !== 'undefined') {
+            myUsername = cachedUser;
+            if (cachedAv) myAvatar = cachedAv;
+            if (cachedSlug) mySlug = cachedSlug;
+        }
+
+        // Step 2: Query Remote Database asynchronously
+        db.ref('users/' + myUID).once('value').then(function(snap) {
+            var val = snap.val();
+            if (val && val.username) {
+                myUsername = val.username;
+                myAvatar = val.avatar || '/logo.png';
+                mySlug = val.slug || 'scrambler';
+
+                // Repopulate device local storage truth table
+                localStorage.setItem('bsc_username', myUsername);
+                localStorage.setItem('bsc_avatar', myAvatar);
+                localStorage.setItem('bsc_slug', mySlug);
+            } else if (myUsername) {
+                // If it exists locally but backend is missing it, update backend instead of wiping client state
+                db.ref('users/' + myUID).update({
+                    username: myUsername,
+                    avatar: myAvatar,
+                    slug: mySlug,
+                    lastSeen: firebase.database.ServerValue.TIMESTAMP
+                });
+            }
+
+            // Route securely using our verified identity parameters
+            if (myUsername && myUsername !== 'null' && myUsername !== 'undefined') {
+                if (wasLocked === '1') rejoinRace();
+                else showScreen('s-location');
+            } else {
+                showScreen('s-name');
+            }
+        }).catch(function() {
+            // Offline fallback strategy: completely rely on validated client variables
+            if (myUsername && myUsername !== 'null' && myUsername !== 'undefined') {
+                if (wasLocked === '1') rejoinRace();
+                else showScreen('s-location');
+            } else {
+                showScreen('s-name');
+            }
+        });
+    }
+
+    // ── USERNAME ──
+    function saveName(){
+        var v=document.getElementById('name-input').value.trim().replace(/[^a-zA-Z0-9_]/g,'');
+        var e=document.getElementById('name-err');
+        if(v.length<2){e.textContent='Minimum 2 characters';return;}
+        e.textContent='';
+
+        fetch('/api/register-username',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({uid:myUID||'u_'+Date.now(),username:v})})
+        .then(function(r){return r.json();}).then(function(d){
+            if(d.error){e.textContent=d.error;return;}
+            myUsername=d.username;
             localStorage.setItem('bsc_username',myUsername);
+            
+            // Save profile to Firebase so any device can load it
+            db.ref('users/'+myUID).set({
+                username:myUsername,
+                avatar:myAvatar,
+                slug:mySlug,
+                createdAt:firebase.database.ServerValue.TIMESTAMP
+            });
             localStorage.setItem('bsc_avatar',myAvatar);
             localStorage.setItem('bsc_slug',mySlug);
+            showScreen('s-location');
+        }).catch(function(){myUsername=v;showScreen('s-location');});
+    }
+
+    // ── SCREENS ──
+    function showScreen(id){
+        document.getElementById('s-loading').style.display='none';
+        ['s-auth','s-name','s-location','s-reg'].forEach(function(s){
+            document.getElementById(s).classList.toggle('hidden',s!==id);
+        });
+    }
+
+    function requestGPS(){
+        if(!navigator.geolocation){
+            alert('GPS is not available on this device.');
+            return;
+        }
+        navigator.geolocation.getCurrentPosition(
+            function(pos){
+                goRegister();
+            },
+            function(err){
+                if(err.code===1){
+                    document.getElementById('btn-gps').classList.add('hidden');
+                    document.getElementById('gps-denied').classList.remove('hidden');
+                } else {
+                    alert('GPS error: '+err.message);
+                }
+            },{enableHighAccuracy:true,timeout:10000}
+        );
+    }
+
+    function goRegister(){
+        showScreen('s-reg');
+        document.getElementById('reg-username').textContent='@'+myUsername;
+        loadStreak();
+        startGPS();
+        loadTicker();
+    }
+
+    function forceSaveProfile(){
+        if(!myUID)return;
+        db.ref('users/'+myUID).update({
+            username:myUsername,
+            avatar:myAvatar,
+            slug:mySlug,
+            lastSeen:firebase.database.ServerValue.TIMESTAMP
+        }).then(function(){
+            alert('Profile configuration synchronized!');
+        });
+    }
+
+    // ── AVATARS ──
+    function pickAvatar(card,slug,src){
+        document.querySelectorAll('.av-card').forEach(function(c){c.classList.remove('active');});
+        card.classList.add('active');
+        myAvatar=src;
+        mySlug=slug;
+        localStorage.setItem('bsc_avatar',src);
+        localStorage.setItem('bsc_slug',slug);
+        
+        if(myUID){
+            db.ref('users/'+myUID).update({avatar:src,slug:slug});
+        }
+    }
+
+    function lockRegistration(){
+        var box=document.getElementById('elig-box');
+        if(box.classList.contains('checking')){
+            alert('Please wait for GPS signal verification.');
+            return;
+        }
+        localStorage.setItem('bsc_locked','1');
+        
+        if(myUID){
             db.ref('users/'+myUID).update({
                 username:myUsername,
                 avatar:myAvatar,
                 slug:mySlug,
-                lastSeen:firebase.database.ServerValue.TIMESTAMP
+                lockedToday:true,
+                lockedAt:firebase.database.ServerValue.TIMESTAMP
             });
-            if(wasLocked==='1') rejoinRace();
-            else showScreen('s-location');
-        } else {
-            showScreen('s-name');
         }
-    }).catch(function(){
-        // Firebase offline — localStorage already applied in Step 1
-        if(myUsername){
-            if(wasLocked==='1') rejoinRace();
-            else showScreen('s-location');
-        } else {
-            showScreen('s-name');
+        
+        document.getElementById('hud-av').src=myAvatar;
+        keepAudioWarm();
+        
+        if(isDQ){
+            var ok=confirm('Boundary Status: DQ. You are inside the 4KM ring. Entering locks you into a TIME TRIAL ONLY. Proceed?');
+            if(!ok){
+                localStorage.removeItem('bsc_locked');
+                return;
+            }
         }
-    });
-}
-
-// ── USERNAME ──
-function saveName(){
-    var v=document.getElementById('name-input').value.trim().replace(/[^a-zA-Z0-9_]/g,'');
-    var e=document.getElementById('name-err');
-    if(v.length<2){e.textContent='Minimum 2 characters';return;}
-    e.textContent='';
-    fetch('/api/register-username',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({uid:myUID||'u_'+Date.now(),username:v})})
-    .then(function(r){return r.json();}).then(function(d){
-        if(d.error){e.textContent=d.error;return;}
-        myUsername=d.username;
-        localStorage.setItem('bsc_username',myUsername);
-        // Save profile to Firebase so any device can load it
-        db.ref('users/'+myUID).set({
-            username:myUsername,
-            avatar:myAvatar,
-            slug:mySlug,
-            createdAt:firebase.database.ServerValue.TIMESTAMP
-        });
-        localStorage.setItem('bsc_avatar',myAvatar);
-        localStorage.setItem('bsc_slug',mySlug);
-        showScreen('s-location');
-    }).catch(function(){myUsername=v;showScreen('s-location');});
-}
-
-// ── SCREENS ──
-function showScreen(id){
-    document.getElementById('s-loading').style.display='none';
-    ['s-auth','s-name','s-location','s-reg'].forEach(function(s){
-        document.getElementById(s).classList.toggle('hidden',s!==id);
-    });
-}
-
-function requestGPS(){
-    // Trigger the GPS permission prompt immediately on button tap
-    // This ensures the browser prompt fires right after a user gesture
-    if(!navigator.geolocation){
-        alert('GPS is not available on this device.');
-        return;
+        startRaceMode();
     }
-    navigator.geolocation.getCurrentPosition(
-        function(pos){
-            // Permission granted — go to register
-            goRegister();
-        },
-        function(err){
-            if(err.code===1){ // PERMISSION_DENIED
-                document.querySelector('#s-location .btn-red').textContent='❌ Location Denied — Go to Settings';
-                document.querySelector('#s-location .btn-red').style.background='#555';
-            } else {
-                goRegister(); // Other errors — try anyway
+
+    function rejoinRace(){
+        document.getElementById('hud-av').src=myAvatar;
+        keepAudioWarm();
+        var wasLocked=localStorage.getItem('bsc_locked');
+        if(wasLocked==='1'){
+            var lastRace=localStorage.getItem('bsc_last_race');
+            if(lastRace===brisDateKey()){
+                showScreen('s-name');
+                return;
             }
-        },
-        {enableHighAccuracy:true,timeout:10000,maximumAge:0}
-    );
-}
-
-function goRegister(){
-    showScreen('s-reg');
-    document.getElementById('reg-username').textContent='@'+myUsername;
-    // Always ensure profile is saved to Firebase
-    if(myUID&&myUsername){
-        db.ref('users/'+myUID).once('value').then(function(s){
-            if(!s.exists()||s.val().username!==myUsername){
-                db.ref('users/'+myUID).set({username:myUsername,avatar:myAvatar,slug:mySlug,savedAt:firebase.database.ServerValue.TIMESTAMP});
-            }
-        });
+        }
+        startRaceMode();
     }
-    document.getElementById('pk-name').textContent='@'+myUsername;
-    restoreAvatar();
-    startGPS();
-    listenLeaderboard();
-    setLbDate();
-    showRulesIfNeeded();
-}
 
-function restoreAvatar(){
-    var slug=localStorage.getItem('bsc_slug')||'scrambler';
-    var src=localStorage.getItem('bsc_avatar')||'/logo.png';
-    myAvatar=src; mySlug=slug;
-    document.querySelectorAll('.av-card').forEach(function(c){c.classList.remove('active');});
-    var cards=document.querySelectorAll('.av-card');
-    for(var i=0;i<cards.length;i++){
-        var onclick=cards[i].getAttribute('onclick')||'';
-        if(onclick.indexOf("'"+slug+"'")>-1){cards[i].classList.add('active');break;}
+    function startRaceMode(){
+        isRacing=true;
+        showScreen(null);
+        document.getElementById('hud').classList.add('show');
+        document.getElementById('race-banner').classList.add('show');
+        document.getElementById('drawer').classList.add('show','collapsed');
+        document.getElementById('ticker').classList.add('show');
+        document.getElementById('btn-re').classList.add('show');
+        document.getElementById('pk-name').textContent='@'+(myUsername||'You');
+        document.getElementById('btn-share').classList.add('show');
+        
+        if(myUID){
+            var ref=db.ref('active/'+myUID);
+            ref.set({username:myUsername,avatar:myAvatar,lat:myLat||0,lng:myLng||0,dist:9999,racing:false,isDQ:isDQ,ts:firebase.database.ServerValue.TIMESTAMP});
+            ref.onDisconnect().remove();
+        }
+        listenActivePlayers();
+        listenLeaderboard();
+        setLbDate();
+        if(myLat) updateRaceState(myLat,myLng);
     }
-}
 
-function pickAvatar(el,slug,src){
-    document.querySelectorAll('.av-card').forEach(function(c){c.classList.remove('active');});
-    el.classList.add('active');
-    mySlug=slug; myAvatar=src;
-    localStorage.setItem('bsc_avatar',src);
-    localStorage.setItem('bsc_slug',slug);
-    // Update Firebase profile so other devices get new avatar
-    if(myUID) db.ref('users/'+myUID).update({avatar:src,slug:slug});
-}
-
-// Drag scroll avatar strip
-(function(){
-    var s=document.getElementById('av-strip');
-    if(!s) return;
-    var down=false,sx=0,sl=0;
-    s.addEventListener('mousedown',function(e){down=true;sx=e.pageX-s.offsetLeft;sl=s.scrollLeft;s.style.cursor='grabbing';});
-    s.addEventListener('mouseleave',function(){down=false;s.style.cursor='grab';});
-    s.addEventListener('mouseup',function(){down=false;s.style.cursor='grab';});
-    s.addEventListener('mousemove',function(e){if(!down)return;e.preventDefault();s.scrollLeft=sl-(e.pageX-s.offsetLeft-sx)*1.5;});
-})();
-
-// ── LOCK IN ──
-function lockIn(){
-    // Always save profile to Firebase before racing
-    if(myUID&&myUsername){
-        db.ref('users/'+myUID).set({
-            username:myUsername,
-            avatar:myAvatar,
-            slug:mySlug,
-            savedAt:firebase.database.ServerValue.TIMESTAMP
-        });
-        localStorage.setItem('bsc_avatar',myAvatar);
-        localStorage.setItem('bsc_slug',mySlug);
-        localStorage.setItem('bsc_username',myUsername);
-    }
-    if(!myLat){alert('Waiting for GPS...');return;}
-    var dist=haversine(myLat,myLng,FINISH[0],FINISH[1]);
-    isDQ = dist < BOUNDARY; // DQ if inside boundary at registration
-    // Also DQ if outside race window (before 7am or after 8am)
-    if(isOutsideWindowDQ()) isDQ = true;
-    localStorage.setItem('bsc_locked','1');
-    localStorage.setItem('bsc_avatar',myAvatar);
-    localStorage.setItem('bsc_slug',mySlug);
-    startRaceMode();
-}
-
-function rejoinRace(){
-    // Make sure profile is loaded before showing race
-    if(!myUsername){
-        // Try localStorage fallback
-        var lsUser = localStorage.getItem('bsc_username');
-        var lsAv   = localStorage.getItem('bsc_avatar');
-        var lsSlug = localStorage.getItem('bsc_slug');
-        if(lsUser){ myUsername=lsUser; myAvatar=lsAv||'/logo.png'; mySlug=lsSlug||'scrambler'; }
-        else {
-            // No profile at all — send to name screen
-            showScreen('s-name');
+    // ── GPS ──
+    function startGPS(){
+        if(!navigator.geolocation){
+            document.getElementById('elig-box').className='elig-box dq';
+            document.getElementById('elig-box').textContent='GPS not available on this device';
             return;
         }
-    }
-    startRaceMode();
-}
-
-function startRaceMode(){
-    isRacing=true;
-    showScreen(null);
-    document.getElementById('hud').classList.add('show');
-    document.getElementById('race-banner').classList.add('show');
-    document.getElementById('drawer').classList.add('show','collapsed');
-    document.getElementById('ticker').classList.add('show');
-    document.getElementById('btn-re').classList.add('show');
-    document.getElementById('pk-name').textContent='@'+(myUsername||'You');
-    document.getElementById('btn-share').classList.add('show');
-    // Register in Firebase
-    if(myUID){
-        var ref=db.ref('active/'+myUID);
-        ref.set({username:myUsername,avatar:myAvatar,lat:myLat||0,lng:myLng||0,dist:9999,racing:false,isDQ:isDQ,ts:firebase.database.ServerValue.TIMESTAMP});
-        ref.onDisconnect().remove();
-    }
-    listenActivePlayers();
-    listenLeaderboard();
-    setLbDate();
-    if(myLat) updateRaceState(myLat,myLng);
-}
-
-// ── GPS ──
-function startGPS(){
-    if(!navigator.geolocation){
-        document.getElementById('elig-box').className='elig-box dq';
-        document.getElementById('elig-box').textContent='GPS not available on this device';
-        return;
-    }
-    navigator.geolocation.watchPosition(
-        function(p){onPos(p.coords.latitude,p.coords.longitude);},
-        function(){
-            document.getElementById('elig-box').className='elig-box dq';
-            document.getElementById('elig-box').textContent='Enable location services and reload';
-        },
-        {enableHighAccuracy:true,maximumAge:1000,timeout:5000}
-    );
-}
-
-function onPos(lat,lng){
-    // Only process if moved at least 5 metres (saves battery, reduces redraws)
-    if(myLat!==null && myLng!==null){
-        var moved = haversine(myLat,myLng,lat,lng);
-        if(moved < 5) return;
-    }
-    myLat=lat; myLng=lng;
-    var dist=haversine(lat,lng,FINISH[0],FINISH[1]);
-
-    // Update/create my marker
-    if(!myMarker){
-        myMarker=L.marker([lat,lng],{icon:mkIcon(myAvatar,'@'+(myUsername||'You'),true,fmt(dist),false,false),zIndexOffset:1000}).addTo(map);
-    } else {
-        myMarker.setLatLng([lat,lng]);
-        myMarker.setIcon(mkIcon(myAvatar,'@'+(myUsername||'You'),true,fmt(dist),false,false));
+        navigator.geolocation.watchPosition(
+            function(p){onPos(p.coords.latitude,p.coords.longitude);},
+            function(){
+                document.getElementById('elig-box').className='elig-box dq';
+                document.getElementById('elig-box').textContent='Enable location services and reload';
+            },
+            {enableHighAccuracy:true,maximumAge:1000,timeout:5000}
+        );
     }
 
-    // Update HUD
-    document.getElementById('hud-dist').textContent=fmt(dist);
+    function onPos(lat,lng){
+        if(myLat!==null && myLng!==null){
+            var moved = haversine(myLat,myLng,lat,lng);
+            if(moved < 5) return;
+        }
+        myLat=lat;
+        myLng=lng;
+        var dist=haversine(lat,lng,FINISH[0],FINISH[1]);
 
-    if(!isRacing){
-        // Show eligibility on register screen
-        var ebox=document.getElementById('elig-box');
-        if(ebox){
-            if(dist<BOUNDARY){
-                ebox.className='elig-box dq';
-                ebox.innerHTML='&#9888; INSIDE 4KM ('+fmt(dist)+' from GPO) &mdash; you can still race but won\'t appear on leaderboard';
+        if(!myMarker){
+            myMarker=L.marker([lat,lng],{icon:mkIcon(myAvatar,'@'+myUsername,true,'',false,false)}).addTo(map);
+        } else {
+            myMarker.setLatLng([lat,lng]);
+        }
+
+        if(mapFollowing){
+            map.setView([lat,lng],16);
+        }
+
+        if(!isRacing){
+            var box=document.getElementById('elig-box');
+            if(dist >= BOUNDARY){
+                box.className='elig-box ok';
+                box.innerHTML='&#9989; OUTSIDE BOUNDARY ('+fmt(dist)+') &mdash; ELIGIBLE FOR LEADERBOARD';
+                isDQ=false;
             } else {
-                var t=getBrisTime();
-                var inWindow=isInRaceWindow();
-                var windowNote=inWindow?' &mdash; <strong style="color:var(--teal)">Race window OPEN</strong>':t.total<7*60?' &mdash; <strong style="color:#FFAA00">Window opens at 7:00am</strong>':' &mdash; <strong style="color:#FFAA00">Window closed (after 8am)</strong>';
-                ebox.className='elig-box ok';
-                ebox.innerHTML='&#10003; '+fmt(dist)+' from finish'+windowNote;
+                box.className='elig-box dq';
+                box.innerHTML='&#9888; INSIDE BOUNDARY ('+fmt(dist)+') &mdash; TIME TRIAL ONLY (NO LEADERBOARD)';
+                isDQ=true;
             }
+        } else {
+            updateRaceState(lat,lng);
         }
-        // Fit map to show player + finish
-        if(!myMarker._mapFirstFit){
-            myMarker._mapFirstFit=true;
-            map.fitBounds(L.latLngBounds([[lat,lng],FINISH]).pad(0.3),{animate:true,duration:1.5});
-        }
-        return;
     }
 
-    // Race mode
-    updateRaceState(lat,lng);
+    function updateRaceState(lat,lng){
+        var dist=haversine(lat,lng,FINISH[0],FINISH[1]);
+        var bStatus=document.getElementById('banner-status');
+        var bMain=document.getElementById('banner-main');
+        var bSub=document.getElementById('banner-sub');
 
-    // Draw route path when racing
-    if(timerStarted && !finished){
+        if(myMarker) myMarker.setLatLng([lat,lng]);
+
         routePath.push([lat,lng]);
         if(!routeLine){
-            routeLine = L.polyline(routePath, {
-                color:'#00FFCC', weight:4, opacity:0.8,
-                lineJoin:'round', lineCap:'round'
-            }).addTo(map);
+            routeLine=L.polyline(routePath,{color:isDQ?'#FFAA00':'#00FFCC',weight:5,opacity:0.8}).addTo(map);
         } else {
             routeLine.setLatLngs(routePath);
         }
-    }
 
-    // Throttled Firebase update
-    var now=Date.now();
-    if(now-_lastEmit>4000&&myUID){
-        db.ref('active/'+myUID).update({lat:lat,lng:lng,dist:dist,ts:firebase.database.ServerValue.TIMESTAMP});
-        _lastEmit=now;
-    }
-
-    // Auto-zoom
-    if(mapFollowing){
-        var z;
-        if(!timerStarted) z=dist>6000?12:dist>4000?13:14; // before start — show boundary
-        else z=dist>2000?14:dist>800?15:dist>300?16:dist>100?17:18; // after start — zoom to finish
-        map.setView([lat,lng],z,{animate:true,duration:1});
-    }
-
-    // Checkpoints
-
-    // Proximity alerts
-    if(timerStarted){
-        if(dist<1000&&dist>900) speak('You are close. Keep going.');
-        if(dist<500&&dist>400) speak('500 metres. Push hard.');
-    }
-}
-
-function updateRaceState(lat,lng){
-    // Show side leaderboard only when outside boundary waiting
-    var sideLb = document.getElementById('side-lb');
-    if(sideLb) sideLb.style.display = (!timerStarted&&isRacing) ? 'block' : 'none';
-    var dist=haversine(lat,lng,FINISH[0],FINISH[1]);
-    var banner=document.getElementById('race-banner');
-    var bStatus=document.getElementById('banner-status');
-    var bMain=document.getElementById('banner-main');
-    var bSub=document.getElementById('banner-sub');
-
-    if(finished) return;
-
-    if(dist>=BOUNDARY){
-        // Show distance to the boundary ring, not to finish
-        var distToBoundary = dist - BOUNDARY;
-        bStatus.textContent='WAITING TO CROSS START LINE';
-        bMain.className='banner-main waiting';
-        bMain.textContent = distToBoundary < 50 ? 'AT THE START LINE!' : fmt(distToBoundary)+' TO START LINE';
-        bSub.textContent='Cross the red ring — timer starts automatically';
-        if(timerStarted){
-            // They went back outside — pause? No — timer keeps running per rules
-        }
-    } else {
-        // Inside boundary — timer should be running
-        if(!timerStarted){
-            timerStarted=true;
-            raceStartTime=Date.now();
-            startTimer();
-            if(navigator.vibrate) navigator.vibrate([50,50,50,50,300]);
-            speak(isDQ ? 'Timer started. Time trial only.' : 'Off and racing. Good luck!');
-        }
-        bStatus.textContent=isDQ?'TIME TRIAL — DQ FROM LEADERBOARD':'RACING';
-        bMain.className='banner-main '+(isDQ?'dq':'racing');
-        bMain.textContent=fmt(dist)+' TO FINISH';
-        bSub.textContent=isDQ?'Time trial — not on leaderboard':'Find the red dot. First to reach it wins.';
-
-        // Check finish
-        if(dist<=FINISH_RADIUS&&!finished){
-            finished=true;
-            showFinished();
-        }
-    }
-}
-
-// ── TIMER ──
-function startTimer(){
-    clearInterval(timerInterval);
-    timerInterval=setInterval(function(){
-        if(!raceStartTime||finished) return;
-        var elapsed=Date.now()-raceStartTime;
-        var t=fmtTime(elapsed);
-        document.getElementById('hud-timer').textContent=t;
-        document.getElementById('pk-time').textContent=t;
-    },500);
-}
-
-function getElapsed(){
-    if(!raceStartTime) return 0;
-    return Math.floor((Date.now()-raceStartTime)/1000);
-}
-
-
-// ── SHARE CARD ──
-function generateShareCard(username, timeStr, rank, isDQ){
-    var canvas = document.createElement('canvas');
-    canvas.width = 1080; canvas.height = 1080;
-    var ctx = canvas.getContext('2d');
-
-    // Background
-    var grad = ctx.createLinearGradient(0,0,1080,1080);
-    grad.addColorStop(0,'#0e0e1f');
-    grad.addColorStop(1,'#111216');
-    ctx.fillStyle = grad;
-    ctx.fillRect(0,0,1080,1080);
-
-    // Red boundary ring decoration
-    ctx.beginPath();
-    ctx.arc(540,540,420,0,Math.PI*2);
-    ctx.strokeStyle='rgba(232,0,26,0.15)';
-    ctx.lineWidth=60;
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.arc(540,540,420,0,Math.PI*2);
-    ctx.strokeStyle='rgba(232,0,26,0.4)';
-    ctx.lineWidth=4;
-    ctx.setLineDash([20,15]);
-    ctx.stroke();
-    ctx.setLineDash([]);
-
-    // Finish dot
-    ctx.beginPath();
-    ctx.arc(540,540,18,0,Math.PI*2);
-    ctx.fillStyle='#E8001A';
-    ctx.fill();
-    ctx.strokeStyle='#fff';
-    ctx.lineWidth=4;
-    ctx.stroke();
-
-    // Title
-    ctx.font='900 90px Barlow Condensed,Arial';
-    ctx.fillStyle='#fff';
-    ctx.textAlign='center';
-    ctx.fillText('BRIS',380,160);
-    ctx.fillStyle='#E8001A';
-    ctx.fillText('CRAMBLE',700,160);
-
-    // Subtitle
-    ctx.font='500 36px Share Tech Mono,monospace';
-    ctx.fillStyle='rgba(255,255,255,0.5)';
-    ctx.textAlign='center';
-    ctx.fillText(getRouteName().toUpperCase(), 540, 210);
-
-    // Username
-    ctx.font='900 72px Barlow Condensed,Arial';
-    ctx.fillStyle=isDQ?'#FFAA00':'#00FFCC';
-    ctx.textAlign='center';
-    ctx.fillText('@'+username, 540, 440);
-
-    // Time
-    ctx.font='900 160px Barlow Condensed,Arial';
-    ctx.fillStyle='#ffffff';
-    ctx.textAlign='center';
-    ctx.fillText(timeStr, 540, 640);
-
-    // Time label
-    ctx.font='500 40px Share Tech Mono,monospace';
-    ctx.fillStyle='rgba(255,255,255,0.4)';
-    ctx.fillText('FINISH TIME', 540, 690);
-
-    // Rank
-    if(!isDQ && rank){
-        ctx.font='900 56px Barlow Condensed,Arial';
-        ctx.fillStyle='#FFD700';
-        ctx.fillText('#'+rank+' TODAY', 540, 790);
-    } else if(isDQ){
-        ctx.font='500 40px Share Tech Mono,monospace';
-        ctx.fillStyle='#FFAA00';
-        ctx.fillText('TIME TRIAL — NOT ON LEADERBOARD', 540, 790);
-    }
-
-    // URL
-    ctx.font='500 32px Share Tech Mono,monospace';
-    ctx.fillStyle='rgba(255,255,255,0.3)';
-    ctx.fillText('briscramble.onrender.com', 540, 980);
-
-    return canvas;
-}
-
-function getRouteName(){
-    // Derive route name from start position
-    if(!routePath||routePath.length<2) return 'Brisbane CBD';
-    var start=routePath[0];
-    var lat=start[0], lng=start[1];
-    // Rough Brisbane suburb detection from start coords
-    if(lat<-27.52) return 'Southside to CBD';
-    if(lng<152.98) return 'Western Suburbs to CBD';
-    if(lat<-27.47&&lng<153.01) return 'Inner West to CBD';
-    if(lat>-27.44) return 'Northside to CBD';
-    if(lng>153.04) return 'Eastside to CBD';
-    return 'Brisbane to CBD';
-}
-
-function shareFinishCard(username, timeStr, rank, isDQ){
-    var canvas = generateShareCard(username, timeStr, rank, isDQ);
-    canvas.toBlob(function(blob){
-        var file = new File([blob], 'briscramble.png', {type:'image/png'});
-        if(navigator.share && navigator.canShare && navigator.canShare({files:[file]})){
-            navigator.share({
-                title:'BriScramble — GPO Time Trial',
-                text:'I just raced to the GPO in '+timeStr+'! Can you beat me? briscramble.onrender.com',
-                files:[file]
-            }).catch(function(){
-                // Fallback — download
-                var a=document.createElement('a');
-                a.href=canvas.toDataURL('image/png');
-                a.download='briscramble-'+timeStr.replace(':','-')+'.png';
-                a.click();
+        var now=Date.now();
+        if(now-_lastEmit > 2000 && myUID && !finished){
+            _lastEmit=now;
+            db.ref('active/'+myUID).update({
+                lat:lat,
+                lng:lng,
+                dist:dist,
+                racing:timerStarted,
+                isDQ:isDQ,
+                ts:firebase.database.ServerValue.TIMESTAMP
             });
-        } else {
-            // Desktop fallback — download
-            var a=document.createElement('a');
-            a.href=canvas.toDataURL('image/png');
-            a.download='briscramble-'+timeStr.replace(':','-')+'.png';
-            a.click();
         }
-    },'image/png');
-}
 
-// ── STREAK ──
-function loadStreak(){
-    var today = brisDateKey();
-    var lastRace = localStorage.getItem('bsc_last_race');
-    var streak = parseInt(localStorage.getItem('bsc_streak')||'0');
-    // Check if raced yesterday
-    var yesterday = new Date();
-    yesterday.setDate(yesterday.getDate()-1);
-    var yKey = yesterday.toLocaleDateString('en-AU',{timeZone:'Australia/Brisbane'}).replace(/\//g,'-');
-    if(lastRace===yKey||lastRace===today){
-        // streak intact
-    } else {
-        streak=0;
-    }
-    var el=document.getElementById('hud-streak');
-    if(el) el.textContent = streak>0 ? '\uD83D\uDD25'+streak : '—';
-    return streak;
-}
-
-function saveStreak(){
-    var today=brisDateKey();
-    var lastRace=localStorage.getItem('bsc_last_race');
-    var streak=parseInt(localStorage.getItem('bsc_streak')||'0');
-    var yesterday=new Date();
-    yesterday.setDate(yesterday.getDate()-1);
-    var yKey=yesterday.toLocaleDateString('en-AU',{timeZone:'Australia/Brisbane'}).replace(/\//g,'-');
-    if(lastRace===yKey) streak++;
-    else if(lastRace!==today) streak=1;
-    localStorage.setItem('bsc_streak',streak);
-    localStorage.setItem('bsc_last_race',today);
-    var el=document.getElementById('hud-streak');
-    if(el) el.textContent='\uD83D\uDD25'+streak;
-    return streak;
-}
-
-
-// ── KEEP AUDIO WARM (prevents iOS sleep from killing proximity alerts) ──
-var _audioCtx = null;
-function keepAudioWarm(){
-    try {
-        _audioCtx = new (window.AudioContext||window.webkitAudioContext)();
-        // Silent tick every 25 seconds keeps audio context alive
-        setInterval(function(){
-            if(!_audioCtx||finished) return;
-            var buf = _audioCtx.createBuffer(1,1,22050);
-            var src = _audioCtx.createBufferSource();
-            src.buffer=buf;
-            src.connect(_audioCtx.destination);
-            src.start(0);
-        }, 25000);
-    } catch(e){}
-}
-
-
-// ── TIME WINDOW CHECK ──
-function getBrisTime(){
-    var now = new Date();
-    var bne = new Date(now.toLocaleString('en-AU',{timeZone:'Australia/Brisbane'}));
-    return {h:bne.getHours(), m:bne.getMinutes(), total:bne.getHours()*60+bne.getMinutes()};
-}
-
-function isInRaceWindow(){
-    var t = getBrisTime();
-    return t.total >= 7*60 && t.total < 8*60; // 7:00am to 8:00am
-}
-
-function isOutsideWindowDQ(){
-    var t = getBrisTime();
-    return t.total < 7*60 || t.total >= 8*60;
-}
-
-function showRulesIfNeeded(){
-    if(!localStorage.getItem('bsc_rules_accepted')){
-        document.getElementById('rules-popup').classList.remove('hidden');
-    }
-}
-
-function acceptRules(){
-    localStorage.setItem('bsc_rules_accepted','1');
-    document.getElementById('rules-popup').classList.add('hidden');
-}
-
-// ── FINISH ──
-function showFinished(){
-    clearInterval(timerInterval);
-    var elapsed=getElapsed();
-    var t=fmtTimeStr(elapsed);
-    document.getElementById('hud-timer').textContent=t;
-    document.getElementById('hud-timer').style.color='var(--teal)';
-
-    // Freeze route line on finish
-    if(routeLine) routeLine.setStyle({color:'#00FFCC',weight:5,opacity:1});
-
-    // Save streak
-    saveStreak();
-    // Save to Firebase leaderboard if not DQ
-    if(!isDQ&&myUID){
-        var dateKey=brisDateKey();
-        db.ref('leaderboard/'+dateKey+'/'+myUID).set({
-            username:myUsername,avatar:myAvatar,seconds:elapsed,timeStr:t,
-            ts:firebase.database.ServerValue.TIMESTAMP
-        });
-    }
-
-    // Full screen finish
-    var overlay=document.createElement('div');
-    overlay.style.cssText='position:fixed;inset:0;z-index:300;background:rgba(7,7,8,0.97);display:flex;align-items:center;justify-content:center';
-    var myRank=null;
-    var claimBtn=!isDQ?'<a href="sms:'+claimPhone+'?body=BRISCRAMBLE%20FINISH%20@'+myUsername+'%20'+t+'" style="display:inline-block;margin-top:16px;padding:14px 28px;background:var(--teal);color:#000;font-family:var(--head);font-size:1.1rem;font-weight:900;border-radius:8px;text-decoration:none;letter-spacing:1px">&#128241; TEXT TO CLAIM</a>':'';
-    var dqNote=isDQ?'<div style="color:#FFAA00;font-family:var(--mono);font-size:0.7rem;margin-top:12px;letter-spacing:1px">DQ &mdash; started inside boundary. Time not on leaderboard.</div>':'';
-    overlay.innerHTML='<div style="text-align:center;padding:40px 28px;max-width:360px">'
-        +'<div style="font-size:3rem;margin-bottom:8px">'+(isDQ?'&#9201;':'&#127942;')+'</div>'
-        +'<div style="font-family:var(--head);font-size:2.5rem;font-weight:900;letter-spacing:3px;color:'+(isDQ?'#FFAA00':'var(--teal)')+'margin-bottom:8px">'+(isDQ?'FINISHED':'YOU MADE IT')+'</div>'
-        +'<div style="font-family:var(--mono);font-size:0.65rem;color:rgba(255,255,255,0.35);letter-spacing:3px;margin:10px 0 6px">YOUR TIME</div>'
-        +'<div style="font-family:var(--head);font-size:5rem;font-weight:900;color:#fff;letter-spacing:4px;line-height:1">'+t+'</div>'
-        +dqNote+claimBtn
-        +'<div style="margin-top:16px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap">'
-        +'<button onclick="shareFinishCard(\''+myUsername+'\',\''+t+'\',null,'+isDQ+')" style="background:linear-gradient(135deg,#E8001A,#ff4444);color:#fff;border:none;padding:12px 20px;font-family:var(--head);font-size:1rem;font-weight:900;border-radius:8px;cursor:pointer;letter-spacing:1px">&#128247; SHARE RESULT</button>'
-        +'<button onclick="this.parentElement.parentElement.parentElement.remove()" style="background:none;border:1px solid var(--border);color:rgba(255,255,255,0.4);padding:12px 20px;font-family:var(--mono);font-size:0.65rem;border-radius:6px;cursor:pointer">VIEW LEADERBOARD</button>'
-        +'</div>'
-        +'</div>';
-    document.body.appendChild(overlay);
-    speak(isDQ?'Finished. Your time is '+t+'. Not on leaderboard.':'You made it! Your time is '+t+'.');
-    if(navigator.vibrate) navigator.vibrate(isDQ?[200,100,200]:[200,100,200,100,400,100,400]);
-
-    // Clear beep interval
-    if(window._beepInterval){clearInterval(window._beepInterval);window._beepInterval=null;}
-    // Clean up Firebase active player
-    if(myUID) db.ref('active/'+myUID).remove();
-    localStorage.removeItem('bsc_locked');
-}
-
-// ── ACTIVE PLAYERS (live on map) ──
-function listenActivePlayers(){
-    db.ref('active').on('value',function(snap){
-        var players=snap.val()||{};
-        // Remove stale markers
-        Object.keys(markers).forEach(function(k){
-            if(!players[k]){map.removeLayer(markers[k]);delete markers[k];}
-        });
-        // Update markers
-        Object.entries(players).forEach(function(e){
-            var uid=e[0],p=e[1];
-            if(uid===myUID||!p.lat||!p.lng||p.lat===0) return;
-            if(p.ts && Date.now()-p.ts>60000){
-                if(markers[uid]){map.removeLayer(markers[uid]);delete markers[uid];}
-                return;
-            }
-            var dist=haversine(p.lat,p.lng,FINISH[0],FINISH[1]);
-            var icon=mkIcon(p.avatar||'/logo.png','@'+p.username,false,fmt(dist),false,false);
-            if(!markers[uid]){
-                markers[uid]=L.marker([p.lat,p.lng],{icon:icon,className:'rival-marker'}).addTo(map);
+        if(!timerStarted){
+            if(dist >= BOUNDARY){
+                bStatus.textContent='READY TO SCRAMBLE';
+                bMain.className='banner-main waiting';
+                bMain.textContent=fmt(dist)+' TO GO';
+                bSub.textContent='Cross the 4KM boundary line to start the timer';
             } else {
-                markers[uid].setLatLng([p.lat,p.lng]);
-                markers[uid].setIcon(icon);
+                timerStarted=true;
+                raceStartTime=Date.now();
+                startTimer();
+                if(navigator.vibrate) navigator.vibrate([50,50,50,50,300]);
+                speak(isDQ ? 'Timer started. Time trial only.' : 'Off and racing. Good luck!');
             }
-        });
-        updateLeaderboardPeek(players);
-    });
-}
-
-// ── LEADERBOARD ──
-function setLbDate(){
-    var el=document.getElementById('lb-date');
-    if(el) el.textContent=new Date().toLocaleDateString('en-AU',{timeZone:'Australia/Brisbane',day:'numeric',month:'short'});
-}
-
-function listenLeaderboard(){
-    var dateKey=brisDateKey();
-    db.ref('leaderboard/'+dateKey).orderByChild('seconds').limitToFirst(50).on('value',function(snap){
-        var entries=[];
-        snap.forEach(function(child){entries.push({uid:child.key,...child.val()});});
-        entries.sort(function(a,b){return a.seconds-b.seconds;});
-        renderLeaderboard(entries);
-        // Show ghost racers (top 3)
-        showGhosts(entries.slice(0,3));
-    });
-}
-
-function renderLeaderboard(entries){
-    // Update side leaderboard
-    var sideEl = document.getElementById('side-lb-rows');
-    if(sideEl){
-        if(entries.length===0){
-            sideEl.innerHTML='<div style="font-family:var(--mono);font-size:0.55rem;color:rgba(255,255,255,0.2);letter-spacing:1px">No finishers yet</div>';
         } else {
-            sideEl.innerHTML = entries.slice(0,10).map(function(r,i){
-                var isMe=r.uid===myUID;
-                var rk=i+1;
-                var col=rk===1?'var(--teal)':rk===2?'#FFD700':rk===3?'#CD7F32':'rgba(255,255,255,0.6)';
-                return '<div style="display:flex;align-items:center;gap:5px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.04)">'
-                    +'<span style="font-family:var(--head);font-size:0.9rem;font-weight:900;color:'+col+';width:16px;flex-shrink:0">'+rk+'</span>'
-                    +'<div style="flex:1;min-width:0">'
-                    +'<div style="font-family:var(--head);font-size:0.75rem;font-weight:700;color:'+(isMe?'var(--red)':'#fff')+';white-space:nowrap;overflow:hidden;text-overflow:ellipsis">@'+r.username+'</div>'
-                    +'<div style="font-family:var(--mono);font-size:0.6rem;color:'+col+'">'+r.timeStr+'</div>'
-                    +'</div></div>';
-            }).join('');
+            if(dist > BOUNDARY){
+                // Left bounds fallback logic
+            } else {
+                bStatus.textContent=isDQ?'TIME TRIAL — DQ FROM LEADERBOARD':'RACING';
+                bMain.className='banner-main '+(isDQ?'dq':'racing');
+                bMain.textContent=fmt(dist)+' TO FINISH';
+                bSub.textContent=isDQ?'Time trial — not on leaderboard':'Find the red dot. First to reach it wins.';
+                if(dist<=FINISH_RADIUS&&!finished){
+                    finished=true;
+                    showFinished();
+                }
+            }
         }
     }
-    var lbEl=document.getElementById('lb-rows');
-    if(!lbEl) return;
-    if(entries.length===0){
-        lbEl.innerHTML='<div style="font-family:var(--mono);font-size:0.65rem;color:rgba(255,255,255,0.2);text-align:center;padding:20px;letter-spacing:2px">NO FINISHERS YET TODAY</div>';
-        return;
-    }
-    lbEl.innerHTML=entries.map(function(r,i){
-        var rk=i+1,rc=rk===1?'r1':rk===2?'r2':rk===3?'r3':'';
-        var isMe=r.uid===myUID;
-        return '<div class="lb-row '+(isMe?'me':'')+'"><div class="lb-rank '+rc+'">'+rk+'</div>'
-            +'<img class="lb-av" src="'+r.avatar+'" onerror="this.style.opacity=0">'
-            +'<div class="lb-info"><div class="lb-name '+(isMe?'me':'')+'">@'+r.username+'</div></div>'
-            +'<div class="lb-time '+(rk===1?'best':'')+'">'+r.timeStr+'</div></div>';
-    }).join('');
-    // Update peek
-    var myEntry=entries.find(function(r){return r.uid===myUID;});
-    if(myEntry){
-        var myRank=entries.indexOf(myEntry)+1;
-        var pkRank=document.getElementById('pk-rank');
-        if(pkRank){pkRank.textContent='#'+myRank;pkRank.className='peek-rank '+(myRank===1?'p1':myRank===2?'p2':myRank===3?'p3':'back');}
-        var pkTime=document.getElementById('pk-time');
-        if(pkTime) pkTime.textContent=myEntry.timeStr;
-    }
-}
 
-function updateLeaderboardPeek(players){
-    var count=Object.keys(players).length;
-    var sub=document.getElementById('pk-sub');
-    if(sub) sub.textContent=count+' PLAYER'+(count!==1?'S':'')+' RACING NOW';
-}
+    // ── TIMER ──
+    function startTimer(){
+        clearInterval(timerInterval);
+        timerInterval=setInterval(function(){
+            if(!raceStartTime||finished) return;
+            var elapsed=Date.now()-raceStartTime;
+            var t=fmtTime(elapsed);
+            document.getElementById('hud-timer').textContent=t;
+            document.getElementById('pk-time').textContent=t;
+        },500);
+    }
 
-// ── GHOST RACERS ──
-var ghostData={};
-function showGhosts(topEntries){
-    // Clear old ghosts
-    Object.values(ghostMarkers).forEach(function(m){map.removeLayer(m);});
-    Object.keys(ghostMarkers).forEach(function(k){delete ghostMarkers[k];});
-    // For each top entry, we don't have historical path data yet
-    // Show a static ghost marker at GPO with their time
-    topEntries.forEach(function(r,i){
-        if(r.uid===myUID) return;
-        var icon=mkIcon(r.avatar||'/logo.png','&#128123; @'+r.username+' '+r.timeStr,false,'',false,true);
-        ghostMarkers[r.uid]=L.marker(FINISH,{icon:icon,zIndexOffset:500}).addTo(map);
+    function getElapsed(){
+        if(!raceStartTime) return 0;
+        return Math.floor((Date.now()-raceStartTime)/1000);
+    }
+
+    // ── SHARE CARD ──
+    function generateShareCard(username, timeStr, rank, isDQ){
+        var canvas = document.createElement('canvas');
+        canvas.width = 1080;
+        canvas.height = 1080;
+        var ctx = canvas.getContext('2d');
+        var grad = ctx.createLinearGradient(0,0,1080,1080);
+        grad.addColorStop(0,#0e0e1f);
+        grad.addColorStop(1,#111216);
+        ctx.fillStyle = grad;
+        ctx.fillRect(0,0,1080,1080);
+        ctx.beginPath();
+        ctx.arc(540,540,420,0,Math.PI*2);
+        ctx.strokeStyle='rgba(232,0,26,0.15)';
+        ctx.lineWidth=60;
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(540,540,420,0,Math.PI*2);
+        ctx.strokeStyle='rgba(232,0,26,0.4)';
+        ctx.lineWidth=4;
+    }
+
+    // ── STREAK ──
+    function loadStreak(){
+        var today = brisDateKey();
+        var lastRace = localStorage.getItem('bsc_last_race');
+        var streak = parseInt(localStorage.getItem('bsc_streak')||'0');
+        var yesterday = new Date();
+        yesterday.setDate(yesterday.getDate()-1);
+        var yKey = yesterday.toLocaleDateString('en-AU',{timeZone:'Australia/Brisbane'}).replace(/\//g,'-');
+        if(lastRace===yKey||lastRace===today){
+            // active streak status
+        } else {
+            streak=0;
+        }
+        var el=document.getElementById('hud-streak');
+        if(el) el.textContent = streak>0 ? '\uD83D\uDD25'+streak : '—';
+        return streak;
+    }
+
+    function saveStreak(){
+        var today=brisDateKey();
+        var lastRace=localStorage.getItem('bsc_last_race');
+        var streak=parseInt(localStorage.getItem('bsc_streak')||'0');
+        var yesterday=new Date();
+        yesterday.setDate(yesterday.getDate()-1);
+        var yKey=yesterday.toLocaleDateString('en-AU',{timeZone:'Australia/Brisbane'}).replace(/\//g,'-');
+        if(lastRace===yKey) streak++;
+        else if(lastRace!==today) streak=1;
+        localStorage.setItem('bsc_streak',streak);
+        localStorage.setItem('bsc_last_race',today);
+        var el=document.getElementById('hud-streak');
+        if(el) el.textContent='\uD83D\uDD25'+streak;
+        return streak;
+    }
+
+    // ── KEEP AUDIO WARM ──
+    var _audioCtx = null;
+    function keepAudioWarm(){
+        try {
+            _audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+            setInterval(function(){
+                if(!_audioCtx||finished) return;
+                var buf = _audioCtx.createBuffer(1,1,22050);
+                var src = _audioCtx.createBufferSource();
+                src.buffer=buf;
+                src.connect(_audioCtx.destination);
+                src.start(0);
+            }, 25000);
+        } catch(e){}
+    }
+
+    // ── TIME WINDOW CHECK ──
+    function getBrisTime(){
+        var now = new Date();
+        var bne = new Date(now.toLocaleString('en-AU',{timeZone:'Australia/Brisbane'}));
+        return {h:bne.getHours(), m:bne.getMinutes()};
+    }
+
+    function isOutsideTimeWindow(){
+        var t=getBrisTime();
+        if(t.h < 7 || t.h >= 8) return true;
+        return false;
+    }
+
+    function showFinished(){
+        clearInterval(timerInterval);
+        var elapsed=Date.now()-raceStartTime;
+        var timeStr=fmtTime(elapsed);
+        document.getElementById('banner-status').textContent='ARRIVED AT GPO';
+        document.getElementById('banner-main').className='banner-main racing';
+        document.getElementById('banner-main').textContent=timeStr;
+        document.getElementById('banner-sub').textContent=isDQ?'Finished! Time recorded but not on leaderboard':'Finished! Storing your time on leaderboard...';
+        
+        var dateKey=brisDateKey();
+        var outOfWindow = isOutsideTimeWindow();
+        var entryDQ = isDQ || outOfWindow;
+        
+        if(myUID){
+            db.ref('leaderboard/'+dateKey+'/'+myUID).set({
+                username:myUsername,
+                avatar:myAvatar,
+                slug:mySlug,
+                seconds:elapsed/1000,
+                timeStr:timeStr,
+                isDQ:entryDQ,
+                outOfWindow:outOfWindow,
+                ts:firebase.database.ServerValue.TIMESTAMP
+            });
+            if(!entryDQ) saveStreak();
+        }
+        
+        var msg=isDQ?'Time trial complete! Time: '+timeStr : (outOfWindow ? 'Finished outside 7am-8am window! Time recorded but not eligible for prizes.' : 'Sensational run! Your time is '+timeStr+'.');
+        speak(msg);
+        alert('You made it! Your time is '+timeStr+'.');
+        if(navigator.vibrate) navigator.vibrate(isDQ?[200,100,200]:[200,100,200,100,400,100,400]);
+        if(window._beepInterval){clearInterval(window._beepInterval);window._beepInterval=null;}
+        if(myUID) db.ref('active/'+myUID).remove();
+        localStorage.removeItem('bsc_locked');
+    }
+
+    // ── ACTIVE PLAYERS ──
+    function listenActivePlayers(){
+        db.ref('active').on('value',function(snap){
+            var players=snap.val()||{};
+            Object.keys(markers).forEach(function(k){
+                if(!players[k]){map.removeLayer(markers[k]);delete markers[k];}
+            });
+            Object.entries(players).forEach(function(e){
+                var uid=e[0],p=e[1];
+                if(uid===myUID||!p.lat||!p.lng||p.lat===0) return;
+                if(p.ts && Date.now()-p.ts>60000){
+                    if(markers[uid]){map.removeLayer(markers[uid]);delete markers[uid];}
+                    return;
+                }
+                var dist=haversine(p.lat,p.lng,FINISH[0],FINISH[1]);
+                var icon=mkIcon(p.avatar||'/logo.png','@'+p.username,false,fmt(dist),false,false);
+                if(!markers[uid]){
+                    markers[uid]=L.marker([p.lat,p.lng],{icon:icon,className:'rival-marker'}).addTo(map);
+                } else {
+                    markers[uid].setLatLng([p.lat,p.lng]);
+                    markers[uid].setIcon(icon);
+                }
+            });
+            updateLeaderboardPeek(players);
+        });
+    }
+
+    // ── LEADERBOARD ──
+    function setLbDate(){
+        var el=document.getElementById('lb-date');
+        if(el) el.textContent=new Date().toLocaleDateString('en-AU',{timeZone:'Australia/Brisbane',day:'numeric',month:'short'});
+    }
+
+    function listenLeaderboard(){
+        var dateKey=brisDateKey();
+        db.ref('leaderboard/'+dateKey).orderByChild('seconds').limitToFirst(50).on('value',function(snap){
+            var entries=[];
+            snap.forEach(function(child){entries.push({uid:child.key,...child.val()});});
+            entries.sort(function(a,b){
+                if(a.isDQ !== b.isDQ) return a.isDQ ? 1 : -1;
+                return a.seconds - b.seconds;
+            });
+            
+            var html='', sideHtml='', rank=1, sideCount=0;
+            entries.forEach(function(r){
+                var rowClass=r.uid===myUID?'lb-row me':'lb-row';
+                if(r.isDQ) rowClass+=' dq-row';
+                var rStr=r.isDQ?'DQ':(rank++);
+                var timeDisplay=r.timeStr;
+                if(r.outOfWindow) timeDisplay+=' *';
+                
+                html+='<div class="'+rowClass+'"><div class="lb-rank r'+rStr+'">'+rStr+'</div><img class="lb-av" src="'+(r.avatar||'/logo.png')+'"><div class="lb-info"><div class="lb-name '+(r.uid===myUID?'me':'')+'">@'+r.username+'</div></div><div class="lb-time '+(rStr===1?'best':'')+'">'+timeDisplay+'</div></div>';
+                
+                if(!r.isDQ && sideCount<5){
+                    sideCount++;
+                    sideHtml+='<div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;background:rgba(255,255,255,0.02);padding:4px;border-radius:4px"><div style="font-family:var(--head);font-size:0.9rem;font-weight:900;width:16px;color:var(--teal)">'+sideCount+'</div><div style="font-family:var(--head);font-size:0.8rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1">@'+r.username+'</div><div style="font-family:var(--mono);font-size:0.7rem;color:#fff">'+r.timeStr+'</div></div>';
+                }
+                
+                if(r.uid===myUID){
+                    var pRank=document.getElementById('pk-rank');
+                    pRank.textContent=rStr;
+                    pRank.className='peek-rank '+(r.isDQ?'back':'p'+rStr);
+                    document.getElementById('pk-sub').textContent=r.isDQ?'Disqualified / Time Trial':'Today\'s Rank';
+                    document.getElementById('pk-time').textContent=timeDisplay;
+                }
+            });
+            
+            document.getElementById('lb-rows').innerHTML=html||'<div style="text-align:center;font-family:var(--mono);font-size:0.7rem;color:rgba(255,255,255,0.3);padding:20px 0">NO RUNS RECORDED TODAY</div>';
+            var sRows=document.getElementById('side-lb-rows');
+            if(sRows) sRows.innerHTML=sideHtml||'<div style="font-family:var(--mono);font-size:0.6rem;color:rgba(255,255,255,0.2)">Waiting for first runner...</div>';
+        });
+    }
+
+    function updateLeaderboardPeek(activePlayers){
+        var myActive=activePlayers[myUID];
+        if(myActive && finished) return;
+        if(document.getElementById('pk-sub').textContent.indexOf('Rank')>-1) return;
+        
+        var count=Object.keys(activePlayers).length;
+        document.getElementById('pk-sub').textContent=count+(count===1?' racer live':' racers live');
+    }
+
+    function toggleDrawer(){
+        var d=document.getElementById('drawer');
+        _drawerOpen=!_drawerOpen;
+        if(_drawerOpen){d.classList.remove('collapsed');}
+        else{d.classList.add('collapsed');}
+    }
+
+    // ── AD TICKER ──
+    function loadTicker(){
+        fetch('/api/ticker').then(function(r){return r.json();}).then(function(items){
+            var track=document.getElementById('ticker-track');
+            if(!track||!items||!items.length)return;
+            document.getElementById('ticker').classList.add('show');
+            
+            var html1='', html2='';
+            items.forEach(function(item){
+                var segment='<div class="ticker-inner">';
+                if(item.image) segment+='<img class="ticker-img" src="'+item.image+'">';
+                if(item.text) segment+='<span class="ticker-sep">'+item.text+'</span>';
+                segment+='</div>';
+                html1+=segment;
+            });
+            track.innerHTML=html1+html1;
+        }).catch(function(){});
+    }
+
+    // ── HELPERS ──
+    function haversine(lat1,lon1,lat2,lon2){
+        var R=6371e3;
+        var phi1=lat1*Math.PI/180, phi2=lat2*Math.PI/180;
+        var deltaPhi=(lat2-lat1)*Math.PI/180, deltaLambda=(lon2-lon1)*Math.PI/180;
+        var a=Math.sin(deltaPhi/2)*Math.sin(deltaPhi/2)+Math.cos(phi1)*Math.cos(phi2)*Math.sin(deltaLambda/2)*Math.sin(deltaLambda/2);
+        return 2*R*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+    }
+
+    function fmt(metres){
+        if(metres>=1000) return (metres/1000).toFixed(2)+'KM';
+        return Math.round(metres)+'M';
+    }
+
+    function fmtTime(ms){
+        var totalSecs=Math.floor(ms/1000);
+        var m=Math.floor(totalSecs/60);
+        var s=totalSecs%60;
+        return (m<10?'0':'')+m+':'+(s<10?'0':'')+s;
+    }
+
+    function mkIcon(avatarUrl,label,isMe,distStr,badgeText,ghostColor){
+        var border=isMe?'#00FFCC':'#fff';
+        var pulseClass=isMe?'':(ghostColor?'ghostPulse':'rivalPulse');
+        var ani=isMe?'':'animation:'+pulseClass+' 2s infinite;';
+        if(ghostColor) border=ghostColor;
+        
+        var distBadge=distStr?'<div style="background:rgba(0,0,0,0.85);color:#fff;font-family:\'Share Tech Mono\';font-size:9px;padding:1px 4px;border-radius:3px;margin-top:2px;border:1px solid '+border+'">'+distStr+'</div>':'';
+        var bhtml=badgeText?'<div style="position:absolute;top:-6px;right:-10px;background:#FFAA00;color:#000;font-size:8px;font-weight:bold;padding:1px 4px;border-radius:3px;box-shadow:0 2px 6px #000">'+badgeText+'</div>':'';
+        
+        return L.divIcon({
+            html:'<div style="display:flex;flex-direction:column;align-items:center;position:relative;'+ani+'"><div style="width:34px;height:34px;border-radius:50%;border:2px solid '+border+';overflow:hidden;background:#111;box-shadow:0 3px 10px rgba(0,0,0,0.6);position:relative"><img src="'+avatarUrl+'" style="width:100%;height:100%;object-fit:cover"></div>'+bhtml+'<div style="background:rgba(14,15,20,0.92);color:#fff;font-family:\'Barlow Condensed\';font-weight:700;font-size:11px;padding:2px 6px;border-radius:4px;margin-top:3px;white-space:nowrap;border:1px solid rgba(255,255,255,0.15);letter-spacing:0.5px;box-shadow:0 2px 6px rgba(0,0,0,0.5)">'+label+'</div>'+distBadge+'</div>',
+            className:'',
+            iconSize:[40,40],
+            iconAnchor:[20,20]
+        });
+    }
+
+    function recentre(){
+        mapFollowing=true;
+        if(myLat) map.setView([myLat,myLng],16);
+    }
+
+    map.on('movestart',function(){
+        mapFollowing=false;
     });
-}
 
-
-// ── CONTROLS ──
-function recentre(){mapFollowing=true;document.getElementById('btn-re').classList.remove('show');if(myLat)map.setView([myLat,myLng],14,{animate:true});}
-
-function toggleDrawer(){
-    _drawerOpen=!_drawerOpen;
-    document.getElementById('drawer').classList.toggle('collapsed',!_drawerOpen);
-    document.getElementById('pk-expand').textContent=_drawerOpen?'&#8595; CLOSE':'&#8593; BOARD';
-    document.getElementById('btn-re').style.bottom=_drawerOpen?'320px':'130px';
-}
-(function(){
-    var z=document.getElementById('drawer');
-    if(!z) return;
-    var sy=0;
-    z.addEventListener('touchstart',function(e){sy=e.touches[0].clientY;},{passive:true});
-    z.addEventListener('touchend',function(e){var dy=sy-e.changedTouches[0].clientY;if(dy>40&&!_drawerOpen)toggleDrawer();if(dy<-40&&_drawerOpen)toggleDrawer();},{passive:true});
-})();
-
-
-function forceSaveProfile(){
-    if(!myUID||!myUsername) return;
-    db.ref('users/'+myUID).set({
-        username:myUsername,
-        avatar:myAvatar,
-        slug:mySlug,
-        savedAt:firebase.database.ServerValue.TIMESTAMP
-    }).then(function(){
-        alert('Profile saved! @'+myUsername+' is now linked to your Google account on all devices.');
-    }).catch(function(e){
-        alert('Save failed: '+e.message);
-    });
-}
-
-function doInvite(){
-    var txt = "I'm racing to the GPO right now on BriScramble 🏁 Join me — register outside the 4KM boundary and your timer starts automatically when you cross it. Fastest time to the GPO wins today's leaderboard! briscramble.onrender.com";
-    if(navigator.share){
-        navigator.share({title:'Race me on BriScramble!', text:txt, url:'https://briscramble.onrender.com'});
-    } else {
-        navigator.clipboard.writeText(txt).then(function(){ alert('Invite copied!'); });
+    function speak(text){
+        try{
+            if(!window.speechSynthesis)return;
+            window.speechSynthesis.cancel();
+            var u=new SpeechSynthesisUtterance(text);
+            u.rate=1.0; u.pitch=1.0; u.volume=1.0;
+            window.speechSynthesis.speak(u);
+        }catch(e){}
     }
-}
 
-function doShare(){
-    var txt='I\'m racing to the GPO on BriScramble — Brisbane\'s time trial commute race. Join me: https://briscramble.onrender.com';
-    if(navigator.share) navigator.share({title:'BriScramble',text:txt,url:'https://briscramble.onrender.com'});
-    else navigator.clipboard.writeText(txt).then(function(){alert('Copied!');});
-}
+    function doInvite(){
+        var txt="Race me to the GPO on BriScramble! I'm locked in and ready for tomorrow morning's commute. Fastest time wins today's leaderboard! briscramble.onrender.com";
+        if(navigator.share){
+            navigator.share({title:'Race me on BriScramble!', text:txt, url:'https://briscramble.onrender.com'});
+        } else {
+            navigator.clipboard.writeText(txt).then(function(){
+                alert('Invite copied!');
+            });
+        }
+    }
+
+    function doShare(){
+        var txt='I\'m racing to the GPO on BriScramble — Brisbane\'s time trial commute race. Join me: https://briscramble.onrender.com';
+        if(navigator.share) navigator.share({title:'BriScramble',text:txt,url:'https://briscramble.onrender.com'});
+        else navigator.clipboard.writeText(txt).then(function(){alert('Copied!');});
+    }
 </script>
 
-<!-- RULES POPUP (first time only) -->
-<div id="rules-popup" class="hidden" style="position:fixed;inset:0;z-index:250;background:rgba(7,7,8,0.97);display:flex;align-items:center;justify-content:center;padding:20px">
-    <div style="width:100%;max-width:380px;background:#16171e;border:1px solid rgba(232,0,26,0.4);border-radius:16px;padding:28px;text-align:center">
-        <div style="font-size:2.5rem;margin-bottom:12px">🏁</div>
-        <div style="font-family:var(--head);font-size:2rem;font-weight:900;letter-spacing:2px;margin-bottom:4px">BRIS<span style="color:var(--red)">CRAMBLE</span></div>
-        <div style="font-family:var(--mono);font-size:0.7rem;color:rgba(255,255,255,0.4);letter-spacing:3px;margin-bottom:24px">THE RULES</div>
-
-        <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:24px;text-align:left">
+<div id="rules-popup" class="hidden" style="position:fixed;inset:0;z-index:250;background:rgba(7,7,12,0.96);backdrop-filter:blur(10px);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px">
+    <div style="background:#13141f;border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:24px;max-width:400px;width:100%;box-shadow:0 10px 40px rgba(0,0,0,0.8)">
+        <div style="font-family:var(--head);font-size:2.2rem;font-weight:900;text-align:center;margin-bottom:6px;letter-spacing:1px">THE 3 RULES OF<span></span></div>
+        <div style="font-family:var(--head);font-size:1.1rem;font-weight:700;color:var(--red);text-align:center;margin-bottom:24px;letter-spacing:3px;text-transform:uppercase">BRISCRAMBLE</div>
+        
+        <div style="display:flex;flex-direction:column;gap:16px;margin-bottom:28px">
             <div style="display:flex;gap:12px;align-items:flex-start">
                 <div style="width:28px;height:28px;border-radius:50%;background:var(--red);color:#fff;font-family:var(--head);font-size:1rem;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0">1</div>
-                <div style="font-family:var(--mono);font-size:0.72rem;color:rgba(255,255,255,0.75);line-height:1.6">Register from <strong style="color:#fff">outside the 4KM boundary</strong> any time before 8am</div>
+                <div style="font-family:var(--mono);font-size:0.72rem;color:rgba(255,255,255,0.75);line-height:1.6">You must hit <strong style="color:#fff">LOCK PROFILE</strong> from <strong style="color:var(--teal)">outside the 4KM ring</strong> before your commute starts.</div>
             </div>
             <div style="display:flex;gap:12px;align-items:flex-start">
                 <div style="width:28px;height:28px;border-radius:50%;background:var(--red);color:#fff;font-family:var(--head);font-size:1rem;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0">2</div>
-                <div style="font-family:var(--mono);font-size:0.72rem;color:rgba(255,255,255,0.75);line-height:1.6"><strong style="color:#fff">Race window: 7:00am – 8:00am</strong> Brisbane time. Timer starts when you cross the boundary ring</div>
+                <div style="font-family:var(--mono);font-size:0.72rem;color:rgba(255,255,255,0.75);line-height:1.6">Your timer starts automatically the split second you cross inside the 4KM ring. Race to the <strong style="color:#fff">red dot</strong> in the CBD. Fastest time wins today's leaderboard.</div>
             </div>
             <div style="display:flex;gap:12px;align-items:flex-start">
                 <div style="width:28px;height:28px;border-radius:50%;background:var(--red);color:#fff;font-family:var(--head);font-size:1rem;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0">3</div>
-                <div style="font-family:var(--mono);font-size:0.72rem;color:rgba(255,255,255,0.75);line-height:1.6">Race to the <strong style="color:#fff">red dot</strong> in the CBD. Fastest time wins today's leaderboard</div>
-            </div>
-            <div style="display:flex;gap:12px;align-items:flex-start">
-                <div style="width:28px;height:28px;border-radius:50%;background:var(--red);color:#fff;font-family:var(--head);font-size:1rem;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0">4</div>
                 <div style="font-family:var(--mono);font-size:0.72rem;color:rgba(255,255,255,0.75);line-height:1.6">Cross boundary <strong style="color:#FFAA00">before 7am or after 8am</strong> = time recorded but <strong style="color:#FFAA00">not on leaderboard</strong></div>
             </div>
         </div>
 
-        <div style="background:rgba(0,255,204,0.06);border:1px solid rgba(0,255,204,0.2);border-radius:8px;padding:12px;margin-bottom:20px;font-family:var(--mono);font-size:0.65rem;color:rgba(255,255,255,0.5);line-height:1.6">
-            Leaderboard resets daily at midnight Brisbane time.<br>
-            One entry per Google/Apple account per day.
-        </div>
-
-        <button onclick="acceptRules()" style="width:100%;background:var(--red);color:#fff;border:none;padding:16px;font-family:var(--head);font-size:1.4rem;font-weight:900;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:8px;box-shadow:0 6px 20px rgba(232,0,26,0.4)">
-            I UNDERSTAND — LET'S RACE
-        </button>
+        <button onclick="closeRules()" style="width:100%;background:var(--red);color:#fff;border:none;padding:16px;font-family:var(--head);font-size:1.4rem;font-weight:900;letter-spacing:1px;border-radius:8px;cursor:pointer">UNDERSTOOD</button>
     </div>
 </div>
+
+<script>
+    if(!localStorage.getItem('bsc_rules_seen')){
+        document.getElementById('rules-popup').classList.remove('hidden');
+    }
+    function closeRules(){
+        localStorage.setItem('bsc_rules_seen','1');
+        document.getElementById('rules-popup').classList.add('hidden');
+    }
+</script>
 
 </body>
 </html>
