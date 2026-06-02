@@ -778,7 +778,16 @@
                 raceStartTime=Date.now();
                 startTimer();
                 if(navigator.vibrate) navigator.vibrate([50,50,50,50,300]);
-                speak(isDQ ? 'Timer started. Time trial only.' : 'Off and racing. Good luck!');
+                if(isDQ){
+                    speak('Outside race window. Recording your time anyway.');
+                    var dqToast=document.createElement('div');
+                    dqToast.style.cssText='position:fixed;top:80px;left:50%;transform:translateX(-50%);z-index:500;background:rgba(255,170,0,0.97);color:#000;font-family:var(--head);font-size:1rem;font-weight:900;padding:14px 24px;border-radius:10px;text-align:center;pointer-events:none;box-shadow:0 4px 20px rgba(0,0,0,0.5)';
+                    dqToast.innerHTML='\u26a0 OUTSIDE RACE WINDOW<br><span style="font-size:0.75rem;font-weight:700">Not on leaderboard \u2014 time still recorded!</span>';
+                    document.body.appendChild(dqToast);
+                    setTimeout(function(){dqToast.remove();},6000);
+                } else {
+                    speak('Off and racing. Good luck!');
+                }
             }
         } else {
             if(dist > BOUNDARY){
