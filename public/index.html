@@ -657,43 +657,46 @@ function afterAuth(user){
     if(_authDone) return;
     _authDone=true;
     myUID=user.uid;
-    // Load profile from Firebase — works on any device
+
+    // STEP 1: Instantly apply localStorage (zero delay — no @You flash)
+    var lsUser=localStorage.getItem('bsc_username');
+    var lsAv=localStorage.getItem('bsc_avatar');
+    var lsSlug=localStorage.getItem('bsc_slug');
+    var wasLocked=localStorage.getItem('bsc_locked');
+    if(lsUser){ myUsername=lsUser; myAvatar=lsAv||'/logo.png'; mySlug=lsSlug||'scrambler'; }
+
+    // STEP 2: Load from Firebase in background (updates if different device)
     db.ref('users/'+myUID).once('value').then(function(snap){
         if(snap.exists()){
-            var profile=snap.val();
-            myUsername=profile.username;
-            myAvatar=profile.avatar||'/logo.png';
-            mySlug=profile.slug||'scrambler';
+            var p=snap.val();
+            myUsername=p.username;
+            myAvatar=p.avatar||'/logo.png';
+            mySlug=p.slug||'scrambler';
+        }
+        // STEP 3: Always save back to both stores
+        if(myUsername){
+            localStorage.setItem('bsc_username',myUsername);
             localStorage.setItem('bsc_avatar',myAvatar);
             localStorage.setItem('bsc_slug',mySlug);
-            localStorage.setItem('bsc_username',myUsername);
-            var wasLocked=localStorage.getItem('bsc_locked');
+            db.ref('users/'+myUID).update({
+                username:myUsername,
+                avatar:myAvatar,
+                slug:mySlug,
+                lastSeen:firebase.database.ServerValue.TIMESTAMP
+            });
             if(wasLocked==='1') rejoinRace();
             else showScreen('s-location');
         } else {
-            // Check localStorage as fallback
-            var lsUser=localStorage.getItem('bsc_username');
-            var lsAv=localStorage.getItem('bsc_avatar');
-            if(lsUser){
-                myUsername=lsUser;
-                myAvatar=lsAv||'/logo.png';
-                // Save to Firebase now
-                db.ref('users/'+myUID).set({username:myUsername,avatar:myAvatar,slug:mySlug||'scrambler',savedAt:firebase.database.ServerValue.TIMESTAMP});
-                showScreen('s-location');
-            } else {
-                showScreen('s-name');
-            }
+            showScreen('s-name');
         }
     }).catch(function(){
-        // Firebase failed — fall back to localStorage
-        var sv=localStorage.getItem('bsc_avatar'), ss=localStorage.getItem('bsc_slug');
-        if(sv) myAvatar=sv;
-        if(ss) mySlug=ss;
-        fetch('/api/register-username',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({uid:myUID,username:'__check__'})})
-        .then(function(r){return r.json();}).then(function(d){
-            if(d.username&&d.username!=='__check__'){myUsername=d.username;showScreen('s-location');}
-            else{showScreen('s-name');}
-        }).catch(function(){showScreen('s-name');});
+        // Firebase offline — localStorage already applied in Step 1
+        if(myUsername){
+            if(wasLocked==='1') rejoinRace();
+            else showScreen('s-location');
+        } else {
+            showScreen('s-name');
+        }
     });
 }
 
@@ -707,6 +710,7 @@ function saveName(){
     .then(function(r){return r.json();}).then(function(d){
         if(d.error){e.textContent=d.error;return;}
         myUsername=d.username;
+        localStorage.setItem('bsc_username',myUsername);
         // Save profile to Firebase so any device can load it
         db.ref('users/'+myUID).set({
             username:myUsername,
@@ -830,6 +834,19 @@ function lockIn(){
 }
 
 function rejoinRace(){
+    // Make sure profile is loaded before showing race
+    if(!myUsername){
+        // Try localStorage fallback
+        var lsUser = localStorage.getItem('bsc_username');
+        var lsAv   = localStorage.getItem('bsc_avatar');
+        var lsSlug = localStorage.getItem('bsc_slug');
+        if(lsUser){ myUsername=lsUser; myAvatar=lsAv||'/logo.png'; mySlug=lsSlug||'scrambler'; }
+        else {
+            // No profile at all — send to name screen
+            showScreen('s-name');
+            return;
+        }
+    }
     startRaceMode();
 }
 
@@ -841,6 +858,7 @@ function startRaceMode(){
     document.getElementById('drawer').classList.add('show','collapsed');
     document.getElementById('ticker').classList.add('show');
     document.getElementById('btn-re').classList.add('show');
+    document.getElementById('pk-name').textContent='@'+(myUsername||'You');
     document.getElementById('btn-share').classList.add('show');
     // Register in Firebase
     if(myUID){
