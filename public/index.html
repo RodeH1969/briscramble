@@ -707,7 +707,7 @@
     function onPos(lat,lng){
         if(myLat!==null && myLng!==null){
             var moved = haversine(myLat,myLng,lat,lng);
-            if(moved < 5) return;
+            if(moved < 3) return;
         }
         myLat=lat;
         myLng=lng;
@@ -777,16 +777,34 @@
                 timerStarted=true;
                 raceStartTime=Date.now();
                 startTimer();
+                // Apply time window DQ at moment of crossing
+                if(typeof isOutsideWindowDQ==='function' && isOutsideWindowDQ()) isDQ=true;
                 if(navigator.vibrate) navigator.vibrate([50,50,50,50,300]);
+                // Show DQ toast
                 if(isDQ){
-                    speak('Outside race window. Recording your time anyway.');
                     var dqToast=document.createElement('div');
-                    dqToast.style.cssText='position:fixed;top:80px;left:50%;transform:translateX(-50%);z-index:500;background:rgba(255,170,0,0.97);color:#000;font-family:var(--head);font-size:1rem;font-weight:900;padding:14px 24px;border-radius:10px;text-align:center;pointer-events:none;box-shadow:0 4px 20px rgba(0,0,0,0.5)';
+                    dqToast.style.cssText='position:fixed;top:80px;left:50%;transform:translateX(-50%);z-index:500;background:rgba(255,170,0,0.97);color:#000;font-family:var(--head);font-size:1rem;font-weight:900;padding:14px 24px;border-radius:10px;text-align:center;pointer-events:none;box-shadow:0 4px 20px rgba(0,0,0,0.5);max-width:90vw';
                     dqToast.innerHTML='\u26a0 OUTSIDE RACE WINDOW<br><span style="font-size:0.75rem;font-weight:700">Not on leaderboard \u2014 time still recorded!</span>';
                     document.body.appendChild(dqToast);
                     setTimeout(function(){dqToast.remove();},6000);
-                } else {
-                    speak('Off and racing. Good luck!');
+                }
+                // Audio — use Web Audio API beep first to unlock context, then speak
+                try {
+                    var ctx=new(window.AudioContext||window.webkitAudioContext)();
+                    var osc=ctx.createOscillator();
+                    var g=ctx.createGain();
+                    osc.connect(g); g.connect(ctx.destination);
+                    osc.frequency.value=880;
+                    g.gain.setValueAtTime(0.4,ctx.currentTime);
+                    g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.3);
+                    osc.start(ctx.currentTime); osc.stop(ctx.currentTime+0.3);
+                    ctx.resume().then(function(){
+                        setTimeout(function(){
+                            speak(isDQ?'Outside race window. Time still recorded.':'Off and racing. Good luck!');
+                        },400);
+                    });
+                } catch(e){
+                    speak(isDQ?'Outside race window. Time still recorded.':'Off and racing. Good luck!');
                 }
             }
         } else {
