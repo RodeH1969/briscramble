@@ -1026,15 +1026,11 @@
                     if(outcome.isWin){
                         localStorage.setItem(winnerKey,'1');
                         db.ref('flipwinner/'+dateKey).set({username:myUsername,ts:firebase.database.ServerValue.TIMESTAMP});
-                        statusEl.innerHTML = '<span style="color:var(--teal);font-weight:bold">YOU WON A FREE MEDIUM FLAT WHITE! Show this screen at the finish cafe.</span>';
-                        // Add share button
-                        var shareBtn = document.createElement('button');
-                        shareBtn.style.cssText = 'background:linear-gradient(135deg,var(--teal),#00CCAA);color:#000;border:none;padding:12px 22px;font-family:var(--head);font-size:1rem;font-weight:900;border-radius:8px;cursor:pointer;letter-spacing:1px';
-                        shareBtn.textContent = 'SHARE WIN';
-                        shareBtn.addEventListener('click', shareFlipResult);
-                        actBtns.appendChild(shareBtn);
+                        // Hide the grid and show barista card full screen
+                        document.getElementById('coffee-flip').classList.add('hidden');
+                        showBaristaCard(timeStr);
                         if(navigator.vibrate) navigator.vibrate([100,50,100,50,400]);
-                        speak('Congratulations! You won a free flat white!');
+                        speak('Congratulations! You won a free flat white! Show this screen to the barista.');
                     } else {
                         statusEl.innerHTML = '<span style="color:rgba(255,255,255,0.4)">Better luck tomorrow. See you on the leaderboard.</span>';
                     }
@@ -1056,6 +1052,47 @@
         document.getElementById('flip-status').textContent = '';
         document.getElementById('flip-action-btns').innerHTML = '';
         initFlipGrid();
+    }
+
+
+    function showBaristaCard(timeStr){
+        var overlay = document.createElement('div');
+        overlay.id = 'barista-card';
+        overlay.style.cssText = 'position:fixed;inset:0;z-index:500;background:#004d40;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px;text-align:center';
+
+        var dateStr = new Date().toLocaleDateString('en-AU',{timeZone:'Australia/Brisbane',weekday:'long',day:'numeric',month:'long',year:'numeric'});
+
+        var inner = document.createElement('div');
+        inner.style.cssText = 'width:100%;max-width:380px';
+        inner.innerHTML =
+            '<div style="font-family:var(--mono);font-size:0.65rem;color:rgba(255,255,255,0.6);letter-spacing:3px;margin-bottom:16px;text-transform:uppercase">Show this to the barista</div>'
+            +'<div style="background:rgba(0,0,0,0.3);border-radius:16px;padding:28px;border:3px solid #00FFCC;box-shadow:0 0 40px rgba(0,255,204,0.3)">'
+            +'<div style="font-size:3rem;margin-bottom:8px">&#9749;</div>'
+            +'<div style="font-family:var(--head);font-size:1rem;font-weight:900;color:rgba(255,255,255,0.7);letter-spacing:3px;text-transform:uppercase;margin-bottom:4px">BriScramble Winner</div>'
+            +'<div style="font-family:var(--head);font-size:2.8rem;font-weight:900;color:#00FFCC;letter-spacing:2px;margin-bottom:4px">@'+myUsername+'</div>'
+            +'<div style="font-family:var(--mono);font-size:0.7rem;color:rgba(255,255,255,0.5);letter-spacing:2px;margin-bottom:16px">'+dateStr+'</div>'
+            +'<div style="background:rgba(0,255,204,0.1);border:1px solid rgba(0,255,204,0.4);border-radius:10px;padding:14px;margin-bottom:16px">'
+            +'<div style="font-family:var(--head);font-size:1.6rem;font-weight:900;color:#fff;letter-spacing:1px">1 x Medium Flat White</div>'
+            +'<div style="font-family:var(--mono);font-size:0.6rem;color:rgba(255,255,255,0.5);letter-spacing:1px;margin-top:4px">Compliments of BriScramble &amp; Aldi</div>'
+            +'</div>'
+            +'<div style="font-family:var(--mono);font-size:0.6rem;color:rgba(255,255,255,0.35);letter-spacing:1px;line-height:1.6">Fastest commuter to the CBD today<br>Race time: '+timeStr+'</div>'
+            +'</div>'
+            +'<div style="margin-top:20px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap">'
+            +'<button id="barista-share-btn" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.3);color:#fff;padding:12px 22px;font-family:var(--head);font-size:1rem;font-weight:900;border-radius:8px;cursor:pointer;letter-spacing:1px">&#128247; SHARE WIN</button>'
+            +'<button id="barista-close-btn" style="background:none;border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.5);padding:12px 22px;font-family:var(--mono);font-size:0.65rem;border-radius:8px;cursor:pointer">CLOSE</button>'
+            +'</div>';
+
+        overlay.appendChild(inner);
+        document.body.appendChild(overlay);
+
+        document.getElementById('barista-share-btn').addEventListener('click', function(){
+            var txt = 'I won a FREE flat white on BriScramble today! Fastest commuter to the CBD in '+timeStr+'. briscramble.onrender.com';
+            if(navigator.share) navigator.share({title:'I won on BriScramble!',text:txt,url:'https://briscramble.onrender.com'});
+            else navigator.clipboard.writeText(txt).then(function(){alert('Copied!');});
+        });
+        document.getElementById('barista-close-btn').addEventListener('click', function(){
+            overlay.remove();
+        });
     }
 
     function closeFlip(){
@@ -1477,15 +1514,11 @@
                     if(outcome.isWin){
                         localStorage.setItem(winnerKey,'1');
                         db.ref('flipwinner/'+dateKey).set({username:myUsername,ts:firebase.database.ServerValue.TIMESTAMP});
-                        statusEl.innerHTML = '<span style="color:var(--teal);font-weight:bold">YOU WON A FREE MEDIUM FLAT WHITE! Show this screen at the finish cafe.</span>';
-                        // Add share button
-                        var shareBtn = document.createElement('button');
-                        shareBtn.style.cssText = 'background:linear-gradient(135deg,var(--teal),#00CCAA);color:#000;border:none;padding:12px 22px;font-family:var(--head);font-size:1rem;font-weight:900;border-radius:8px;cursor:pointer;letter-spacing:1px';
-                        shareBtn.textContent = 'SHARE WIN';
-                        shareBtn.addEventListener('click', shareFlipResult);
-                        actBtns.appendChild(shareBtn);
+                        // Hide the grid and show barista card full screen
+                        document.getElementById('coffee-flip').classList.add('hidden');
+                        showBaristaCard(timeStr);
                         if(navigator.vibrate) navigator.vibrate([100,50,100,50,400]);
-                        speak('Congratulations! You won a free flat white!');
+                        speak('Congratulations! You won a free flat white! Show this screen to the barista.');
                     } else {
                         statusEl.innerHTML = '<span style="color:rgba(255,255,255,0.4)">Better luck tomorrow. See you on the leaderboard.</span>';
                     }
@@ -1507,6 +1540,47 @@
         document.getElementById('flip-status').textContent = '';
         document.getElementById('flip-action-btns').innerHTML = '';
         initFlipGrid();
+    }
+
+
+    function showBaristaCard(timeStr){
+        var overlay = document.createElement('div');
+        overlay.id = 'barista-card';
+        overlay.style.cssText = 'position:fixed;inset:0;z-index:500;background:#004d40;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px;text-align:center';
+
+        var dateStr = new Date().toLocaleDateString('en-AU',{timeZone:'Australia/Brisbane',weekday:'long',day:'numeric',month:'long',year:'numeric'});
+
+        var inner = document.createElement('div');
+        inner.style.cssText = 'width:100%;max-width:380px';
+        inner.innerHTML =
+            '<div style="font-family:var(--mono);font-size:0.65rem;color:rgba(255,255,255,0.6);letter-spacing:3px;margin-bottom:16px;text-transform:uppercase">Show this to the barista</div>'
+            +'<div style="background:rgba(0,0,0,0.3);border-radius:16px;padding:28px;border:3px solid #00FFCC;box-shadow:0 0 40px rgba(0,255,204,0.3)">'
+            +'<div style="font-size:3rem;margin-bottom:8px">&#9749;</div>'
+            +'<div style="font-family:var(--head);font-size:1rem;font-weight:900;color:rgba(255,255,255,0.7);letter-spacing:3px;text-transform:uppercase;margin-bottom:4px">BriScramble Winner</div>'
+            +'<div style="font-family:var(--head);font-size:2.8rem;font-weight:900;color:#00FFCC;letter-spacing:2px;margin-bottom:4px">@'+myUsername+'</div>'
+            +'<div style="font-family:var(--mono);font-size:0.7rem;color:rgba(255,255,255,0.5);letter-spacing:2px;margin-bottom:16px">'+dateStr+'</div>'
+            +'<div style="background:rgba(0,255,204,0.1);border:1px solid rgba(0,255,204,0.4);border-radius:10px;padding:14px;margin-bottom:16px">'
+            +'<div style="font-family:var(--head);font-size:1.6rem;font-weight:900;color:#fff;letter-spacing:1px">1 x Medium Flat White</div>'
+            +'<div style="font-family:var(--mono);font-size:0.6rem;color:rgba(255,255,255,0.5);letter-spacing:1px;margin-top:4px">Compliments of BriScramble &amp; Aldi</div>'
+            +'</div>'
+            +'<div style="font-family:var(--mono);font-size:0.6rem;color:rgba(255,255,255,0.35);letter-spacing:1px;line-height:1.6">Fastest commuter to the CBD today<br>Race time: '+timeStr+'</div>'
+            +'</div>'
+            +'<div style="margin-top:20px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap">'
+            +'<button id="barista-share-btn" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.3);color:#fff;padding:12px 22px;font-family:var(--head);font-size:1rem;font-weight:900;border-radius:8px;cursor:pointer;letter-spacing:1px">&#128247; SHARE WIN</button>'
+            +'<button id="barista-close-btn" style="background:none;border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.5);padding:12px 22px;font-family:var(--mono);font-size:0.65rem;border-radius:8px;cursor:pointer">CLOSE</button>'
+            +'</div>';
+
+        overlay.appendChild(inner);
+        document.body.appendChild(overlay);
+
+        document.getElementById('barista-share-btn').addEventListener('click', function(){
+            var txt = 'I won a FREE flat white on BriScramble today! Fastest commuter to the CBD in '+timeStr+'. briscramble.onrender.com';
+            if(navigator.share) navigator.share({title:'I won on BriScramble!',text:txt,url:'https://briscramble.onrender.com'});
+            else navigator.clipboard.writeText(txt).then(function(){alert('Copied!');});
+        });
+        document.getElementById('barista-close-btn').addEventListener('click', function(){
+            overlay.remove();
+        });
     }
 
     function closeFlip(){
