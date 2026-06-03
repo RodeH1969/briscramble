@@ -96,7 +96,7 @@
         .lock-note{font-family:var(--mono);font-size:0.55rem;color:rgba(255,255,255,0.2);text-align:center;margin-top:8px;letter-spacing:1px}
 
         /* HUD */
-        #hud{display:none;position:absolute;top:0;left:0;right:0;z-index:30;padding:10px 14px;padding-top:max(env(safe-area-inset-top,10px),10px);background:#0e0f14;border-bottom:1px solid var(--border);align-items:center;justify-content:space-between;gap:10px}
+        #hud{display:none;position:absolute;top:30px;left:0;right:0;z-index:30;padding:10px 14px;padding-top:max(env(safe-area-inset-top,10px),10px);background:#0e0f14;border-bottom:1px solid var(--border);align-items:center;justify-content:space-between;gap:10px}
         #hud.show{display:flex}
         .hud-logo{width:38px;height:38px;border-radius:50%;overflow:hidden;border:1.5px solid var(--red);flex-shrink:0}
         .hud-logo img{width:100%;height:100%;object-fit:cover}
@@ -174,6 +174,20 @@
         @keyframes finishPing{0%{transform:scale(1);box-shadow:0 0 0 0 rgba(232,0,26,0.8)}70%{transform:scale(1.1);box-shadow:0 0 0 16px rgba(232,0,26,0)}100%{transform:scale(1);box-shadow:0 0 0 0 rgba(232,0,26,0)}}
         @keyframes rivalPulse{0%,100%{filter:drop-shadow(0 0 4px rgba(0,255,204,0.8))}50%{filter:drop-shadow(0 0 8px rgba(0,255,204,0.3))}}
         @keyframes ghostPulse{0%,100%{filter:drop-shadow(0 0 4px rgba(150,100,255,0.8))}50%{filter:drop-shadow(0 0 8px rgba(150,100,255,0.3))}}
+
+        .flip-tile{width:100%;aspect-ratio:1;position:relative;cursor:pointer;transform-style:preserve-3d;transition:transform 0.6s cubic-bezier(0.4,0,0.2,1)}
+        .flip-tile.flipped{transform:rotateY(180deg);cursor:default}
+        .flip-tile-face{position:absolute;width:100%;height:100%;backface-visibility:hidden;display:flex;align-items:center;justify-content:center;border-radius:10px;box-sizing:border-box;font-weight:bold;text-align:center;font-size:10px;padding:4px;line-height:1.3;text-transform:uppercase;letter-spacing:0.5px}
+        .flip-front{background:linear-gradient(135deg,#1a1a2e,#16213e);border:2px solid rgba(232,0,26,0.6);box-shadow:inset 0 0 10px rgba(232,0,26,0.1)}
+        .flip-front img{width:62%;height:62%;object-fit:contain;border-radius:50%;opacity:0.85;pointer-events:none}
+        .flip-front:hover{border-color:var(--red);box-shadow:0 0 15px rgba(232,0,26,0.4)}
+        .flip-back{transform:rotateY(180deg);font-family:var(--mono)}
+        .flip-back.win{background:linear-gradient(135deg,#004d40,#00796b);border:3px solid #00FFCC;color:#fff;font-size:9px;box-shadow:0 0 25px rgba(0,255,204,0.8);animation:flipWinPulse 1.5s infinite alternate}
+        .flip-back.loss{background:#1a0d13;border:2px solid rgba(232,0,26,0.3);color:rgba(232,0,26,0.5);font-size:9px}
+        .flip-disabled .flip-tile:not(.flipped){cursor:default;opacity:0.3;filter:grayscale(80%)}
+        .flip-disabled .flip-front:hover{border-color:rgba(232,0,26,0.6);box-shadow:none}
+        @keyframes flipWinPulse{0%{box-shadow:0 0 15px rgba(0,255,204,0.5)}100%{box-shadow:0 0 35px rgba(0,255,204,1)}}
+
     </style>
 </head>
 <body>
@@ -262,6 +276,15 @@
 </div>
 
 <div id="s-reg" class="screen hidden">
+
+<div style="background:linear-gradient(135deg,#CC0000,#FF0000);padding:10px 16px;text-align:center;flex-shrink:0;display:flex;align-items:center;justify-content:center;gap:10px">
+    <img src="/aldi-logo.png" style="height:26px;object-fit:contain" onerror="this.style.opacity=0">
+    <div>
+        <div style="font-family:var(--head);font-size:1.1rem;font-weight:900;color:#fff;letter-spacing:1px">WIN A $30 ALDI GIFT CARD</div>
+        <div style="font-family:var(--mono);font-size:0.58rem;color:rgba(255,255,255,0.85);letter-spacing:1px">FASTEST COMMUTER EACH DAY — WINNER DECLARED 9AM</div>
+    </div>
+</div>
+
     <div class="reg-top">
         <div class="reg-top-logo"><img src="/logo.png" alt=""></div>
         <div class="reg-top-title">BRIS<span>CRAMBLE</span></div>
@@ -322,6 +345,11 @@
     </div>
 </div>
 
+<div id="hud-prize" style="display:none;position:absolute;top:0;left:0;right:0;z-index:31;background:linear-gradient(135deg,#CC0000,#FF0000);padding:5px 16px;text-align:center;pointer-events:none;display:flex;align-items:center;justify-content:center;gap:8px">
+    <img src="/aldi-logo.png" style="height:18px;object-fit:contain" onerror="this.style.opacity=0">
+    <span style="font-family:var(--head);font-size:0.85rem;font-weight:900;color:#fff;letter-spacing:1px">WIN $30 ALDI GIFT CARD</span>
+    <span style="font-family:var(--mono);font-size:0.52rem;color:rgba(255,255,255,0.85);letter-spacing:1px">FASTEST TODAY WINS — DECLARED 9AM</span>
+</div>
 <div id="hud">
     <div class="hud-logo" id="hud-av-wrap"><img id="hud-av" src="/logo.png" alt=""></div>
     <div class="hud-mid">
@@ -716,6 +744,7 @@
         listenActivePlayers();
         listenLeaderboard();
         setLbDate();
+        checkDailyWinner();
         startGPS();
         if(myLat) updateRaceState(myLat,myLng);
     }
@@ -946,6 +975,143 @@
     }
 
     // ── TIME WINDOW CHECK ──
+
+    // -- COFFEE FLIP --
+    var _flipResult = null;
+
+    function initFlipGrid(){
+        var grid = document.getElementById('flip-grid');
+        var actBtns = document.getElementById('flip-action-btns');
+        if(!grid) return;
+        grid.innerHTML = '';
+        actBtns.innerHTML = '';
+        grid.classList.remove('flip-disabled');
+
+        var dateKey = brisDateKey();
+        var winnerKey = 'bsc_flip_winner_'+dateKey;
+        var alreadyWon = localStorage.getItem(winnerKey) === '1';
+        var seed = 0;
+        for(var i=0;i<dateKey.length;i++) seed += dateKey.charCodeAt(i);
+        var winPos = seed % 20;
+
+        db.ref('flipwinner/'+dateKey).once('value').then(function(snap){
+            var todayWon = snap.exists() || alreadyWon;
+            var outcomes = [];
+            for(var i=0;i<20;i++) outcomes.push({isWin: !todayWon && (i === winPos)});
+            var rng = seed;
+            function sr(){rng=(rng*9301+49297)%233280;return rng/233280;}
+            for(var i=outcomes.length-1;i>0;i--){
+                var j=Math.floor(sr()*(i+1));
+                var tmp=outcomes[i];outcomes[i]=outcomes[j];outcomes[j]=tmp;
+            }
+            outcomes.forEach(function(outcome){
+                var tile = document.createElement('div');
+                tile.className = 'flip-tile';
+                var front = document.createElement('div');
+                front.className = 'flip-tile-face flip-front';
+                var img = document.createElement('img');
+                img.src = '/logo.png';
+                front.appendChild(img);
+                var back = document.createElement('div');
+                back.className = 'flip-tile-face flip-back ' + (outcome.isWin ? 'win' : 'loss');
+                back.textContent = outcome.isWin ? 'FREE FLAT WHITE!' : 'BETTER TOMORROW';
+                tile.appendChild(front);
+                tile.appendChild(back);
+                tile.addEventListener('click', function(){
+                    if(grid.classList.contains('flip-disabled')) return;
+                    grid.classList.add('flip-disabled');
+                    tile.classList.add('flipped');
+                    _flipResult = outcome.isWin;
+                    var statusEl = document.getElementById('flip-status');
+                    if(outcome.isWin){
+                        localStorage.setItem(winnerKey,'1');
+                        db.ref('flipwinner/'+dateKey).set({username:myUsername,ts:firebase.database.ServerValue.TIMESTAMP});
+                        statusEl.innerHTML = '<span style="color:var(--teal);font-weight:bold">YOU WON A FREE MEDIUM FLAT WHITE! Show this screen at the finish cafe.</span>';
+                        // Add share button
+                        var shareBtn = document.createElement('button');
+                        shareBtn.style.cssText = 'background:linear-gradient(135deg,var(--teal),#00CCAA);color:#000;border:none;padding:12px 22px;font-family:var(--head);font-size:1rem;font-weight:900;border-radius:8px;cursor:pointer;letter-spacing:1px';
+                        shareBtn.textContent = 'SHARE WIN';
+                        shareBtn.addEventListener('click', shareFlipResult);
+                        actBtns.appendChild(shareBtn);
+                        if(navigator.vibrate) navigator.vibrate([100,50,100,50,400]);
+                        speak('Congratulations! You won a free flat white!');
+                    } else {
+                        statusEl.innerHTML = '<span style="color:rgba(255,255,255,0.4)">Better luck tomorrow. See you on the leaderboard.</span>';
+                    }
+                    // Always add close button
+                    var closeB = document.createElement('button');
+                    closeB.style.cssText = 'background:none;border:1px solid var(--border);color:rgba(255,255,255,0.4);padding:12px 22px;font-family:var(--mono);font-size:0.68rem;border-radius:8px;cursor:pointer';
+                    closeB.textContent = 'VIEW LEADERBOARD';
+                    closeB.addEventListener('click', closeFlip);
+                    actBtns.appendChild(closeB);
+                });
+                grid.appendChild(tile);
+            });
+        });
+    }
+
+    function showCoffeeFlip(timeStr){
+        document.getElementById('flip-time-display').textContent = 'YOUR TIME: ' + timeStr;
+        document.getElementById('coffee-flip').classList.remove('hidden');
+        document.getElementById('flip-status').textContent = '';
+        document.getElementById('flip-action-btns').innerHTML = '';
+        initFlipGrid();
+    }
+
+    function closeFlip(){
+        document.getElementById('coffee-flip').classList.add('hidden');
+    }
+
+    function shareFlipResult(){
+        var txt = 'I just won a FREE flat white on BriScramble! Race to the CBD and flip your token. briscramble.onrender.com';
+        if(navigator.share) navigator.share({title:'I won on BriScramble!',text:txt,url:'https://briscramble.onrender.com'});
+        else navigator.clipboard.writeText(txt).then(function(){alert('Copied!');});
+    }
+
+    // -- DAILY WINNER DECLARATION --
+    var _winnerShown = false;
+    function checkDailyWinner(){
+        // Show HUD prize strip
+        var hp = document.getElementById('hud-prize');
+        if(hp) hp.style.display = 'flex';
+
+        var bneStr = new Date().toLocaleString('en-AU',{timeZone:'Australia/Brisbane'});
+        var bneDate = new Date(bneStr);
+        if(bneDate.getHours() < 9) return; // Before 9am — no winner declared yet
+
+        var yesterday = new Date(bneDate);
+        yesterday.setDate(yesterday.getDate()-1);
+        var parts = yesterday.toLocaleDateString('en-AU',{timeZone:'Australia/Brisbane'}).split('/');
+        var yKey = parseInt(parts[0])+'-'+parseInt(parts[1])+'-'+parts[2];
+        var seenKey = 'bsc_winner_seen_'+yKey;
+        if(localStorage.getItem(seenKey) || _winnerShown) return;
+
+        db.ref('leaderboard/'+yKey).orderByChild('seconds').limitToFirst(3).once('value').then(function(snap){
+            if(!snap.exists()) return;
+            var winner = null;
+            snap.forEach(function(child){
+                var v = child.val();
+                if(!winner && !v.isDQ && !v.outOfWindow) winner = v;
+            });
+            if(!winner) return;
+            _winnerShown = true;
+            localStorage.setItem(seenKey,'1');
+            var overlay = document.getElementById('winner-overlay');
+            document.getElementById('winner-name').textContent = '@'+winner.username;
+            document.getElementById('winner-time').textContent = winner.timeStr;
+            var claimBox = document.getElementById('winner-claim-box');
+            var claimTitle = document.getElementById('winner-claim-title');
+            if(winner.username === myUsername){
+                claimBox.style.display = 'block';
+                claimTitle.textContent = 'ARE YOU @'+winner.username+'? CLAIM YOUR PRIZE!';
+            } else {
+                claimBox.style.display = 'block';
+                claimTitle.textContent = 'IS THIS YOU? @'+winner.username;
+            }
+            overlay.classList.remove('hidden');
+        });
+    }
+
     function getBrisTime(){
         var now = new Date();
         var bne = new Date(now.toLocaleString('en-AU',{timeZone:'Australia/Brisbane'}));
@@ -987,11 +1153,69 @@
         
         var msg=isDQ?'Time trial complete! Time: '+timeStr : (outOfWindow ? 'Finished outside 7am-8am window! Time recorded but not eligible for prizes.' : 'Sensational run! Your time is '+timeStr+'.');
         speak(msg);
-        alert('You made it! Your time is '+timeStr+'.');
-        if(navigator.vibrate) navigator.vibrate(isDQ?[200,100,200]:[200,100,200,100,400,100,400]);
+        if(navigator.vibrate) navigator.vibrate(entryDQ?[200,100,200]:[200,100,200,100,400,100,400]);
         if(window._beepInterval){clearInterval(window._beepInterval);window._beepInterval=null;}
         if(myUID) db.ref('active/'+myUID).remove();
         localStorage.removeItem('bsc_locked');
+
+        // Build finish overlay using DOM (no HTML string injection)
+        var overlay = document.createElement('div');
+        overlay.style.cssText = 'position:fixed;inset:0;z-index:300;background:rgba(7,7,8,0.97);display:flex;align-items:center;justify-content:center';
+
+        var inner = document.createElement('div');
+        inner.style.cssText = 'text-align:center;padding:36px 28px;max-width:360px';
+
+        var iconDiv = document.createElement('div');
+        iconDiv.style.cssText = 'font-size:2.5rem;margin-bottom:8px';
+        iconDiv.innerHTML = entryDQ ? '&#9201;' : '&#127942;';
+        inner.appendChild(iconDiv);
+
+        var headDiv = document.createElement('div');
+        headDiv.style.cssText = 'font-family:var(--head);font-size:2.2rem;font-weight:900;letter-spacing:3px;color:'+(entryDQ?'#FFAA00':'var(--teal)');
+        headDiv.textContent = entryDQ ? 'FINISHED' : 'YOU MADE IT';
+        inner.appendChild(headDiv);
+
+        var labelDiv = document.createElement('div');
+        labelDiv.style.cssText = 'font-family:var(--mono);font-size:0.65rem;color:rgba(255,255,255,0.35);letter-spacing:3px;margin:10px 0 6px';
+        labelDiv.textContent = 'YOUR TIME';
+        inner.appendChild(labelDiv);
+
+        var timeDiv = document.createElement('div');
+        timeDiv.style.cssText = 'font-family:var(--head);font-size:4.5rem;font-weight:900;color:#fff;letter-spacing:4px;line-height:1';
+        timeDiv.textContent = timeStr;
+        inner.appendChild(timeDiv);
+
+        if(entryDQ){
+            var dqDiv = document.createElement('div');
+            dqDiv.style.cssText = 'color:#FFAA00;font-family:var(--mono);font-size:0.7rem;margin-top:10px;letter-spacing:1px';
+            dqDiv.textContent = (outOfWindow ? 'Outside race window' : 'Started inside boundary') + ' — time recorded, not on leaderboard.';
+            inner.appendChild(dqDiv);
+        }
+
+        var btnRow = document.createElement('div');
+        btnRow.style.cssText = 'display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:20px';
+
+        if(!entryDQ){
+            var flipBtn = document.createElement('button');
+            flipBtn.style.cssText = 'background:linear-gradient(135deg,var(--teal),#00CCAA);color:#000;border:none;padding:14px 24px;font-family:var(--head);font-size:1.1rem;font-weight:900;border-radius:8px;cursor:pointer;letter-spacing:1px';
+            flipBtn.innerHTML = '&#9749; FLIP FOR COFFEE';
+            var capturedTime = timeStr;
+            flipBtn.addEventListener('click', function(){
+                overlay.remove();
+                showCoffeeFlip(capturedTime);
+            });
+            btnRow.appendChild(flipBtn);
+        }
+
+        var closeBtn = document.createElement('button');
+        closeBtn.style.cssText = 'background:none;border:1px solid var(--border);color:rgba(255,255,255,0.4);padding:12px 20px;font-family:var(--mono);font-size:0.65rem;border-radius:6px;cursor:pointer';
+        closeBtn.textContent = 'VIEW LEADERBOARD';
+        closeBtn.addEventListener('click', function(){ overlay.remove(); });
+        btnRow.appendChild(closeBtn);
+
+        inner.appendChild(btnRow);
+        overlay.appendChild(inner);
+        document.body.appendChild(overlay);
     }
 
     // ── ACTIVE PLAYERS ──
@@ -1202,11 +1426,178 @@
         document.getElementById('rules-popup').classList.add('hidden');
     }
 
+
+    // -- COFFEE FLIP --
+    var _flipResult = null;
+
+    function initFlipGrid(){
+        var grid = document.getElementById('flip-grid');
+        var actBtns = document.getElementById('flip-action-btns');
+        if(!grid) return;
+        grid.innerHTML = '';
+        actBtns.innerHTML = '';
+        grid.classList.remove('flip-disabled');
+
+        var dateKey = brisDateKey();
+        var winnerKey = 'bsc_flip_winner_'+dateKey;
+        var alreadyWon = localStorage.getItem(winnerKey) === '1';
+        var seed = 0;
+        for(var i=0;i<dateKey.length;i++) seed += dateKey.charCodeAt(i);
+        var winPos = seed % 20;
+
+        db.ref('flipwinner/'+dateKey).once('value').then(function(snap){
+            var todayWon = snap.exists() || alreadyWon;
+            var outcomes = [];
+            for(var i=0;i<20;i++) outcomes.push({isWin: !todayWon && (i === winPos)});
+            var rng = seed;
+            function sr(){rng=(rng*9301+49297)%233280;return rng/233280;}
+            for(var i=outcomes.length-1;i>0;i--){
+                var j=Math.floor(sr()*(i+1));
+                var tmp=outcomes[i];outcomes[i]=outcomes[j];outcomes[j]=tmp;
+            }
+            outcomes.forEach(function(outcome){
+                var tile = document.createElement('div');
+                tile.className = 'flip-tile';
+                var front = document.createElement('div');
+                front.className = 'flip-tile-face flip-front';
+                var img = document.createElement('img');
+                img.src = '/logo.png';
+                front.appendChild(img);
+                var back = document.createElement('div');
+                back.className = 'flip-tile-face flip-back ' + (outcome.isWin ? 'win' : 'loss');
+                back.textContent = outcome.isWin ? 'FREE FLAT WHITE!' : 'BETTER TOMORROW';
+                tile.appendChild(front);
+                tile.appendChild(back);
+                tile.addEventListener('click', function(){
+                    if(grid.classList.contains('flip-disabled')) return;
+                    grid.classList.add('flip-disabled');
+                    tile.classList.add('flipped');
+                    _flipResult = outcome.isWin;
+                    var statusEl = document.getElementById('flip-status');
+                    if(outcome.isWin){
+                        localStorage.setItem(winnerKey,'1');
+                        db.ref('flipwinner/'+dateKey).set({username:myUsername,ts:firebase.database.ServerValue.TIMESTAMP});
+                        statusEl.innerHTML = '<span style="color:var(--teal);font-weight:bold">YOU WON A FREE MEDIUM FLAT WHITE! Show this screen at the finish cafe.</span>';
+                        // Add share button
+                        var shareBtn = document.createElement('button');
+                        shareBtn.style.cssText = 'background:linear-gradient(135deg,var(--teal),#00CCAA);color:#000;border:none;padding:12px 22px;font-family:var(--head);font-size:1rem;font-weight:900;border-radius:8px;cursor:pointer;letter-spacing:1px';
+                        shareBtn.textContent = 'SHARE WIN';
+                        shareBtn.addEventListener('click', shareFlipResult);
+                        actBtns.appendChild(shareBtn);
+                        if(navigator.vibrate) navigator.vibrate([100,50,100,50,400]);
+                        speak('Congratulations! You won a free flat white!');
+                    } else {
+                        statusEl.innerHTML = '<span style="color:rgba(255,255,255,0.4)">Better luck tomorrow. See you on the leaderboard.</span>';
+                    }
+                    // Always add close button
+                    var closeB = document.createElement('button');
+                    closeB.style.cssText = 'background:none;border:1px solid var(--border);color:rgba(255,255,255,0.4);padding:12px 22px;font-family:var(--mono);font-size:0.68rem;border-radius:8px;cursor:pointer';
+                    closeB.textContent = 'VIEW LEADERBOARD';
+                    closeB.addEventListener('click', closeFlip);
+                    actBtns.appendChild(closeB);
+                });
+                grid.appendChild(tile);
+            });
+        });
+    }
+
+    function showCoffeeFlip(timeStr){
+        document.getElementById('flip-time-display').textContent = 'YOUR TIME: ' + timeStr;
+        document.getElementById('coffee-flip').classList.remove('hidden');
+        document.getElementById('flip-status').textContent = '';
+        document.getElementById('flip-action-btns').innerHTML = '';
+        initFlipGrid();
+    }
+
+    function closeFlip(){
+        document.getElementById('coffee-flip').classList.add('hidden');
+    }
+
+    function shareFlipResult(){
+        var txt = 'I just won a FREE flat white on BriScramble! Race to the CBD and flip your token. briscramble.onrender.com';
+        if(navigator.share) navigator.share({title:'I won on BriScramble!',text:txt,url:'https://briscramble.onrender.com'});
+        else navigator.clipboard.writeText(txt).then(function(){alert('Copied!');});
+    }
+
+    // -- DAILY WINNER DECLARATION --
+    var _winnerShown = false;
+    function checkDailyWinner(){
+        // Show HUD prize strip
+        var hp = document.getElementById('hud-prize');
+        if(hp) hp.style.display = 'flex';
+
+        var bneStr = new Date().toLocaleString('en-AU',{timeZone:'Australia/Brisbane'});
+        var bneDate = new Date(bneStr);
+        if(bneDate.getHours() < 9) return; // Before 9am — no winner declared yet
+
+        var yesterday = new Date(bneDate);
+        yesterday.setDate(yesterday.getDate()-1);
+        var parts = yesterday.toLocaleDateString('en-AU',{timeZone:'Australia/Brisbane'}).split('/');
+        var yKey = parseInt(parts[0])+'-'+parseInt(parts[1])+'-'+parts[2];
+        var seenKey = 'bsc_winner_seen_'+yKey;
+        if(localStorage.getItem(seenKey) || _winnerShown) return;
+
+        db.ref('leaderboard/'+yKey).orderByChild('seconds').limitToFirst(3).once('value').then(function(snap){
+            if(!snap.exists()) return;
+            var winner = null;
+            snap.forEach(function(child){
+                var v = child.val();
+                if(!winner && !v.isDQ && !v.outOfWindow) winner = v;
+            });
+            if(!winner) return;
+            _winnerShown = true;
+            localStorage.setItem(seenKey,'1');
+            var overlay = document.getElementById('winner-overlay');
+            document.getElementById('winner-name').textContent = '@'+winner.username;
+            document.getElementById('winner-time').textContent = winner.timeStr;
+            var claimBox = document.getElementById('winner-claim-box');
+            var claimTitle = document.getElementById('winner-claim-title');
+            if(winner.username === myUsername){
+                claimBox.style.display = 'block';
+                claimTitle.textContent = 'ARE YOU @'+winner.username+'? CLAIM YOUR PRIZE!';
+            } else {
+                claimBox.style.display = 'block';
+                claimTitle.textContent = 'IS THIS YOU? @'+winner.username;
+            }
+            overlay.classList.remove('hidden');
+        });
+    }
+
     function getBrisTime(){var now=new Date();var bne=new Date(now.toLocaleString('en-AU',{timeZone:'Australia/Brisbane'}));return{total:bne.getHours()*60+bne.getMinutes()};}
     function isOutsideWindowDQ(){var t=getBrisTime();return t.total<7*60||t.total>=8*60;}
     function isInRaceWindow(){var t=getBrisTime();return t.total>=7*60&&t.total<8*60;}
 
 </script>
+
+
+<!-- COFFEE FLIP -->
+<div id="coffee-flip" class="hidden" style="position:fixed;inset:0;z-index:400;background:rgba(7,7,8,0.97);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;overflow-y:auto">
+    <div style="width:100%;max-width:420px;text-align:center">
+        <div style="margin-bottom:8px"><img src="/logo.png" style="width:56px;height:56px;border-radius:50%;border:2px solid var(--red);box-shadow:0 0 20px rgba(232,0,26,0.4)"></div>
+        <div style="font-family:var(--head);font-size:2rem;font-weight:900;letter-spacing:2px;margin-bottom:4px">THANKS FOR RACING</div>
+        <div style="font-family:var(--mono);font-size:0.75rem;color:var(--teal);letter-spacing:2px;margin-bottom:4px" id="flip-time-display"></div>
+        <div style="font-family:var(--mono);font-size:0.68rem;color:rgba(255,255,255,0.45);letter-spacing:1px;margin-bottom:18px">Flip one token — win a free medium flat white</div>
+        <div id="flip-grid" style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:16px;perspective:1000px"></div>
+        <div id="flip-status" style="font-family:var(--mono);font-size:0.78rem;color:rgba(255,255,255,0.4);letter-spacing:1px;min-height:24px;margin-bottom:16px;padding:0 10px"></div>
+        <div id="flip-action-btns" style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap"></div>
+    </div>
+</div>
+
+<!-- PRIZE WINNER OVERLAY (declared 9am) -->
+<div id="winner-overlay" class="hidden" style="position:fixed;inset:0;z-index:350;background:rgba(7,7,8,0.95);display:flex;align-items:center;justify-content:center;padding:20px">
+    <div style="text-align:center;max-width:360px;width:100%">
+        <img src="/aldi-logo.png" style="height:50px;object-fit:contain;margin-bottom:12px" onerror="this.style.opacity=0">
+        <div style="font-family:var(--head);font-size:1.5rem;font-weight:900;color:rgba(255,255,255,0.5);letter-spacing:3px;margin-bottom:4px">YESTERDAY&#39;S WINNER</div>
+        <div id="winner-name" style="font-family:var(--head);font-size:3rem;font-weight:900;color:var(--teal);letter-spacing:2px;margin-bottom:4px"></div>
+        <div id="winner-time" style="font-family:var(--head);font-size:2rem;font-weight:900;color:#fff;letter-spacing:4px;margin-bottom:8px"></div>
+        <div style="font-family:var(--mono);font-size:0.7rem;color:rgba(255,255,255,0.4);letter-spacing:1px;margin-bottom:20px">Fastest commuter to the CBD — wins a $30 Aldi Gift Card</div>
+        <div id="winner-claim-box" style="background:rgba(0,255,204,0.08);border:1px solid rgba(0,255,204,0.3);border-radius:10px;padding:16px;margin-bottom:20px;display:none">
+            <div style="font-family:var(--head);font-size:1.1rem;font-weight:900;color:var(--teal);margin-bottom:6px" id="winner-claim-title"></div>
+            <div style="font-family:var(--mono);font-size:0.65rem;color:rgba(255,255,255,0.6);letter-spacing:1px;line-height:1.7">Email <strong style="color:#fff">airbrandr@gmail.com</strong><br>Subject: BRISCRAMBLE WIN<br>Include your name and postal address</div>
+        </div>
+        <button onclick="document.getElementById('winner-overlay').classList.add('hidden')" style="background:none;border:1px solid var(--border);color:rgba(255,255,255,0.4);padding:12px 28px;font-family:var(--mono);font-size:0.7rem;border-radius:8px;cursor:pointer;letter-spacing:1px">CLOSE</button>
+    </div>
+</div>
 
 </body>
 </html>
