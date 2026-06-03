@@ -409,7 +409,36 @@
 </script>
 <script>
     // ── CONSTANTS ──
-    const FINISH = [-27.4691, 153.0273]; // GPO, 261 Queen St
+    // Daily rotating finish points — keyed by DD-MM-YYYY Brisbane date
+    const FINISH_SCHEDULE = {
+        '4-6-2026':  [-27.4698, 153.0251],  // GPO, 261 Queen St
+        '5-6-2026':  [-27.4678, 153.0228],  // King George Square fountain
+        '6-6-2026':  [-27.4657, 153.0272],  // Anzac Square Memorial
+        '7-6-2026':  [-27.4710, 153.0224],  // Treasury Building, Queen St
+        '8-6-2026':  [-27.4672, 153.0268],  // Post Office Square park
+        '9-6-2026':  [-27.4693, 153.0243],  // Burnett Lane laneway
+        '10-6-2026': [-27.4695, 153.0265],  // Brisbane Arcade entrance
+        '11-6-2026': [-27.4672, 153.0290],  // MacArthur Chambers, Edward St
+        '12-6-2026': [-27.4648, 153.0280],  // Cathedral Square, Ann St
+        '13-6-2026': [-27.4648, 153.0318],  // Customs House front steps
+        '14-6-2026': [-27.4672, 153.0215],  // Reddacliff Place, George St
+        '15-6-2026': [-27.4682, 153.0268],  // Queens Plaza entrance
+        '16-6-2026': [-27.4660, 153.0310],  // Waterfront Promenade, Queens Wharf
+        '17-6-2026': [-27.4678, 153.0295],  // MacArthur Park, Edward St
+        '18-6-2026': [-27.4695, 153.0258],  // Albert Street Mall
+        '19-6-2026': [-27.4698, 153.0251],  // GPO, 261 Queen St
+    };
+
+    function getTodayFinish(){
+        var bne = new Date().toLocaleDateString('en-AU',{timeZone:'Australia/Brisbane'});
+        // en-AU gives DD/MM/YYYY — convert to D-M-YYYY
+        var parts = bne.split('/');
+        var key = parseInt(parts[0])+'-'+parseInt(parts[1])+'-'+parts[2];
+        // Default to GPO if date not in schedule
+        return FINISH_SCHEDULE[key] || [-27.4698, 153.0251];
+    }
+
+    const FINISH = getTodayFinish();
     const BOUNDARY = 4000; // 4km
     const FINISH_RADIUS = 20; // 10 metres to finish
 
