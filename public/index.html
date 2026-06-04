@@ -713,6 +713,13 @@
 
     function rejoinRace(){
         document.getElementById('hud-av').src=myAvatar;
+        // Restore timer if racing today
+        var savedStart = localStorage.getItem('bsc_race_start');
+        var racingToday = localStorage.getItem('bsc_racing_today');
+        if(savedStart && racingToday === brisDateKey()){
+            raceStartTime = parseInt(savedStart);
+            timerStarted = true;
+        }
         keepAudioWarm();
         var wasLocked=localStorage.getItem('bsc_locked');
         if(wasLocked==='1'){
@@ -746,6 +753,7 @@
         setLbDate();
         checkDailyWinner();
         startGPS();
+        if(timerStarted) startTimer();
         if(myLat) updateRaceState(myLat,myLng);
     }
 
@@ -838,6 +846,8 @@
             } else {
                 timerStarted=true;
                 raceStartTime=Date.now();
+                localStorage.setItem('bsc_race_start', raceStartTime);
+                localStorage.setItem('bsc_racing_today', brisDateKey());
                 startTimer();
                 // Apply time window DQ at moment of crossing
                 if(typeof isOutsideWindowDQ==='function' && isOutsideWindowDQ()) isDQ=true;
@@ -1194,6 +1204,8 @@
         if(window._beepInterval){clearInterval(window._beepInterval);window._beepInterval=null;}
         if(myUID) db.ref('active/'+myUID).remove();
         localStorage.removeItem('bsc_locked');
+        localStorage.removeItem('bsc_race_start');
+        localStorage.removeItem('bsc_racing_today');
 
         // Build finish overlay using DOM (no HTML string injection)
         var overlay = document.createElement('div');
