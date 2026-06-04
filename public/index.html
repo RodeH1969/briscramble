@@ -533,7 +533,10 @@
 
     function signInGoogle() {
         var provider = new firebase.auth.GoogleAuthProvider();
-        firebase.auth().signInWithRedirect(provider);
+        firebase.auth().signInWithPopup(provider)
+            .then(function(r){ if(r.user) afterAuth(r.user); })
+            .catch(function(e){ console.error('Google sign-in error:', e.code); });
+        if(false) firebase.auth().signInWithRedirect(provider);
     }
     function signInApple() {
         var provider = new firebase.auth.OAuthProvider('apple.com');
