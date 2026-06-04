@@ -526,23 +526,9 @@
     })}).addTo(map);
 
     // ── FIREBASE AUTH ──
-    var _redirectHandled = false;
-
-    firebase.auth().getRedirectResult().then(function(r){
-        _redirectHandled = true;
-        if(r && r.user) afterAuth(r.user);
-        else if(!_authDone){
-            firebase.auth().onAuthStateChanged(function(user){
-                if(user) afterAuth(user);
-                else showScreen('s-auth');
-            });
-        }
-    }).catch(function(){
-        _redirectHandled = true;
-        firebase.auth().onAuthStateChanged(function(user){
-            if(user) afterAuth(user);
-            else showScreen('s-auth');
-        });
+    firebase.auth().onAuthStateChanged(function(user){
+        if(user){ afterAuth(user); }
+        else{ if(!_authDone) showScreen('s-auth'); }
     });
 
     function signInGoogle() {
