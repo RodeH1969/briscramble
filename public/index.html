@@ -526,17 +526,27 @@
     })}).addTo(map);
 
     // ── FIREBASE AUTH ──
+    firebase.auth().getRedirectResult().then(function(r){
+        if(r && r.user) afterAuth(r.user);
+    }).catch(function(){});
+
     firebase.auth().onAuthStateChanged(function(user) {
         if (user) {
             afterAuth(user);
         } else {
-            showScreen('s-auth');
+            setTimeout(function(){
+                if(!_authDone) showScreen('s-auth');
+            }, 1500);
         }
     });
 
     function signInGoogle() {
         var provider = new firebase.auth.GoogleAuthProvider();
-        firebase.auth().signInWithRedirect(provider);
+        firebase.auth().signInWithPopup(provider).then(function(r){ afterAuth(r.user); }).catch(function(e){
+            if(e.code==='auth/popup-blocked'||e.code==='auth/popup-closed-by-user') firebase.auth().signInWithRedirect(provider);
+            else console.error(e);
+        });
+        if(false);
     }
     function signInApple() {
         var provider = new firebase.auth.OAuthProvider('apple.com');
