@@ -10,12 +10,6 @@ const io = new Server(server);
 
 app.use(express.json());
 
-// COOP header for Firebase Auth redirect
-app.use(function(req, res, next){
-    res.setHeader('Cross-Origin-Opener-Policy', 'same-origin-allow-popups');
-    next();
-});
-
 // Favicon
 app.get('/favicon.ico', function(req, res){
     res.setHeader('Content-Type', 'image/svg+xml');
