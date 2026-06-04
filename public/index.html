@@ -526,27 +526,28 @@
     })}).addTo(map);
 
     // ── FIREBASE AUTH ──
-    firebase.auth().getRedirectResult().then(function(r){
-        if(r && r.user) afterAuth(r.user);
-    }).catch(function(){});
+    var _redirectHandled = false;
 
-    firebase.auth().onAuthStateChanged(function(user) {
-        if (user) {
-            afterAuth(user);
-        } else {
-            setTimeout(function(){
-                if(!_authDone) showScreen('s-auth');
-            }, 1500);
+    firebase.auth().getRedirectResult().then(function(r){
+        _redirectHandled = true;
+        if(r && r.user) afterAuth(r.user);
+        else if(!_authDone){
+            firebase.auth().onAuthStateChanged(function(user){
+                if(user) afterAuth(user);
+                else showScreen('s-auth');
+            });
         }
+    }).catch(function(){
+        _redirectHandled = true;
+        firebase.auth().onAuthStateChanged(function(user){
+            if(user) afterAuth(user);
+            else showScreen('s-auth');
+        });
     });
 
     function signInGoogle() {
         var provider = new firebase.auth.GoogleAuthProvider();
-        firebase.auth().signInWithPopup(provider).then(function(r){ afterAuth(r.user); }).catch(function(e){
-            if(e.code==='auth/popup-blocked'||e.code==='auth/popup-closed-by-user') firebase.auth().signInWithRedirect(provider);
-            else console.error(e);
-        });
-        if(false);
+        firebase.auth().signInWithRedirect(provider);
     }
     function signInApple() {
         var provider = new firebase.auth.OAuthProvider('apple.com');
