@@ -818,6 +818,55 @@
         if(myMarker) myMarker.setLatLng([lat,lng]);
 
         routePath.push([lat,lng]);
+
+        // ── PROXIMITY AUDIO ALERTS ──
+        if(timerStarted && !finished){
+            if(dist<1000 && dist>950) speak('Getting close. Keep going.');
+            if(dist<500  && dist>450) speak('500 metres. Push hard.');
+            if(dist<100  && dist>80)  speak("You're close now!");
+            // Beeping under 50m — speeds up as you close in
+            if(dist<50 && !window._beepInterval){
+                window._beepInterval = setInterval(function(){
+                    try {
+                        var ctx = new(window.AudioContext||window.webkitAudioContext)();
+                        var osc = ctx.createOscillator();
+                        var gain = ctx.createGain();
+                        osc.connect(gain);
+                        gain.connect(ctx.destination);
+                        osc.frequency.value = 880;
+                        gain.gain.setValueAtTime(0.4, ctx.currentTime);
+                        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime+0.15);
+                        osc.start(ctx.currentTime);
+                        osc.stop(ctx.currentTime+0.15);
+                        setTimeout(function(){ ctx.close(); }, 500);
+                    } catch(e){}
+                }, Math.max(150, dist * 5));
+            }
+            if(dist >= 50 && window._beepInterval){
+                clearInterval(window._beepInterval);
+                window._beepInterval = null;
+            }
+            // Update beep speed as distance changes under 50m
+            if(dist < 50 && window._beepInterval){
+                clearInterval(window._beepInterval);
+                window._beepInterval = null;
+                window._beepInterval = setInterval(function(){
+                    try {
+                        var ctx = new(window.AudioContext||window.webkitAudioContext)();
+                        var osc = ctx.createOscillator();
+                        var gain = ctx.createGain();
+                        osc.connect(gain);
+                        gain.connect(ctx.destination);
+                        osc.frequency.value = 880;
+                        gain.gain.setValueAtTime(0.4, ctx.currentTime);
+                        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime+0.15);
+                        osc.start(ctx.currentTime);
+                        osc.stop(ctx.currentTime+0.15);
+                        setTimeout(function(){ ctx.close(); }, 500);
+                    } catch(e){}
+                }, Math.max(150, dist * 5));
+            }
+        }
         if(!routeLine){
             routeLine=L.polyline(routePath,{color:isDQ?'#FFAA00':'#00FFCC',weight:5,opacity:0.8}).addTo(map);
         } else {
@@ -839,10 +888,16 @@
 
         if(!timerStarted){
             if(dist >= BOUNDARY){
+                var dtb = dist - BOUNDARY;
                 bStatus.textContent='READY TO SCRAMBLE';
                 bMain.className='banner-main waiting';
-                bMain.textContent=fmt(dist)+' TO GO';
+                bMain.textContent = dtb < 50 ? 'AT THE START LINE!' : fmt(dtb)+' TO START LINE';
                 bSub.textContent='Cross the 4KM boundary line to start the timer';
+
+                // Approach to start line audio
+                if(dtb < 500 && dtb > 450) speak('500 metres to the start line.');
+                if(dtb < 200 && dtb > 150) speak('Almost at the start line. Get ready.');
+                if(dtb < 50 && dtb > 10)   speak('Cross the line now. Timer starts automatically.');
             } else {
                 timerStarted=true;
                 raceStartTime=Date.now();
