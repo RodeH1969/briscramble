@@ -756,6 +756,7 @@
         document.getElementById('btn-re').classList.add('show');
         document.getElementById('pk-name').textContent='@'+(myUsername||'You');
         document.getElementById('btn-share').classList.add('show');
+        document.getElementById('slidle-btn').classList.remove('hidden');
         
         if(myUID){
             var ref=db.ref('active/'+myUID);
@@ -1227,6 +1228,43 @@
             overlay.classList.remove('hidden');
         });
     }
+
+
+    // ── SLIDLE POPUP ──
+    var _slidleTimer = null;
+    var _slidleSeconds = 180;
+    var _slidleOpen = false;
+
+    function openSlidle(){
+        _slidleOpen = true;
+        document.getElementById('slidle-popup').classList.remove('hidden');
+        _slidleSeconds = 180;
+        updateSlidleCountdown();
+        _slidleTimer = setInterval(function(){
+            _slidleSeconds--;
+            updateSlidleCountdown();
+            if(_slidleSeconds <= 0){
+                closeSlidle();
+            }
+        }, 1000);
+    }
+
+    function closeSlidle(){
+        _slidleOpen = false;
+        document.getElementById('slidle-popup').classList.add('hidden');
+        clearInterval(_slidleTimer);
+    }
+
+    function updateSlidleCountdown(){
+        var el = document.getElementById('slidle-countdown');
+        if(!el) return;
+        var m = Math.floor(_slidleSeconds/60);
+        var s = _slidleSeconds % 60;
+        el.textContent = m + ':' + String(s).padStart(2,'0');
+        el.style.color = _slidleSeconds < 30 ? 'var(--red)' : 'var(--teal)';
+    }
+
+    // Show Slidle button when racing starts
 
     function getBrisTime(){
         var now = new Date();
@@ -1718,6 +1756,43 @@
         });
     }
 
+
+    // ── SLIDLE POPUP ──
+    var _slidleTimer = null;
+    var _slidleSeconds = 180;
+    var _slidleOpen = false;
+
+    function openSlidle(){
+        _slidleOpen = true;
+        document.getElementById('slidle-popup').classList.remove('hidden');
+        _slidleSeconds = 180;
+        updateSlidleCountdown();
+        _slidleTimer = setInterval(function(){
+            _slidleSeconds--;
+            updateSlidleCountdown();
+            if(_slidleSeconds <= 0){
+                closeSlidle();
+            }
+        }, 1000);
+    }
+
+    function closeSlidle(){
+        _slidleOpen = false;
+        document.getElementById('slidle-popup').classList.add('hidden');
+        clearInterval(_slidleTimer);
+    }
+
+    function updateSlidleCountdown(){
+        var el = document.getElementById('slidle-countdown');
+        if(!el) return;
+        var m = Math.floor(_slidleSeconds/60);
+        var s = _slidleSeconds % 60;
+        el.textContent = m + ':' + String(s).padStart(2,'0');
+        el.style.color = _slidleSeconds < 30 ? 'var(--red)' : 'var(--teal)';
+    }
+
+    // Show Slidle button when racing starts
+
     function getBrisTime(){var now=new Date();var bne=new Date(now.toLocaleString('en-AU',{timeZone:'Australia/Brisbane'}));return{total:bne.getHours()*60+bne.getMinutes()};}
     function isOutsideWindowDQ(){var t=getBrisTime();return t.total<6*60+45||t.total>=8*60+45;}
     function isInRaceWindow(){var t=getBrisTime();return t.total>=6*60+45&&t.total<8*60+45;}
@@ -1754,5 +1829,424 @@
     </div>
 </div>
 
+
+<!-- SLIDLE POPUP -->
+<div id="slidle-popup" class="hidden" style="position:fixed;inset:0;z-index:450;background:rgba(7,7,8,0.96);display:flex;flex-direction:column;align-items:center;justify-content:flex-start;overflow-y:auto;padding:12px">
+    <!-- Header with timer and close -->
+    <div style="width:100%;max-width:400px;display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-shrink:0">
+        <div style="font-family:var(--head);font-size:1.2rem;font-weight:900;color:#fff;letter-spacing:2px">SLIDLE</div>
+        <div style="display:flex;align-items:center;gap:12px">
+            <div style="font-family:var(--mono);font-size:0.9rem;color:var(--teal)" id="slidle-countdown">3:00</div>
+            <button onclick="closeSlidle()" style="background:none;border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.5);padding:6px 14px;font-family:var(--mono);font-size:0.65rem;border-radius:6px;cursor:pointer">CLOSE</button>
+        </div>
+    </div>
+    <!-- Slidle game content -->
+    <div id="slidle-inner" style="width:100%;max-width:400px">
+<div class="modal-bg" id="how-modal">
+  <div class="modal">
+    <h2>How To Play</h2>
+
+    <div style="background:#f6f7f8;border-radius:8px;padding:14px;margin-bottom:14px;text-align:center;">
+      <div style="font-size:36px;margin-bottom:6px;">👆</div>
+      <div style="font-size:15px;font-weight:700;margin-bottom:4px;">Tap a tile to slide it</div>
+      <div style="font-size:13px;color:#555;">Only tiles next to the gap can move</div>
+    </div>
+
+    <div style="background:#f6f7f8;border-radius:8px;padding:14px;margin-bottom:14px;text-align:center;">
+      <div style="font-size:36px;margin-bottom:6px;">🖼️</div>
+      <div style="font-size:15px;font-weight:700;margin-bottom:4px;">Recreate the image</div>
+      <div style="font-size:13px;color:#555;">Use the thumbnail in the top right as your guide</div>
+    </div>
+
+    <div style="background:#f6f7f8;border-radius:8px;padding:14px;margin-bottom:14px;text-align:center;">
+      <div style="font-size:36px;margin-bottom:6px;">1️⃣</div>
+      <div style="font-size:15px;font-weight:700;margin-bottom:4px;">One shot. No refunds.</div>
+      <div style="font-size:13px;color:#555;">Same puzzle for everyone. Beat par to brag.</div>
+    </div>
+
+    <div style="margin-bottom:14px;">
+      <div style="font-size:13px;font-weight:700;margin-bottom:8px;text-align:center;">Your move strip after solving:</div>
+      <div style="display:flex;gap:3px;justify-content:center;margin-bottom:8px;">
+        <span style="width:28px;height:28px;border-radius:3px;background:#538d4e;display:inline-block;"></span>
+        <span style="width:28px;height:28px;border-radius:3px;background:#538d4e;display:inline-block;"></span>
+        <span style="width:28px;height:28px;border-radius:3px;background:#cc2222;display:inline-block;"></span>
+        <span style="width:28px;height:28px;border-radius:3px;background:#538d4e;display:inline-block;"></span>
+        <span style="width:28px;height:28px;border-radius:3px;background:#cc2222;display:inline-block;"></span>
+        <span style="width:28px;height:28px;border-radius:3px;background:#538d4e;display:inline-block;"></span>
+        <span style="width:28px;height:28px;border-radius:3px;background:#538d4e;display:inline-block;"></span>
+      </div>
+      <div style="font-size:13px;text-align:center;">
+        <span style="color:#538d4e;font-weight:700;">🟩 Green</span> = closer &nbsp;|&nbsp; <span style="color:#cc2222;font-weight:700;">🟥 Red</span> = further away
+      </div>
+    </div>
+
+    <button class="modal-close" id="modal-close-btn">Let's Go! 🛒</button>
+  </div>
+</div>
+<div id="app">
+  <div class="top-bar">
+    <div style="width:36px"></div>
+    <div class="game-title">SLIDLE</div>
+    <div style="width:36px;display:flex;justify-content:flex-end;gap:8px;">
+      <span id="help-btn" style="cursor:pointer;font-size:18px;line-height:1;color:#787c7e;user-select:none;" title="How to play">?</span>
+      <img id="thumb" src="" style="width:40px;height:40px;border-radius:4px;border:2px solid #1a1a1b;cursor:pointer;object-fit:cover;flex-shrink:0;" title="View target image" />
+    </div>
+  </div>
+
+  <div id="lightbox" onclick="this.style.display='none'" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:999;align-items:center;justify-content:center;cursor:zoom-out;">
+    <img id="lightbox-img" src="" style="max-width:90vw;max-height:90vh;border-radius:8px;box-shadow:0 8px 40px rgba(0,0,0,0.6);" />
+  </div>
+  <div class="date-label" id="date-label"></div>
+  <div class="tagline" id="tagline">One puzzle. One chance. No refunds.</div>
+  <div class="stats-row">
+    <div class="stat"><div class="stat-val" id="move-count">0</div><div class="stat-label">Moves</div></div>
+    <div class="stat"><div class="stat-val" id="par-disp">22</div><div class="stat-label">Par</div></div>
+    <div class="stat"><div class="stat-val" id="streak-disp">0</div><div class="stat-label">Streak 🔥</div></div>
+    <div class="stat"><div class="stat-val" id="timer-disp">0:00</div><div class="stat-label">Time</div></div>
+  </div>
+  <div class="par-line" id="par-line">&nbsp;</div>
+  <div class="board-frame">
+    <div class="board-wrap">
+      <div class="board" id="board"></div>
+      <div class="solved-overlay" id="solved-overlay">
+        <div class="solved-emoji" id="solved-emoji">🛒</div>
+        <div class="solved-title" id="solved-title">Trolley's packed!</div>
+        <div class="solved-sub" id="solved-sub"></div>
+        <div class="share-block" id="share-text"></div>
+        <button class="share-btn" id="copy-btn">Share Result</button>
+        <div class="tomorrow" id="tomorrow-msg"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<style>
+.ticker-wrap{position:fixed;bottom:0;left:0;right:0;overflow:hidden;background:#fff;border-top:3px solid #1a1a1b;padding:6px 0;z-index:500;}
+.ticker-track{display:flex;align-items:center;white-space:nowrap;animation:ticker-scroll 45s linear infinite;}
+.ticker-track:hover{animation-play-state:paused;}
+.ticker-item{display:inline-flex;align-items:center;margin:0 10px;flex-shrink:0;}
+.ticker-item img{height:48px;width:auto;border-radius:3px;border:1px solid #d3d6da;background:#fff;}
+.ticker-label{font-family:"DM Sans",sans-serif;font-size:12px;font-weight:700;margin:0 10px;white-space:nowrap;}
+.ticker-label.red{color:#cc0000;}
+.ticker-label.blue{color:#0055cc;}
+@keyframes ticker-scroll{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+</style>
+<div class="ticker-wrap"><div class="ticker-track" id="ticker-track"></div></div>
+    </div>
+</div>
+
+<style>
+/* Slidle scoped styles */
+#slidle-inner 
+#slidle-inner *{box-sizing:border-box;margin:0;padding:0;}
+#slidle-inner body{background:#f9f9f9;display:flex;justify-content:center;align-items:flex-start;min-height:100vh;font-family:'DM Sans',sans-serif;margin:0;padding:0;}
+#slidle-inner #app{background:#fff;width:100%;max-width:480px;min-height:100vh;display:flex;flex-direction:column;align-items:center;border-left:1px solid #d3d6da;border-right:1px solid #d3d6da;overflow-x:hidden;padding-bottom:64px;}
+#slidle-inner .top-bar{width:100%;border-bottom:1px solid #d3d6da;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;overflow:hidden;}
+#slidle-inner .game-title{font-size:28px;font-weight:700;letter-spacing:5px;text-transform:uppercase;flex:1;text-align:center;color:#1a1a1b;}
+#slidle-inner .date-label{font-size:10px;color:#787c7e;text-align:center;padding:8px 0 2px;letter-spacing:0.5px;}
+#slidle-inner .stats-row{display:flex;gap:28px;justify-content:center;padding:10px 0 4px;}
+#slidle-inner .stat{text-align:center;}
+#slidle-inner .stat-val{font-size:26px;font-weight:700;line-height:1;color:#1a1a1b;}
+#slidle-inner .stat-label{font-size:10px;color:#787c7e;text-transform:uppercase;letter-spacing:0.5px;margin-top:2px;}
+#slidle-inner .par-line{font-size:11px;color:#787c7e;text-align:center;padding:2px 0 12px;min-height:22px;}
+#slidle-inner .board-frame{border:none;border-radius:12px;padding:8px;background:#e9eaec;margin-bottom:16px;box-shadow:0 4px 20px rgba(0,0,0,0.08);touch-action:manipulation;}
+#slidle-inner .board{position:relative;}
+#slidle-inner .board-wrap{position:relative;}
+#slidle-inner .tile{position:absolute;border-radius:6px;cursor:pointer;overflow:hidden;border:1px solid rgba(0,0,0,0.15);transition:left 0.13s cubic-bezier(0.25,1,0.5,1),top 0.13s cubic-bezier(0.25,1,0.5,1),transform 0.1s ease;user-select:none;touch-action:manipulation;-webkit-tap-highlight-color:transparent;box-shadow:inset 0 1px 0 rgba(255,255,255,0.4),0 2px 4px rgba(0,0,0,0.12);}
+#slidle-inner .tile:hover{transform:scale(1.03);z-index:10;}.tile.movable{box-shadow:inset 0 1px 0 rgba(255,255,255,0.4),0 2px 8px rgba(0,107,60,0.35);border:1px solid rgba(0,107,60,0.5);}
+#slidle-inner .tile:active{transform:scale(0.96);}
+#slidle-inner .tile canvas{width:100%;height:100%;display:block;pointer-events:none;}
+#slidle-inner .empty-cell{position:absolute;border-radius:6px;background:#e8e9eb;box-shadow:inset 0 3px 6px rgba(0,0,0,0.12);border:none;}
+#slidle-inner .solved-overlay{position:absolute;inset:-4px;background:rgba(255,255,255,0.97);border-radius:4px;display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.4s;z-index:100;}
+#slidle-inner .solved-overlay.show{opacity:1;pointer-events:all;}
+#slidle-inner .solved-emoji{font-size:36px;margin-bottom:6px;}
+#slidle-inner .solved-title{font-size:16px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#006B3C;}
+#slidle-inner .solved-sub{font-size:12px;color:#787c7e;margin-top:4px;}
+#slidle-inner .share-block{margin-top:14px;background:#f6f7f8;border-radius:6px;padding:12px 16px;font-family:monospace;font-size:12px;color:#1a1a1b;text-align:center;line-height:1.7;max-width:270px;word-break:break-all;border:1px solid #d3d6da;white-space:pre-wrap;}
+#slidle-inner .share-btn{margin-top:12px;font-family:'DM Sans',sans-serif;font-size:16px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:16px 40px;border-radius:8px;border:none;background:#006B3C;color:white;cursor:pointer;touch-action:manipulation;}
+#slidle-inner .share-btn:hover{opacity:0.85;}
+#slidle-inner .tomorrow{font-size:11px;color:#787c7e;margin-top:10px;}
+#slidle-inner .tagline{font-size:11px;color:#787c7e;text-align:center;padding:0 0 8px;font-style:italic;}
+#slidle-inner .modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:998;align-items:center;justify-content:center;}
+#slidle-inner .modal-bg.show{display:flex;}
+#slidle-inner .modal{background:#fff;border-radius:8px;padding:24px 20px;max-width:320px;width:90%;box-shadow:0 8px 40px rgba(0,0,0,0.3);}
+#slidle-inner .modal h2{font-size:16px;font-weight:700;letter-spacing:3px;text-transform:uppercase;text-align:center;margin-bottom:16px;border-bottom:1px solid #d3d6da;padding-bottom:12px;}
+#slidle-inner .modal p{font-size:13px;color:#1a1a1b;line-height:1.6;margin-bottom:10px;}
+#slidle-inner .modal .eg{display:flex;gap:4px;margin:10px 0;justify-content:center;}
+#slidle-inner .modal .eg span{width:24px;height:24px;border-radius:3px;display:inline-block;}
+#slidle-inner .modal-close{width:100%;margin-top:16px;font-family:'DM Sans',sans-serif;font-size:16px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:16px;border-radius:8px;border:none;background:#1a1a1b;color:white;cursor:pointer;}
+#slidle-inner 
+</style>
+
+<!-- SLIDLE BUTTON (shows during race) -->
+<button id="slidle-btn" class="hidden" onclick="openSlidle()" style="position:absolute;left:12px;z-index:35;bottom:220px;background:linear-gradient(135deg,#1a1a2e,#16213e);border:2px solid rgba(0,255,204,0.5);color:var(--teal);font-family:var(--head);font-size:0.85rem;font-weight:900;padding:10px 14px;border-radius:10px;cursor:pointer;letter-spacing:1px;box-shadow:0 4px 14px rgba(0,0,0,0.5)">
+    🧩 SLIDLE
+</button>
+
+
+<script>
+
+const GRID=4,GAP=4,PAR=22;
+const BOARD_PX=Math.min(window.innerWidth-32, 360);
+const TILE_PX=(BOARD_PX-GAP*(GRID-1))/GRID;
+let tiles=[],emptyIdx=15,moveCount=0,moveHistory=[];
+let timerStart=null,timerInterval=null,solved=false;
+
+const now=new Date();
+document.getElementById('date-label').textContent=now.toLocaleDateString('en-AU',{weekday:'long',day:'numeric',month:'long'});
+const puzzleNum=Math.floor((now-new Date('2024-01-01'))/(864e5))%365+1;
+
+function row(i){return Math.floor(i/GRID);}
+function col(i){return i%GRID;}
+function tileX(i){return col(i)*(TILE_PX+GAP);}
+function tileY(i){return row(i)*(TILE_PX+GAP);}
+function manhattan(s){let d=0;for(let i=0;i<16;i++){if(s[i]===15)continue;d+=Math.abs(Math.floor(s[i]/GRID)-row(i))+Math.abs(s[i]%GRID-col(i));}return d;}
+function isSolvable(s){let inv=0;const arr=s.filter(x=>x!==15);for(let i=0;i<arr.length;i++)for(let j=i+1;j<arr.length;j++)if(arr[i]>arr[j])inv++;return(inv+(GRID-row(s.indexOf(15))))%2===1;}
+function seededRand(seed){let s=seed;return()=>{s=(s*1664525+1013904223)&0xffffffff;return(s>>>0)/0xffffffff;};}
+function shuffleSeeded(){
+  const seed=now.getFullYear()*10000+(now.getMonth()+1)*100+now.getDate();
+  const rand=seededRand(seed);
+  let s=Array.from({length:16},(_,i)=>i);
+  do{for(let i=s.length-1;i>0;i--){const j=Math.floor(rand()*(i+1));[s[i],s[j]]=[s[j],s[i]];}}
+  while(!isSolvable(s)||manhattan(s)<20);
+  return s;
+}
+
+const IMG_SRC='/begamacandcheese280g.png';
+
+let puzzleImg=new Image();
+document.getElementById('board').style.width=BOARD_PX+'px';
+document.getElementById('board').style.height=BOARD_PX+'px';
+puzzleImg.onload=function(){
+  document.getElementById('thumb').src=IMG_SRC;
+  document.getElementById('lightbox-img').src=IMG_SRC;
+  document.getElementById('thumb').addEventListener('click',function(){
+    document.getElementById('lightbox').style.display='flex';
+  });
+  tiles=shuffleSeeded();
+  emptyIdx=tiles.indexOf(15);
+  renderBoard();
+};
+puzzleImg.src=IMG_SRC;
+
+let showNums=false;
+
+function isMovable(pos){
+  const er=row(emptyIdx),ec=col(emptyIdx),pr=row(pos),pc=col(pos);
+  return (er===pr&&Math.abs(ec-pc)===1)||(ec===pc&&Math.abs(er-pr)===1);
+}
+
+function renderBoard(){
+  const board=document.getElementById('board');
+  board.innerHTML='';
+  const empty=document.createElement('div');
+  empty.className='empty-cell';
+  empty.style.cssText=`width:${TILE_PX}px;height:${TILE_PX}px;left:${tileX(emptyIdx)}px;top:${tileY(emptyIdx)}px;`;
+  board.appendChild(empty);
+  tiles.forEach((v,pos)=>{
+    if(v===15)return;
+    const movable=isMovable(pos);
+    const el=document.createElement('div');
+    el.className='tile'+(movable?' movable':'');
+    el.dataset.pos=pos;
+    el.style.cssText=`width:${TILE_PX}px;height:${TILE_PX}px;left:${tileX(pos)}px;top:${tileY(pos)}px;`;
+    const c=document.createElement('canvas');
+    c.width=TILE_PX;c.height=TILE_PX;
+    const ctx=c.getContext('2d');
+    ctx.drawImage(puzzleImg,col(v)*(puzzleImg.width/GRID),row(v)*(puzzleImg.height/GRID),puzzleImg.width/GRID,puzzleImg.height/GRID,0,0,TILE_PX,TILE_PX);
+    if(showNums){
+      ctx.fillStyle='rgba(0,0,0,0.45)';
+      ctx.fillRect(0,0,22,22);
+      ctx.fillStyle='white';
+      ctx.font=`bold ${Math.round(TILE_PX*0.18)}px DM Sans,sans-serif`;
+      ctx.textAlign='center';
+      ctx.textBaseline='middle';
+      ctx.fillText(v+1,11,11);
+    }
+    el.appendChild(c);
+    el.addEventListener('click',()=>tryMove(pos));
+    board.appendChild(el);
+  });
+}
+
+function tryMove(pos){
+  if(solved)return;
+  const er=row(emptyIdx),ec=col(emptyIdx),pr=row(pos),pc=col(pos);
+  if((er===pr&&Math.abs(ec-pc)===1)||(ec===pc&&Math.abs(er-pr)===1)){
+    // Haptic feedback
+    if(navigator.vibrate) navigator.vibrate(8);
+    const before=manhattan(tiles);
+    [tiles[emptyIdx],tiles[pos]]=[tiles[pos],tiles[emptyIdx]];
+    emptyIdx=pos;
+    const good=manhattan(tiles)<before;
+    moveHistory.push(good);
+    moveCount++;
+    if(!timerStart){timerStart=Date.now();timerInterval=setInterval(updateTimer,1000);}
+    document.getElementById('move-count').textContent=moveCount;
+    updateParLine();
+    renderBoard();
+    if(tiles.every((v,i)=>v===i))showSolved();
+  }
+}
+
+function updateTimer(){
+  const s=Math.floor((Date.now()-timerStart)/1000);
+  document.getElementById('timer-disp').textContent=`${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`;
+}
+
+function updateParLine(){
+  const diff=moveCount-PAR;
+  const el=document.getElementById('par-line');
+  const under=[
+    '🔥 cheaper than an Aldi Special!',
+    '💪 You absolute bargain hunter.',
+    '🏆 Aldi would hire you.',
+    '⚡ Quicker than the checkout queue.',
+    '🛒 Under par AND under budget.'
+  ];
+  const over=[
+    `${diff} over par — did you shop at Coles?`,
+    `${diff} over par — takes longer than the checkout lady.`,
+    `${diff} over par — still better than full price.`,
+    `${diff} over par — at least it was on special.`,
+    `${diff} over par — the trolley return is that way 👉`
+  ];
+  const atpar=[
+    'Par! Right on the money. Literally.',
+    'Par! Exactly $22.00. No change.',
+    'Par! Aldi precise.'
+  ];
+  if(diff<0){
+    el.innerHTML=`<span style="color:#006B3C;font-weight:700">${Math.abs(diff)} under par — ` + under[Math.abs(diff)%under.length] + `</span>`;
+  } else if(diff===0){
+    el.innerHTML=`<span style="color:#c9a227;font-weight:700">` + atpar[moveCount%atpar.length] + `</span>`;
+  } else {
+    el.innerHTML=`<span style="color:#cc2222;">` + over[(diff-1)%over.length] + `</span>`;
+  }
+}
+
+function showSolved(){
+  solved=true;
+  clearInterval(timerInterval);
+  updateStreak();
+  document.getElementById('streak-disp').textContent=getStreak();
+document.getElementById('num-toggle').addEventListener('change',function(){showNums=this.checked;renderBoard();});
+  if(typeof confetti!=='undefined') confetti({particleCount:120,spread:70,origin:{y:0.6}});
+  const diff2=moveCount-PAR;
+  const titles=diff2<=-5?['LEGENDARY SHOPPER 🏆','AISLE MASTER 🔥','BARGAIN NINJA ⚡']:
+                diff2<0?['Under par! 🛒','Nice work, legend.','Sharp as a price tag.']:
+                diff2===0?['Right on par!','Exactly on budget.','Aldi precise.']:
+                diff2<=5?['Not bad, not great.','Could use a loyalty card.','The trolley wobbled.']:
+                ['Did you shop blindfolded?','Even the self-checkout judged you.','Mate... just mate.'];
+  document.getElementById('solved-title').textContent=titles[Math.floor(Math.random()*titles.length)];
+  const emojis=diff2<0?'🛒':'😅';
+  document.getElementById('solved-emoji').textContent=emojis;
+  const totalSecs=timerStart?Math.floor((Date.now()-timerStart)/1000):0;
+  const m=Math.floor(totalSecs/60),s=totalSecs%60;
+  const diff=moveCount-PAR;
+  const diffStr=diff===0?'Par':(diff<0?`${Math.abs(diff)} under par`:`+${diff} over par`);
+  document.getElementById('solved-sub').textContent=`${moveCount} moves · ${m}m ${String(s).padStart(2,'0')}s · ${diffStr}`;
+  const emojiMoves=moveHistory.map(g=>g?'🟩':'🟥');
+  const rows=[];
+  for(let i=0;i<emojiMoves.length;i+=20)rows.push(emojiMoves.slice(i,i+20).join(''));
+  const aldiBrag=moveCount<PAR?`${PAR-moveCount} under par 🔥`:(moveCount===PAR?`Right on par 🛒`:`${moveCount-PAR} over par 😅`);
+const shareText=`SLIDLE #${puzzleNum} — ${aldiBrag}\n${moveCount}/${PAR} moves · ${m}m${String(s).padStart(2,'0')}s\n\n${rows.join('\n')}\n\nslidlepuzzle.com — Today's Aldi Special`;
+  document.getElementById('share-text').textContent=shareText;
+  const tomorrow=new Date(now);
+  tomorrow.setDate(tomorrow.getDate()+1);
+  document.getElementById('tomorrow-msg').textContent=`New special drops ${tomorrow.toLocaleDateString('en-AU',{weekday:'long'})}. Don't miss it.`;
+  setTimeout(()=>document.getElementById('solved-overlay').classList.add('show'),500);
+}
+
+
+// How to Play modal
+const howModal = document.getElementById('how-modal');
+const seenKey = 'slidle_seen_howto';
+if(!localStorage.getItem(seenKey)){
+  howModal.classList.add('show');
+}
+document.getElementById('modal-close-btn').addEventListener('click',()=>{
+  howModal.classList.remove('show');
+  localStorage.setItem(seenKey,'1');
+});
+// ? icon opens modal
+document.getElementById('help-btn').addEventListener('click',()=>{
+  howModal.classList.add('show');
+});
+
+
+// Streak tracking
+const streakKey='slidle_streak';
+const lastWinKey='slidle_lastwin';
+const todayStr=now.toISOString().slice(0,10);
+
+function getStreak(){return parseInt(localStorage.getItem(streakKey)||'0');}
+function updateStreak(){
+  const last=localStorage.getItem(lastWinKey);
+  const yesterday=new Date(now);
+  yesterday.setDate(yesterday.getDate()-1);
+  const yStr=yesterday.toISOString().slice(0,10);
+  let streak=getStreak();
+  if(last===todayStr) return; // already won today
+  if(last===yStr) streak++; // consecutive day
+  else streak=1; // streak broken
+  localStorage.setItem(streakKey,streak);
+  localStorage.setItem(lastWinKey,todayStr);
+}
+
+document.getElementById('streak-disp').textContent=getStreak();
+document.getElementById('num-toggle').addEventListener('change',function(){showNums=this.checked;renderBoard();});
+
+
+// Swipe gestures
+let touchStartX=0,touchStartY=0,touchTilePos=-1;
+document.getElementById('board').addEventListener('touchstart',e=>{
+  const el=e.target.closest('.tile');
+  if(!el)return;
+  touchStartX=e.touches[0].clientX;
+  touchStartY=e.touches[0].clientY;
+  touchTilePos=parseInt(el.dataset.pos);
+},{passive:true});
+
+document.getElementById('board').addEventListener('touchend',e=>{
+  if(touchTilePos<0)return;
+  const dx=e.changedTouches[0].clientX-touchStartX;
+  const dy=e.changedTouches[0].clientY-touchStartY;
+  if(Math.max(Math.abs(dx),Math.abs(dy))>20){
+    tryMove(touchTilePos);
+  }
+  touchTilePos=-1;
+},{passive:true});
+
+document.getElementById('copy-btn').addEventListener('click',()=>{
+  navigator.clipboard.writeText(document.getElementById('share-text').textContent).then(()=>{
+    document.getElementById('copy-btn').textContent='Copied ✓';
+    setTimeout(()=>document.getElementById('copy-btn').textContent='Share Result',2000);
+  });
+});
+
+
+(function(){
+var imgs=['/begamacandcheese280g.png'];
+var track=document.getElementById("ticker-track");
+for(var pass=0;pass<2;pass++){
+  imgs.forEach(function(src,i){
+    var label=document.createElement("span");
+    label.className="ticker-label "+(i%2===0?"red":"blue");
+    label.textContent="Aldi Specials";
+    var item=document.createElement("div");
+    item.className="ticker-item";
+    var img=document.createElement("img");
+    img.src=src;
+    item.appendChild(img);
+    track.appendChild(label);
+    track.appendChild(item);
+  });
+}
+})();
+
+</script>
 </body>
 </html>
