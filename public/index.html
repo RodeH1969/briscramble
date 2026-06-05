@@ -208,7 +208,8 @@
         <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="">
         Continue with Google
     </button>
-    <button class="btn-signin apple" onclick="signInApple()">
+    <div id="auth-err" style="font-family:monospace;font-size:0.65rem;color:#ff6666;margin:8px 0;max-width:320px;word-break:break-all;min-height:16px"></div>
+        <button class="btn-signin apple" onclick="signInApple()">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
         Continue with Apple
     </button>
@@ -535,7 +536,12 @@
         var provider = new firebase.auth.GoogleAuthProvider();
         firebase.auth().signInWithPopup(provider)
             .then(function(r){ if(r.user) afterAuth(r.user); })
-            .catch(function(e){ console.error('Google sign-in error:', e.code); });
+            .catch(function(e){
+                // Show error visibly so we can diagnose
+                var errDiv = document.getElementById('auth-err');
+                if(errDiv) errDiv.textContent = 'Error: ' + e.code + ' — ' + e.message;
+                console.error('sign-in error:', e);
+            });
         if(false) firebase.auth().signInWithRedirect(provider);
     }
     function signInApple() {
@@ -1521,7 +1527,7 @@
             </div>
             <div style="display:flex;gap:12px;align-items:flex-start">
                 <div style="width:28px;height:28px;border-radius:50%;background:var(--red);color:#fff;font-family:var(--head);font-size:1rem;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0">3</div>
-                <div style="font-family:var(--mono);font-size:0.72rem;color:rgba(255,255,255,0.75);line-height:1.6">Cross boundary <strong style="color:#FFAA00">before 7am or after 8am</strong> = time recorded but <strong style="color:#FFAA00">not on leaderboard</strong></div>
+                <div style="font-family:var(--mono);font-size:0.72rem;color:rgba(255,255,255,0.75);line-height:1.6">Cross boundary <strong style="color:#FFAA00">before 6:45am or after 8:45am</strong> = time recorded but <strong style="color:#FFAA00">not on leaderboard</strong></div>
             </div>
         </div>
 
@@ -1713,8 +1719,8 @@
     }
 
     function getBrisTime(){var now=new Date();var bne=new Date(now.toLocaleString('en-AU',{timeZone:'Australia/Brisbane'}));return{total:bne.getHours()*60+bne.getMinutes()};}
-    function isOutsideWindowDQ(){var t=getBrisTime();return t.total<7*60||t.total>=8*60;}
-    function isInRaceWindow(){var t=getBrisTime();return t.total>=7*60&&t.total<8*60;}
+    function isOutsideWindowDQ(){var t=getBrisTime();return t.total<6*60+45||t.total>=8*60+45;}
+    function isInRaceWindow(){var t=getBrisTime();return t.total>=6*60+45&&t.total<8*60+45;}
 
 </script>
 
